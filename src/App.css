@@ -1,0 +1,19 @@
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  .left_container {
+    width: 15%;
+    min-width: 200px;
+  }
+  .right_container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}

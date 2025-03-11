@@ -1,0 +1,48 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  color: rgb(139, 139, 139);
+  box-shadow: 6px 0 8px lightslategrey;
+  .left {
+    padding: 15px 10px;
+    display: flex;
+    gap: 5px;
+    .expand {
+      padding: 0 8px;
+      cursor: pointer;
+      &:hover {
+        color: black;
+      }
+    }
+    .navigate {
+      .navigate_item {
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.2s linear;
+        &:hover,
+        &.active {
+          color: black;
+        }
+        &:hover {
+          background-color: rgba(black, 0.1);
+        }
+      }
+    }
+  }
+  .right {
+    // margin-right: 5px;
+    display: flex;
+    max-width: 20%;
+    .avatar {
+      padding: 15px;
+      transition: all 0.2s linear;
+      &:hover {
+        cursor: pointer;
+        color: black;
+        background-color: rgba(black, 0.1);
+      }
+    }
+  }
+}
