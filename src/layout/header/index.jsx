@@ -2,7 +2,7 @@ import { Avatar } from "antd";
 import "./index.less";
 import NavigateItem from "./NavigateItem.jsx";
 import {
-  MenuUnfoldOutlined,
+  MenuFoldOutlined,
   HomeOutlined,
   UserOutlined,
   SettingOutlined,
@@ -31,7 +31,7 @@ const Header = (props) => {
     <div className="header">
       <div className="left">
         <div className="expand">
-          <MenuUnfoldOutlined />
+          <MenuFoldOutlined />
         </div>
         <div className="navigate"> {renderNavigateItems(navigateItems)} </div>
       </div>
