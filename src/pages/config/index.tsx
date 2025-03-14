@@ -3,6 +3,7 @@ import ConfigItem from "./ConfigItem.jsx";
 import "./index.css";
 import { FormItemType } from "@/components/Form/Form.types.js";
 import React from "react";
+import { Spin } from "antd";
 
 interface ConfigItemType {
   key: string;
@@ -65,12 +66,14 @@ const _configs: ConfigItemType[] = [
 
 const Config = () => {
   const [configItems, setConfigItems] = useState([] as ConfigItemType[]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await requestConfigsAPI();
       const parsedItems = response.map(parseConfigItem);
       setConfigItems(parsedItems);
+      setLoading(false);
     };
     fetchData();
   }, []);
@@ -123,19 +126,28 @@ const Config = () => {
   };
 
   return (
-    <div className="config_container">
-      {configItems.map((item) => {
-        return (
-          <ConfigItem
-            onAdd={handleAdd}
-            onDelete={handleDelete}
-            onChange={(newData: DataItem[]) => handleChange(item.key, newData)}
-            {...item}
-            key={item.key}
-          />
-        );
-      })}
-    </div>
+    <Spin
+      spinning={loading}
+      wrapperClassName="config_container"
+      size="large"
+      tip="Loading..."
+    >
+      <div>
+        {configItems.map((item) => {
+          return (
+            <ConfigItem
+              onAdd={handleAdd}
+              onDelete={handleDelete}
+              onChange={(newData: DataItem[]) =>
+                handleChange(item.key, newData)
+              }
+              {...item}
+              key={item.key}
+            />
+          );
+        })}
+      </div>
+    </Spin>
   );
 };
 
