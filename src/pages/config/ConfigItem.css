@@ -1,0 +1,16 @@
+.config_container {
+  .config_item {
+    .item_content {
+      padding: 0 10px;
+
+      .item_buttons {
+        padding: 5px 0;
+      }
+
+      .item_list {
+        padding: 10px 0;
+      }
+    }
+
+  }
+}

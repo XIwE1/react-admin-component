@@ -3,7 +3,7 @@ import { FormInstance, Rule } from "antd/es/form";
 /**
  * 字段类型
  */
-type FormItemType =
+export type FormItemType =
   | "input" // 输入框
   | "password" // 密码框
   | "textarea" // 文本域
@@ -67,7 +67,7 @@ type SchemaReactions = SchemaReaction | SchemaReaction[]; //支持传入数组
  */
 export interface FormSchemaItem {
   type: FormItemType;
-  name: string;
+  key: string;
   label: string;
   defaultValue?: any;
   // options?: FormItemOption[];

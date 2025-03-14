@@ -1,0 +1,6 @@
+.config_container {
+    margin: 0 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
