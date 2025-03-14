@@ -1,4 +1,5 @@
 import { FormInstance, Rule } from "antd/es/form";
+import { LabelTooltipType } from "antd/es/form/FormItemLabel";
 
 /**
  * 字段类型
@@ -71,13 +72,14 @@ export interface FormSchemaItem {
   label: string;
   defaultValue?: any;
   // options?: FormItemOption[];
-  // placeholder?: string;
-  // path?: string[];
+  // namePath?: string[];
   disabled?: boolean;
   hidden?: boolean;
   rules?: Rule[];
-  suffix?: React.ReactNode;
-  tooltip?: string | { title: string; icon?: React.ReactNode };
+  // suffix?: React.ReactNode;
+  extra?: React.ReactNode;
+  tooltip?: LabelTooltipType;
+  // tooltip?: string | { title: string; icon?: React.ReactNode };
   componentProps?: Record<string, any>; // 透传给antd组件的属性，如placeholder、options
   customRender?: (
     form: FormInstance,
@@ -92,9 +94,7 @@ export interface FormSchemaItem {
 export interface FormOptions {
   labelWidth?: string;
   itemStyle?: any;
-  layout?: {
-    labelCol?: { span: number };
-    wrapperCol?: { span: number };
-    style?: React.CSSProperties;
-  };
+  labelCol?: { span?: number; offset?: number };
+  wrapperCol?: { span: number; offset?: number };
+  layout?: "horizontal" | "vertical" | "inline";
 }
