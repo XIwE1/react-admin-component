@@ -5,7 +5,7 @@ import "./App.css";
 import Main from "./layout/main";
 
 function App() {
-  const [active, setActive] = useState("Form_1");
+  const [active, setActive] = useState("Config");
 
   const clickItem = (key) => setActive(key);
 

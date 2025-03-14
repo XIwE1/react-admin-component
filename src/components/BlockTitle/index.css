@@ -1,0 +1,17 @@
+.block_title {
+    padding: 5px 0;
+    .content {
+        padding: 0 15px;
+        position: relative;
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 2px;
+            background-color: black;
+        }
+    }
+}
