@@ -11,6 +11,7 @@ export type FormItemType =
   | "number" // 数字输入框
   | "select" // 下拉框
   | "checkbox" // 多选框
+  | "cascader" // 级联选择
   | "radio" // 单选框
   | "date" // 日期选择
   | "range" // 日期范围
