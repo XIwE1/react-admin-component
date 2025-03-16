@@ -73,9 +73,18 @@ export const useConfigStore = create<ConfigState>()(
       // 模拟异步获取数据
       fetchConfigData: async () => {
         set({ loading: true });
+        // 使用 持久化数据 或 mock数据
         const response = await new Promise((resolve) => {
           setTimeout(() => {
-            resolve(mock_configs);
+            let _response = mock_configs;
+            // 优先读取本地存储
+            const localState = localStorage.getItem(LOCAL_CONFIG_KEY);
+            if (localState) {
+              const parsed_localState = JSON.parse(localState);
+              const localConfigs = parsed_localState?.state?.configs;
+              _response = localConfigs ? localConfigs : _response;
+            }
+            resolve(_response);
           }, 1000);
         });
         const parsedItems = (response as ConfigItemType[]).map(parseConfigItem);
