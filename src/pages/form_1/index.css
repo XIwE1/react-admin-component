@@ -1,0 +1,6 @@
+.form_container {
+    margin: 0 15px;
+    .form_content {
+        margin: 10px;
+    }
+}

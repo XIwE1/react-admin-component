@@ -8,12 +8,22 @@ const IForm = (props) => {
   const [formInstance] = Form.useForm();
 
   const renderFormItem = (item: FormSchemaItem) => {
-    return <FormItem {...item} />;
+    const itemProps = {
+      ...item,
+      label: item.field,
+      fieldName: item.key,
+    };
+    return <FormItem {...itemProps} key={item.key} />;
   };
 
   return (
-    <Form form={formInstance}>
-      {schemaItems.map((item) => renderFormItem(item))}
+    <Form
+      // labelCol={{ span: 8 }}
+      // wrapperCol={{ span: 16 }}
+      // style={{ maxWidth: 600 }}
+      form={formInstance}
+    >
+      {schemaItems?.map((item) => renderFormItem(item))}
     </Form>
   );
 };

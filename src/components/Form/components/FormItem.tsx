@@ -13,14 +13,8 @@ import {
 import Radio from "antd/es/radio/radio";
 
 const FormItem = (props: FormSchemaItem) => {
-  const { key, label, extra, rules, tooltip, hidden } = props;
 
-  const renderFieldComponent = (options: FormSchemaItem) => {
-    const { type, customRender, componentProps, reactions } = options;
-    const renderFunction = componentMap[type] || renderEmpty;
-    const component = renderFunction();
-    return component;
-  };
+  const { fieldName, label, extra, rules, tooltip, hidden } = props;
 
   const componentMap = {
     input: renderInputComponent,
@@ -35,6 +29,13 @@ const FormItem = (props: FormSchemaItem) => {
     range: renderDateComponent,
     switch: renderSwitchComponent,
     custom: renderCustomComponent,
+  };
+
+  const renderFieldComponent = (options: FormSchemaItem) => {
+    const { type, customRender, componentProps, reactions } = options;
+    const renderFunction = componentMap[type] || renderEmpty;
+    const component = renderFunction(type);
+    return component;
   };
 
   function renderInputComponent(type: string) {
@@ -77,8 +78,8 @@ const FormItem = (props: FormSchemaItem) => {
   return (
     <Form.Item
       extra={extra}
-      key={key}
-      name={key}
+      key={fieldName}
+      // name={fieldName}
       label={label}
       rules={rules}
       tooltip={tooltip}

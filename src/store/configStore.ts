@@ -57,6 +57,7 @@ export const useConfigStore = create<ConfigState>()(
       loading: false,
       // 更新配置数据
       updateConfigs: (configs) => set({ configs }),
+      
       // 更新目标配置数据
       updateTargetConfigData: (targetKey, targetConfigData) =>
         set((state) => {

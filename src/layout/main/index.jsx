@@ -17,6 +17,7 @@ const Main = (props) => {
     const Component = componentMap[key];
     return Component ? <Component /> : <>invalid content</>;
   };
+  
   return <div className="main">{renderContent(active)}</div>;
 };
 
