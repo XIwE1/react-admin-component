@@ -70,6 +70,7 @@ type SchemaReactions = SchemaReaction | SchemaReaction[]; //支持传入数组
 export interface FormSchemaItem {
   type: FormItemType;
   key: string;
+  fieldName?: string;
   label: string;
   defaultValue?: any;
   // options?: FormItemOption[];
