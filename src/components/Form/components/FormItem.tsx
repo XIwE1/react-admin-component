@@ -1,6 +1,16 @@
 import React from "react";
 import { FormSchemaItem } from "../Form.types";
-import { Form } from "antd";
+import {
+  Cascader,
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Switch,
+} from "antd";
+import Radio from "antd/es/radio/radio";
 
 const FormItem = (props: FormSchemaItem) => {
   const { key, label, extra, rules, tooltip, hidden } = props;
@@ -18,6 +28,7 @@ const FormItem = (props: FormSchemaItem) => {
     textarea: renderInputComponent,
     number: renderInputComponent,
     select: renderSelectComponent,
+    cascader: renderSelectComponent,
     checkbox: renderCheckComponent,
     radio: renderRadioComponent,
     date: renderDateComponent,
@@ -25,16 +36,40 @@ const FormItem = (props: FormSchemaItem) => {
     switch: renderSwitchComponent,
     custom: renderCustomComponent,
   };
-  
-  function renderInputComponent() {
-    return;
+
+  function renderInputComponent(type: string) {
+    if (type === "input") {
+      return <Input />;
+    } else if (type === "number") {
+      return <InputNumber />;
+    } else if (type === "password") {
+      return <Input.Password />;
+    } else if (type === "textarea") {
+      return <Input.TextArea />;
+    }
   }
-  function renderSelectComponent() {}
-  function renderDateComponent() {}
-  function renderCheckComponent() {}
-  function renderRadioComponent() {}
-  function renderSwitchComponent() {}
-  function renderCustomComponent() {}
+  function renderSelectComponent(type: string) {
+    if (type === "select") {
+      return <Select />;
+    } else if (type === "cascader") {
+      return <Cascader />;
+    }
+  }
+  function renderDateComponent() {
+    return <DatePicker />;
+  }
+  function renderCheckComponent() {
+    return <Checkbox />;
+  }
+  function renderRadioComponent() {
+    return <Radio />;
+  }
+  function renderSwitchComponent() {
+    return <Switch />;
+  }
+  function renderCustomComponent(customRender: FormSchemaItem["customRender"]) {
+    return <>renderCustomComponent</>;
+  }
   function renderEmpty() {
     return <></>;
   }
@@ -43,6 +78,7 @@ const FormItem = (props: FormSchemaItem) => {
     <Form.Item
       extra={extra}
       key={key}
+      name={key}
       label={label}
       rules={rules}
       tooltip={tooltip}
