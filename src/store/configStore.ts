@@ -29,6 +29,7 @@ type ConfigState = {
   loading: boolean;
   updateConfigs: (configs: ConfigItemType[]) => void;
   updateTargetConfigData: (targetKey: string, targetConfig: DataItem[]) => void;
+  addTargetConfigData: (targetKey: string, configDataItem: DataItem) => void;
   fetchConfigData: () => Promise<ConfigItemType[]>;
 };
 
@@ -57,7 +58,7 @@ export const useConfigStore = create<ConfigState>()(
       loading: false,
       // 更新配置数据
       updateConfigs: (configs) => set({ configs }),
-      
+
       // 更新目标配置数据
       updateTargetConfigData: (targetKey, targetConfigData) =>
         set((state) => {
@@ -65,6 +66,16 @@ export const useConfigStore = create<ConfigState>()(
             (item) => item.key === targetKey
           );
           state.configs[targetIndex].data = targetConfigData;
+          return { configs: state.configs };
+        }),
+
+      // 添加目标配置数据项
+      addTargetConfigData: (targetKey, configDataItem) =>
+        set((state) => {
+          let targetIndex = state.configs.findIndex(
+            (item) => item.key === targetKey
+          );
+          state.configs[targetIndex].data.push(configDataItem);
           return { configs: state.configs };
         }),
 
@@ -83,15 +94,15 @@ export const useConfigStore = create<ConfigState>()(
             if (localState) {
               const parsed_localState = JSON.parse(localState);
               const localConfigs = parsed_localState?.state?.configs;
-              _response = localConfigs ? localConfigs : _response;
+              _response = localConfigs.length ? localConfigs : _response;
             }
             resolve(_response);
+            set({ loading: false });
           }, 1000);
         });
         const parsedItems = (response as ConfigItemType[]).map(parseConfigItem);
 
         // 更新状态
-        set({ loading: false });
         get().updateConfigs(parsedItems);
 
         return parsedItems;
