@@ -1,10 +1,17 @@
-import BlockTitle from "@/components/BlockTitle";
+import { useState } from "react";
 import { Button, Space, Table, Switch } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+
+import BlockTitle from "@/components/BlockTitle";
+import ConfigItemModal from "./component/ConfigItemModal";
+
 import "./ConfigItem.css";
 
 const ConfigItem = (props) => {
   const { title, data: dataSource, onAdd, onDelete, onChange } = props;
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [activeItem, setActiveItem] = useState(null);
 
   const handleSwitchChange = (record, field, checked) => {
     const newData = dataSource.map((item) => {
@@ -68,12 +75,21 @@ const ConfigItem = (props) => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a>设置</a>
+          <a onClick={() => onClickEdit(record)}>设置</a>
           <a>删除</a>
         </Space>
       ),
     },
   ];
+
+  const onClickAdd = () => {
+    setModalVisible(true);
+    setActiveItem(null);
+  };
+  const onClickEdit = (fieldItem) => {
+    setActiveItem({...fieldItem});
+    setModalVisible(true);
+  };
 
   return (
     <div className="config_item">
@@ -83,7 +99,7 @@ const ConfigItem = (props) => {
       <div className="item_content">
         <div className="item_buttons">
           <Space>
-            <Button icon={<PlusOutlined />} onClick={onAdd}>
+            <Button icon={<PlusOutlined />} onClick={onClickAdd}>
               添加
             </Button>
             <Button icon={<DeleteOutlined />} onClick={onDelete}>
@@ -101,10 +117,20 @@ const ConfigItem = (props) => {
             size="small"
           />
         </div>
-        <Button block type="dashed" icon={<PlusOutlined />} onClick={onAdd}>
+        <Button
+          block
+          type="dashed"
+          icon={<PlusOutlined />}
+          onClick={onClickAdd}
+        >
           添加
         </Button>
       </div>
+      <ConfigItemModal
+        isOpen={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        fieldItem={activeItem}
+      />
     </div>
   );
 };
