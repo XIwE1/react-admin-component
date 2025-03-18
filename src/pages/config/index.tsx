@@ -25,8 +25,9 @@ const Config = () => {
 
   // 增删改回调
   const handleAdd = (targetKey: string, newDataItem: DataItem) => {
-    console.log("add");
+    console.log("add", targetKey, newDataItem);
     addTargetConfigData(targetKey, newDataItem);
+    message.success("添加成功");
   };
   const handleDelete = () => {
     console.log("delete");
@@ -45,11 +46,10 @@ const Config = () => {
             <ConfigItem
               onAdd={handleAdd}
               onDelete={handleDelete}
-              onChange={(newData: DataItem[]) =>
-                handleChange(item.key, newData)
-              }
+              onChange={handleChange}
               {...item}
               key={item.key}
+              configKey={item.key}
             />
           );
         })}

@@ -1,5 +1,6 @@
 import { Modal, Form, Input, Select, Switch, Space } from "antd";
 import { useEffect, useState } from "react";
+import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
 
 import "./ConfigItemModal.css";
 
@@ -76,7 +77,14 @@ const ConfigItemModal = (props) => {
             label="类型"
             rules={[{ required: true, message: "请选择类型" }]}
           >
-            <Select />
+            <Select
+              showSearch
+              optionFilterProp="label"
+              options={FORM_ITEM_TYPES.map((item) => ({
+                value: item,
+                label: item,
+              }))}
+            />
           </Form.Item>
           <Form.Item key="defaultValue" name="defaultValue" label="默认值">
             <Input />
@@ -88,6 +96,7 @@ const ConfigItemModal = (props) => {
                 name="disabled"
                 getValueProps={(value) => ({ checked: !value })}
                 getValueFromEvent={(checked) => !checked}
+                initialValue={false}
               >
                 <Switch checkedChildren="可编辑" unCheckedChildren="不可编辑" />
               </Form.Item>
@@ -96,6 +105,7 @@ const ConfigItemModal = (props) => {
                 name="hidden"
                 getValueProps={(value) => ({ checked: !value })}
                 getValueFromEvent={(checked) => !checked}
+                initialValue={false}
               >
                 <Switch checkedChildren="显示" unCheckedChildren="隐藏" />
               </Form.Item>

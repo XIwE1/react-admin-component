@@ -1,23 +1,41 @@
 import { FormInstance, Rule } from "antd/es/form";
 import { LabelTooltipType } from "antd/es/form/FormItemLabel";
 
+export const FORM_ITEM_TYPES = [
+  "input", // 输入框
+  "password", // 密码框
+  "textarea", // 文本域
+  "number", // 数字输入框
+  "select", // 下拉框
+  "checkbox", // 多选框
+  "cascader", // 级联选择
+  "radio", // 单选框
+  "date", // 日期选择
+  "range", // 日期范围
+  "switch", // 开关
+  "upload", // 文件上传
+  "custom", // 自定义组件
+];
+
+export type FormItemType = typeof FORM_ITEM_TYPES[number];
+
 /**
  * 字段类型
  */
-export type FormItemType =
-  | "input" // 输入框
-  | "password" // 密码框
-  | "textarea" // 文本域
-  | "number" // 数字输入框
-  | "select" // 下拉框
-  | "checkbox" // 多选框
-  | "cascader" // 级联选择
-  | "radio" // 单选框
-  | "date" // 日期选择
-  | "range" // 日期范围
-  | "switch" // 开关
-  | "upload" // 文件上传
-  | "custom"; // 自定义组件
+// export type FormItemType =
+//   | "input" // 输入框
+//   | "password" // 密码框
+//   | "textarea" // 文本域
+//   | "number" // 数字输入框
+//   | "select" // 下拉框
+//   | "checkbox" // 多选框
+//   | "cascader" // 级联选择
+//   | "radio" // 单选框
+//   | "date" // 日期选择
+//   | "range" // 日期范围
+//   | "switch" // 开关
+//   | "upload" // 文件上传
+//   | "custom"; // 自定义组件
 
 /**
  * 选项类型

@@ -8,7 +8,14 @@ import ConfigItemModal from "./component/ConfigItemModal";
 import "./ConfigItem.css";
 
 const ConfigItem = (props) => {
-  const { title, data: dataSource, onAdd, onDelete, onChange } = props;
+  const {
+    title,
+    configKey,
+    data: dataSource,
+    onAdd,
+    onDelete,
+    onChange,
+  } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
@@ -20,16 +27,24 @@ const ConfigItem = (props) => {
       return newItem;
     });
 
-    onChange?.(newData);
+    onChange?.(configKey, newData);
   };
 
-  const handleConfigItemChange = (newDataItem) => {
-    if (!newDataItem) return;
+  const handleChange = (newDataItem) => {
     const newData = dataSource.map((item) => {
       const newItem = item.key === newDataItem.key ? newDataItem : item;
       return newItem;
     });
-    onChange?.(newData);
+    onChange?.(configKey, newData);
+  };
+
+  const handleAdd = (newDataItem) => {
+    onAdd?.(configKey, newDataItem);
+  };
+
+  const handleSubmit = (newDataItem) => {
+    if (!newDataItem) return;
+    activeItem ? handleChange(newDataItem) : handleAdd(newDataItem);
     clearModal();
   };
 
@@ -143,7 +158,7 @@ const ConfigItem = (props) => {
       </div>
       <ConfigItemModal
         isOpen={modalVisible}
-        onSubmit={handleConfigItemChange}
+        onSubmit={handleSubmit}
         onCancel={clearModal}
         fieldItem={activeItem}
       />
