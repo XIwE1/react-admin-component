@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Space, Table, Switch } from "antd";
+import { Button, Space, Table, Switch, Popconfirm } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import BlockTitle from "@/components/BlockTitle";
@@ -40,6 +40,10 @@ const ConfigItem = (props) => {
 
   const handleAdd = (newDataItem) => {
     onAdd?.(configKey, newDataItem);
+  };
+
+  const handleDelete = (dataItemKey) => {
+    onDelete?.(configKey, dataItemKey);
   };
 
   const handleSubmit = (newDataItem) => {
@@ -106,7 +110,23 @@ const ConfigItem = (props) => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => onClickEdit(record)}>设置</a>
-          <a>删除</a>
+          <Popconfirm
+            // title={`删除`}
+            title={
+              <span>
+                确定要删除 <strong>字段-{record.field}</strong> 吗？
+              </span>
+            }
+            onConfirm={() => handleDelete(record.key)}
+            okText="确定"
+            cancelText="取消"
+            okType="danger"
+          >
+            <Button type="link" danger>
+              删除
+            </Button>
+          </Popconfirm>
+          {/* <a>删除</a> */}
         </Space>
       ),
     },
@@ -132,7 +152,7 @@ const ConfigItem = (props) => {
             <Button icon={<PlusOutlined />} onClick={onClickAdd}>
               添加
             </Button>
-            <Button icon={<DeleteOutlined />} onClick={onDelete}>
+            <Button danger icon={<DeleteOutlined />}>
               删除
             </Button>
           </Space>

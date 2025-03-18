@@ -29,7 +29,8 @@ type ConfigState = {
   loading: boolean;
   updateConfigs: (configs: ConfigItemType[]) => void;
   updateTargetConfigData: (targetKey: string, targetConfig: DataItem[]) => void;
-  addTargetConfigData: (targetKey: string, configDataItem: DataItem) => void;
+  addTargetConfigData: (targetKey: string, dataItem: DataItem) => void;
+  deleteTargetConfigData: (targetKey: string, dataItemKey: string) => void;
   fetchConfigData: () => Promise<ConfigItemType[]>;
 };
 
@@ -62,25 +63,39 @@ export const useConfigStore = create<ConfigState>()(
       // 更新目标配置数据
       updateTargetConfigData: (targetKey, targetConfigData) =>
         set((state) => {
-          let targetIndex = state.configs.findIndex(
+          const targetConfig = state.configs.find(
             (item) => item.key === targetKey
           );
-          state.configs[targetIndex].data = targetConfigData;
+          if (!targetConfig) return { configs: state.configs };
+          targetConfig.data = targetConfigData;
           return { configs: state.configs };
         }),
 
       // 添加目标配置数据项
-      addTargetConfigData: (targetKey, configDataItem) =>
+      addTargetConfigData: (targetKey, dataItem) =>
         set((state) => {
-          let targetIndex = state.configs.findIndex(
+          const targetConfig = state.configs.find(
             (item) => item.key === targetKey
           );
-          state.configs[targetIndex].data.push(configDataItem);
+          if (!targetConfig) return { configs: state.configs };
+          targetConfig.data.push(dataItem);
           return { configs: state.configs };
         }),
 
       // 删除配置数据
-      // 删除目标配置数据
+      // 删除目标配置数据项
+      deleteTargetConfigData: (targetKey, dataItemKey) =>
+        set((state) => {
+          const targetConfig = state.configs.find(
+            (item) => item.key === targetKey
+          );
+          if (!targetConfig) return { configs: state.configs };
+          const targetDataIndex = targetConfig.data.findIndex(
+            (item) => item.key === dataItemKey
+          );
+          targetConfig.data.splice(targetDataIndex, 1);
+          return { configs: state.configs };
+        }),
 
       // 模拟异步获取数据
       fetchConfigData: async () => {

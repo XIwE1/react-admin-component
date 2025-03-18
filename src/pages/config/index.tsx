@@ -16,6 +16,7 @@ const Config = () => {
     fetchConfigData,
     updateTargetConfigData,
     addTargetConfigData,
+    deleteTargetConfigData,
   } = useConfigStore();
 
   // 模拟请求后台数据
@@ -29,8 +30,10 @@ const Config = () => {
     addTargetConfigData(targetKey, newDataItem);
     message.success("添加成功");
   };
-  const handleDelete = () => {
+  const handleDelete = (targetKey: string, dataItemKey: string) => {
     console.log("delete");
+    deleteTargetConfigData(targetKey, dataItemKey);
+    message.success("删除成功");
   };
   const handleChange = (targetKey: string, newData: DataItem[]) => {
     console.log("handleChange");
