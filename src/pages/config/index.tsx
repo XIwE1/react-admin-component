@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ConfigItem from "./ConfigItem.jsx";
 import "./index.css";
 import React from "react";
-import { Spin } from "antd";
+import { message, Spin } from "antd";
 import {
   DataItem,
   useConfigStore,
@@ -34,6 +34,7 @@ const Config = () => {
   const handleChange = (targetKey: string, newData: DataItem[]) => {
     console.log("handleChange");
     updateTargetConfigData(targetKey, newData);
+    message.success("修改成功");
   };
 
   return (

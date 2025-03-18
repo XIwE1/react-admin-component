@@ -12,12 +12,13 @@ const ConfigItemModal = (props) => {
   useEffect(() => {
     const clone = {
       ...fieldItem,
-      editAble: !fieldItem?.disabled,
-      visible: !fieldItem?.hidden,
     };
     setCloneItem(clone);
-    formInstance.setFieldsValue(clone);
   }, [fieldItem]);
+
+  useEffect(() => {
+    formInstance.setFieldsValue(cloneItem);
+  }, [cloneItem]);
 
   const computedTitle = (fieldItem) => {
     const edit = fieldItem ? "编辑 - " : "新增 - ";
@@ -34,22 +35,38 @@ const ConfigItemModal = (props) => {
   const handleSubmit = async () => {
     const isValid = await beforeSubmit(formInstance);
     if (!isValid) return;
-    onSubmit?.(formInstance.getFieldsValue());
+    onSubmit?.({ ...cloneItem, ...formInstance.getFieldsValue() });
   };
+
+  const handleCancel = () => {
+    onCancel?.();
+    setTimeout(() => {
+      formInstance.resetFields();
+    }, 160);
+  };
+
   return (
     <Modal
       open={isOpen}
       onOk={handleSubmit}
-      onCancel={onCancel}
+      onCancel={handleCancel}
       title={computedTitle(fieldItem)}
     >
       <div className="modal_content">
         <Form form={formInstance} labelCol={{ span: 4 }}>
           <Form.Item
+            key="key"
+            name="key"
+            label="key"
+            rules={[{ required: true, message: "key不能为空" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
             key="field"
             name="field"
             label="字段"
-            rules={[{ required: true, message: "请输入字段" }]}
+            rules={[{ required: true, message: "字段不能为空" }]}
           >
             <Input />
           </Form.Item>

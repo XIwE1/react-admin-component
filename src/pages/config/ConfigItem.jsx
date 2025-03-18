@@ -23,6 +23,21 @@ const ConfigItem = (props) => {
     onChange?.(newData);
   };
 
+  const handleConfigItemChange = (newDataItem) => {
+    if (!newDataItem) return;
+    const newData = dataSource.map((item) => {
+      const newItem = item.key === newDataItem.key ? newDataItem : item;
+      return newItem;
+    });
+    onChange?.(newData);
+    clearModal();
+  };
+
+  const clearModal = () => {
+    setActiveItem(null);
+    setModalVisible(false);
+  };
+
   const columns = [
     {
       title: "字段",
@@ -83,11 +98,11 @@ const ConfigItem = (props) => {
   ];
 
   const onClickAdd = () => {
-    setModalVisible(true);
     setActiveItem(null);
+    setModalVisible(true);
   };
   const onClickEdit = (fieldItem) => {
-    setActiveItem({...fieldItem});
+    setActiveItem({ ...fieldItem });
     setModalVisible(true);
   };
 
@@ -128,7 +143,8 @@ const ConfigItem = (props) => {
       </div>
       <ConfigItemModal
         isOpen={modalVisible}
-        onCancel={() => setModalVisible(false)}
+        onSubmit={handleConfigItemChange}
+        onCancel={clearModal}
         fieldItem={activeItem}
       />
     </div>
