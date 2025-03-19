@@ -80,7 +80,7 @@ export const useConfigStore = create<ConfigState>()(
           );
           if (!targetConfig) return { configs: state.configs };
           const targetDataIndex = targetConfig.data.findIndex(
-            (item) => item.key === dataItemKey
+            (item) => item.field_key === dataItemKey
           );
           targetConfig.data.splice(targetDataIndex, 1);
           return { configs: state.configs };

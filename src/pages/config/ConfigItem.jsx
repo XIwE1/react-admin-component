@@ -117,7 +117,7 @@ const ConfigItem = (props) => {
                 确定要删除 <strong>字段-{record.field}</strong> 吗？
               </span>
             }
-            onConfirm={() => handleDelete(record.key)}
+            onConfirm={() => handleDelete(record.field_key)}
             okText="确定"
             cancelText="取消"
             okType="danger"
@@ -162,7 +162,7 @@ const ConfigItem = (props) => {
             dataSource={dataSource}
             columns={columns}
             bordered
-            rowKey="key"
+            rowKey="field_key"
             pagination={false}
             size="small"
           />
