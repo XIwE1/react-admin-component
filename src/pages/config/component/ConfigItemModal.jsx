@@ -1,6 +1,7 @@
 import { Modal, Form, Input, Select, Switch, Space } from "antd";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
+import SelectItem from "./SelectItem";
 
 import "./ConfigItemModal.css";
 
@@ -8,7 +9,9 @@ const ConfigItemModal = (props) => {
   const { onSubmit, isOpen, onCancel, fieldItem } = props;
 
   const [cloneItem, setCloneItem] = useState({});
+
   const [formInstance] = Form.useForm();
+  const currentType = Form.useWatch("type", formInstance);
 
   useEffect(() => {
     const clone = {
@@ -28,8 +31,6 @@ const ConfigItemModal = (props) => {
   };
 
   const beforeSubmit = async (formInstance) => {
-    console.log("formInstance", formInstance.getFieldsValue());
-
     return await formInstance.validateFields();
   };
 
@@ -45,6 +46,17 @@ const ConfigItemModal = (props) => {
       formInstance.resetFields();
     }, 160);
   };
+
+  const handleTargetChange = (targetKey, value) => {
+    // setCloneItem({ ...cloneItem, [targetKey]: value });
+    formInstance.setFieldValue(targetKey, value);
+  };
+
+  const renderSelectConfig = useCallback(() => {
+    const { options } = formInstance.getFieldsValue();
+    if (currentType !== "select") return <></>;
+    return <SelectItem options={options || []} onChange={handleTargetChange} />;
+  }, [currentType]);
 
   return (
     <Modal
@@ -86,6 +98,7 @@ const ConfigItemModal = (props) => {
               }))}
             />
           </Form.Item>
+          {renderSelectConfig()}
           <Form.Item key="defaultValue" name="defaultValue" label="默认值">
             <Input />
           </Form.Item>
