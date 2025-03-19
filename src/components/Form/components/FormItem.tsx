@@ -13,8 +13,10 @@ import {
 import Radio from "antd/es/radio/radio";
 
 const FormItem = (props: FormSchemaItem) => {
-
-  const { fieldName, label, extra, rules, tooltip, hidden } = props;
+  const { field_key, field, extra, rules, tooltip, hidden, defaultValue } =
+    props;
+  console.log("props", field_key, field, hidden, defaultValue);
+  console.log("defaultValue", defaultValue);
 
   const componentMap = {
     input: renderInputComponent,
@@ -32,10 +34,13 @@ const FormItem = (props: FormSchemaItem) => {
   };
 
   const renderFieldComponent = (options: FormSchemaItem) => {
-    const { type, customRender, componentProps, reactions } = options;
+    const { type, customRender, componentProps, reactions, disabled } = options;
     const renderFunction = componentMap[type] || renderEmpty;
-    const component = renderFunction(type);
-    return component;
+    const Component = renderFunction(type) || <></>;
+    return React.cloneElement(Component, {
+      disabled,
+      ...componentProps,
+    });
   };
 
   function renderInputComponent(type: string) {
@@ -78,12 +83,13 @@ const FormItem = (props: FormSchemaItem) => {
   return (
     <Form.Item
       extra={extra}
-      key={fieldName}
-      // name={fieldName}
-      label={label}
+      key={field_key}
+      name={field_key}
+      label={field}
       rules={rules}
       tooltip={tooltip}
       hidden={hidden}
+      initialValue={defaultValue}
     >
       {renderFieldComponent(props)}
     </Form.Item>

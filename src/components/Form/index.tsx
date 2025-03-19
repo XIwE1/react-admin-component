@@ -7,23 +7,23 @@ const IForm = (props) => {
   const { schemaItems, fieldValues } = props;
   const [formInstance] = Form.useForm();
 
+  formInstance.setFieldsValue(fieldValues);
+
   const renderFormItem = (item: FormSchemaItem) => {
     const itemProps = {
       ...item,
-      label: item.field,
-      fieldName: item.key,
     };
-    return <FormItem {...itemProps} key={item.key} />;
+    return <FormItem {...itemProps} key={item.field_key} />;
   };
 
   return (
     <Form
-      // labelCol={{ span: 8 }}
+      labelCol={{ span: 4 }}
       // wrapperCol={{ span: 16 }}
       // style={{ maxWidth: 600 }}
-      form={formInstance}
+      // form={formInstance}
     >
-      {schemaItems?.map((item) => renderFormItem(item))}
+      {schemaItems?.map((item: FormSchemaItem) => renderFormItem(item))}
     </Form>
   );
 };

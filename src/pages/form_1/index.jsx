@@ -1,6 +1,6 @@
-import IForm from "@/components/Form/Form";
+import IForm from "@/components/Form";
 import BlockTitle from "@/components/BlockTitle";
-import './index.css'
+import "./index.css";
 import { useConfigStore } from "@/store/configStore";
 
 const TARGET_CONFIG_KEY = "form1";
@@ -13,7 +13,9 @@ const Form1 = () => {
   return (
     <div className="form_container">
       <BlockTitle title={config.title} />
-      <IForm schemaItems={configSchemas} className="form_content"/>
+      <div className="form_content">
+        <IForm schemaItems={configSchemas} />
+      </div>
     </div>
   );
 };
