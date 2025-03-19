@@ -2,6 +2,14 @@ import { ConfigItemType, FormSchemaItem } from "@/store/configStore";
 
 export const mock_dataSource: FormSchemaItem[] = [
   {
+    field_key: "goods",
+    field: "商品",
+    type: "input",
+    defaultValue: "显示器",
+    disabled: false,
+    hidden: false,
+  },
+  {
     field_key: "money",
     field: "金额",
     type: "number",
@@ -9,15 +17,34 @@ export const mock_dataSource: FormSchemaItem[] = [
     disabled: false,
     hidden: false,
     reactions: "count,price",
+    tooltip: "总花费金额",
   },
   {
     field_key: "price",
     field: "单价",
     type: "number",
     defaultValue: 10,
-    disabled: false,
+    disabled: true,
     hidden: false,
     reactions: "money,price",
+    extra: '采购时的价格',
+  },
+  {
+    field_key: "count",
+    field: "数量",
+    type: "number",
+    defaultValue: 10,
+    disabled: false,
+    hidden: false,
+    tooltip: "购入的总数量",
+  },
+  {
+    field_key: "describe",
+    field: "用途",
+    type: "input",
+    defaultValue: '业务采购',
+    disabled: false,
+    hidden: false,
   },
 ];
 

@@ -8,7 +8,7 @@ const Aside = ({ props, children }) => {
     <div className="aside">
       <div className="title" onClick={jumpToGitHub}>
         <div className="">
-          <GithubOutlined /> admin-component v0.0.1
+          <GithubOutlined /> admin-component v0.1.0
         </div>
       </div>
       <div className="list_container">{children}</div>

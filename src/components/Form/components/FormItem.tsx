@@ -56,7 +56,7 @@ const FormItem = (props: FormSchemaItem) => {
   }
   function renderSelectComponent(type: string) {
     if (type === "select") {
-      return <Select />;
+      return <Select showSearch />;
     } else if (type === "cascader") {
       return <Cascader />;
     }
