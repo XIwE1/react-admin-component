@@ -56,8 +56,8 @@ const ConfigItemModal = (props) => {
       <div className="modal_content">
         <Form form={formInstance} labelCol={{ span: 4 }}>
           <Form.Item
-            key="key"
-            name="key"
+            key="field_key"
+            name="field_key"
             label="key"
             rules={[{ required: true, message: "key不能为空" }]}
           >
@@ -87,6 +87,9 @@ const ConfigItemModal = (props) => {
             />
           </Form.Item>
           <Form.Item key="defaultValue" name="defaultValue" label="默认值">
+            <Input />
+          </Form.Item>
+          <Form.Item key="tooltip" name="tooltip" label="提示">
             <Input />
           </Form.Item>
           <Form.Item label="状态" style={{ marginBottom: 0 }}>

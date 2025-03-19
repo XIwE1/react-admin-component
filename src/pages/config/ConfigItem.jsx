@@ -23,7 +23,7 @@ const ConfigItem = (props) => {
   const handleSwitchChange = (record, field, checked) => {
     const newData = dataSource.map((item) => {
       const newItem =
-        item.key === record.key ? { ...item, [field]: !checked } : item;
+        item.field_key === record.field_key ? { ...item, [field]: !checked } : item;
       return newItem;
     });
 
@@ -32,7 +32,7 @@ const ConfigItem = (props) => {
 
   const handleChange = (newDataItem) => {
     const newData = dataSource.map((item) => {
-      const newItem = item.key === newDataItem.key ? newDataItem : item;
+      const newItem = item.field_key === newDataItem.field_key ? newDataItem : item;
       return newItem;
     });
     onChange?.(configKey, newData);

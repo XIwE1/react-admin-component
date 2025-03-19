@@ -4,7 +4,7 @@ import "./index.css";
 import React from "react";
 import { message, Spin } from "antd";
 import {
-  DataItem,
+  FormSchemaItem,
   useConfigStore,
   ConfigItemType,
 } from "@/store/configStore.js";
@@ -25,7 +25,7 @@ const Config = () => {
   }, []);
 
   // 增删改回调
-  const handleAdd = (targetKey: string, newDataItem: DataItem) => {
+  const handleAdd = (targetKey: string, newDataItem: FormSchemaItem) => {
     console.log("add", targetKey, newDataItem);
     addTargetConfigData(targetKey, newDataItem);
     message.success("添加成功");
@@ -35,7 +35,7 @@ const Config = () => {
     deleteTargetConfigData(targetKey, dataItemKey);
     message.success("删除成功");
   };
-  const handleChange = (targetKey: string, newData: DataItem[]) => {
+  const handleChange = (targetKey: string, newData: FormSchemaItem[]) => {
     console.log("handleChange");
     updateTargetConfigData(targetKey, newData);
     message.success("修改成功");

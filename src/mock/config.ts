@@ -1,8 +1,8 @@
-import { ConfigItemType, DataItem } from "@/store/configStore";
+import { ConfigItemType, FormSchemaItem } from "@/store/configStore";
 
-export const mock_dataSource: DataItem[] = [
+export const mock_dataSource: FormSchemaItem[] = [
   {
-    key: "money",
+    field_key: "money",
     field: "金额",
     type: "number",
     defaultValue: 100,
@@ -11,7 +11,7 @@ export const mock_dataSource: DataItem[] = [
     reactions: "count,price",
   },
   {
-    key: "price",
+    field_key: "price",
     field: "单价",
     type: "number",
     defaultValue: 10,

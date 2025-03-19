@@ -1,26 +1,15 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { LOCAL_CONFIG_KEY } from "../constants/config";
-import { FormItemType } from "@/components/Form/Form.types.js";
+import { FormItemType, FormSchemaItem } from "@/components/Form/Form.types.js";
 import { mock_configs } from "../mock/config";
 
 export interface ConfigItemType {
   key: string;
   title: string;
-  data: DataItem[];
+  data: FormSchemaItem[];
   createAt: string;
   lastUpdateAt: string;
-  [key: string]: any;
-}
-
-export interface DataItem {
-  key: string;
-  field: string;
-  type: FormItemType;
-  defaultValue: any;
-  disabled: boolean;
-  hidden: boolean;
-  reactions?: string;
   [key: string]: any;
 }
 
@@ -28,8 +17,8 @@ type ConfigState = {
   configs: ConfigItemType[];
   loading: boolean;
   updateConfigs: (configs: ConfigItemType[]) => void;
-  updateTargetConfigData: (targetKey: string, targetConfig: DataItem[]) => void;
-  addTargetConfigData: (targetKey: string, dataItem: DataItem) => void;
+  updateTargetConfigData: (targetKey: string, targetConfig: FormSchemaItem[]) => void;
+  addTargetConfigData: (targetKey: string, dataItem: FormSchemaItem) => void;
   deleteTargetConfigData: (targetKey: string, dataItemKey: string) => void;
   fetchConfigData: () => Promise<ConfigItemType[]>;
 };
@@ -39,7 +28,7 @@ const parseConfigItem = (rawItem: ConfigItemType) => {
   return {
     ...rawItem,
     // 一些转换操作
-    data: rawItem.data.map((item: DataItem) => ({
+    data: rawItem.data.map((item: FormSchemaItem) => ({
       ...item,
       disabled: !!item.disabled,
       hidden: !!item.hidden,

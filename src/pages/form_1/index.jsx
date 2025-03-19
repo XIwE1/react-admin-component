@@ -1,7 +1,7 @@
 import IForm from "@/components/Form/Form";
 import BlockTitle from "@/components/BlockTitle";
 import './index.css'
-import { useConfigStore } from "../../store/configStore";
+import { useConfigStore } from "@/store/configStore";
 
 const TARGET_CONFIG_KEY = "form1";
 
