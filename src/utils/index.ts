@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 // 获取和更新全局配置
 function getLocalConfig(configKey: string) {
   const config = localStorage.getItem(configKey);
@@ -6,7 +8,6 @@ function getLocalConfig(configKey: string) {
 }
 
 function storeLocalConfig(configKey: string, configs: any[]) {
-
   const result = Object.create({});
   for (let item of configs) {
     const [key, config] = item;
@@ -35,9 +36,25 @@ function storeLocalTargetConfig(
   storeLocalConfig(configKey, Object.entries(localConfig));
 }
 
+const dateFormatList = ["YYYY-MM-DD", "YYYY/MM/DD", "YY-MM-DD", "YY/MM/DD"];
+function transformToDayjs(date: number | string | Date) {
+  const value = dayjs(date, dateFormatList);
+  if (value.isValid()) return value;
+  return;
+}
+
+const formatValueByType = (type: string, value: any) => {
+  if (type === "date") return transformToDayjs(value);
+  if (type === "range")
+    return [transformToDayjs(value[0]), transformToDayjs(value[1])];
+  return value;
+};
+
 export {
   storeLocalConfig,
   getLocalConfig,
   getLocalTargetConfig,
   storeLocalTargetConfig,
+  transformToDayjs,
+  formatValueByType,
 };

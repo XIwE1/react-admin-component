@@ -63,6 +63,22 @@ export const mock_dataSource: FormSchemaItem[] = [
     disabled: false,
     hidden: false,
   },
+  {
+    field_key: "date",
+    field: "申请日期",
+    type: "date",
+    defaultValue: "2025-03-21",
+    disabled: false,
+    hidden: false,
+  },
+  {
+    field_key: "range",
+    field: "有效时间",
+    type: "range",
+    defaultValue: ["2025-03-21", "2026-03-21"],
+    disabled: false,
+    hidden: false,
+  },
 ];
 
 export const mock_configs: ConfigItemType[] = [

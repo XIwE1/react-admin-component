@@ -15,8 +15,6 @@ import Radio from "antd/es/radio/radio";
 const FormItem = (props: FormSchemaItem) => {
   const { field_key, field, extra, rules, tooltip, hidden, defaultValue } =
     props;
-  console.log("props", field_key, field, hidden, defaultValue);
-  console.log("defaultValue", defaultValue);
 
   const componentMap = {
     input: renderInputComponent,
@@ -61,8 +59,12 @@ const FormItem = (props: FormSchemaItem) => {
       return <Cascader />;
     }
   }
-  function renderDateComponent() {
-    return <DatePicker />;
+  function renderDateComponent(type: string) {
+    if (type === "date") {
+      return <DatePicker />;
+    } else if (type === "range") {
+      return <DatePicker.RangePicker />;
+    }
   }
   function renderCheckComponent() {
     return <Checkbox />;
