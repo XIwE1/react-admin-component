@@ -9,8 +9,10 @@ import {
   InputNumber,
   Select,
   Switch,
+  Radio,
+  Upload,
 } from "antd";
-import Radio from "antd/es/radio/radio";
+import { InboxOutlined } from "@ant-design/icons";
 
 const FormItem = (props: FormSchemaItem) => {
   const { field_key, field, extra, rules, tooltip, hidden, defaultValue } =
@@ -28,11 +30,13 @@ const FormItem = (props: FormSchemaItem) => {
     date: renderDateComponent,
     range: renderDateComponent,
     switch: renderSwitchComponent,
+    upload: renderUploadComponent,
     custom: renderCustomComponent,
   };
 
   const renderFieldComponent = (schemaItem: FormSchemaItem) => {
-    const { type, customRender, componentProps, reactions, disabled } = schemaItem;
+    const { type, customRender, componentProps, reactions, disabled } =
+      schemaItem;
     const renderFunction = componentMap[type] || renderEmpty;
     const Component = renderFunction(type) || <></>;
     return React.cloneElement(Component, {
@@ -70,10 +74,23 @@ const FormItem = (props: FormSchemaItem) => {
     return <Checkbox />;
   }
   function renderRadioComponent() {
-    return <Radio />;
+    return <Radio.Group />;
   }
   function renderSwitchComponent() {
     return <Switch />;
+  }
+  function renderUploadComponent() {
+    return (
+      <Upload.Dragger name="files" action="/upload.do">
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">
+          Click or drag file to this area to upload
+        </p>
+        <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+      </Upload.Dragger>
+    );
   }
   function renderCustomComponent(customRender: FormSchemaItem["customRender"]) {
     return <>renderCustomComponent</>;

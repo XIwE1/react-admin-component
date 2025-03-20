@@ -10,6 +10,22 @@ export const mock_dataSource: FormSchemaItem[] = [
     hidden: false,
   },
   {
+    field_key: "type",
+    field: "商品类型",
+    type: "radio",
+    defaultValue: 3,
+    disabled: false,
+    hidden: false,
+    componentProps: {
+      options: [
+        { label: "化工产品", value: 1 },
+        { label: "医疗制剂", value: 2 },
+        { label: "机械设备", value: 3 },
+        { label: "灯具空调", value: 4 },
+      ],
+    },
+  },
+  {
     field_key: "money",
     field: "金额",
     type: "number",
@@ -43,7 +59,7 @@ export const mock_dataSource: FormSchemaItem[] = [
     field: "部门",
     type: "select",
 
-    defaultValue: "tech",
+    defaultValue: ["tech"],
     disabled: false,
     hidden: false,
     componentProps: {
@@ -52,6 +68,7 @@ export const mock_dataSource: FormSchemaItem[] = [
         { label: "技术部", value: "tech" },
         { label: "销售部", value: "sales" },
         { label: "财务部", value: "finance" },
+        { label: "行政部", value: "govern" },
       ],
     },
   },
@@ -76,6 +93,14 @@ export const mock_dataSource: FormSchemaItem[] = [
     field: "有效时间",
     type: "range",
     defaultValue: ["2025-03-21", "2026-03-21"],
+    disabled: false,
+    hidden: false,
+  },
+  {
+    field_key: "valid",
+    field: "票据",
+    type: "upload",
+    defaultValue: "",
     disabled: false,
     hidden: false,
   },

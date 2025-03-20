@@ -1,0 +1,1 @@
+export const SELECT_TYPES = ['select', 'cascader', 'radio', 'checkbox'];

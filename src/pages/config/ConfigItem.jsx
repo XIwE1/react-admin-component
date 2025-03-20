@@ -163,6 +163,7 @@ const ConfigItem = (props) => {
             columns={columns}
             bordered
             rowKey="field_key"
+            rowSelection={'checkbox'}
             pagination={false}
             size="small"
           />

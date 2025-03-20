@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
 import SelectItem from "./SelectItem";
 
+import { SELECT_TYPES } from "@/constants/type.js";
 import "./ConfigItemModal.css";
 
 const ConfigItemModal = (props) => {
@@ -53,8 +54,8 @@ const ConfigItemModal = (props) => {
   };
 
   const renderSelectConfig = useCallback(() => {
-    if (currentType !== "select") return <></>;
-    return <SelectItem />;
+    if (!SELECT_TYPES.includes(currentType)) return <></>;
+    return <SelectItem type={currentType} />;
   }, [currentType]);
 
   return (

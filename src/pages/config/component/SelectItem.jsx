@@ -3,20 +3,22 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 
 const SelectItem = (props) => {
-  const { options, onChange } = props;
+  const { type, options, onChange } = props;
 
   return (
     <>
-      <Form.Item
-        label="选择类型"
-        name={["componentProps", "mode"]}
-        initialValue="radio"
-      >
-        <Radio.Group>
-          <Radio value="radio">单选</Radio>
-          <Radio value="multiple">多选</Radio>
-        </Radio.Group>
-      </Form.Item>
+      {type === "select" && (
+        <Form.Item
+          label="选择类型"
+          name={["componentProps", "mode"]}
+          initialValue="radio"
+        >
+          <Radio.Group>
+            <Radio value="radio">单选</Radio>
+            <Radio value="multiple">多选</Radio>
+          </Radio.Group>
+        </Form.Item>
+      )}
       <Form.Item
         key="options"
         label="可选项"
