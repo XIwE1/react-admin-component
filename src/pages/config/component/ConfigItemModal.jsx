@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Select, Switch, Space } from "antd";
+import { Modal, Form, Input, Select, Switch, Space, Typography } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
 import SelectItem from "./SelectItem";
@@ -53,9 +53,8 @@ const ConfigItemModal = (props) => {
   };
 
   const renderSelectConfig = useCallback(() => {
-    const { options } = formInstance.getFieldsValue();
     if (currentType !== "select") return <></>;
-    return <SelectItem options={options || []} onChange={handleTargetChange} />;
+    return <SelectItem />;
   }, [currentType]);
 
   return (
@@ -66,6 +65,15 @@ const ConfigItemModal = (props) => {
       title={computedTitle(fieldItem)}
     >
       <div className="modal_content">
+        {/* <Typography>
+          <pre>
+            <div><strong>cloneItem:</strong> {JSON.stringify(cloneItem)}</div>
+            <div>
+              <strong>formInstance:</strong> {JSON.stringify(formInstance.getFieldsValue())}
+            </div>
+          </pre>
+        </Typography> */}
+
         <Form form={formInstance} labelCol={{ span: 4 }}>
           <Form.Item
             key="field_key"

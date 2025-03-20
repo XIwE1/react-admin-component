@@ -33,8 +33,8 @@ const FormItem = (props: FormSchemaItem) => {
     custom: renderCustomComponent,
   };
 
-  const renderFieldComponent = (options: FormSchemaItem) => {
-    const { type, customRender, componentProps, reactions, disabled } = options;
+  const renderFieldComponent = (schemaItem: FormSchemaItem) => {
+    const { type, customRender, componentProps, reactions, disabled } = schemaItem;
     const renderFunction = componentMap[type] || renderEmpty;
     const Component = renderFunction(type) || <></>;
     return React.cloneElement(Component, {

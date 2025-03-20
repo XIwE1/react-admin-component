@@ -27,7 +27,7 @@ export const mock_dataSource: FormSchemaItem[] = [
     disabled: true,
     hidden: false,
     reactions: "money,price",
-    extra: '采购时的价格',
+    extra: "采购时的价格",
   },
   {
     field_key: "count",
@@ -39,10 +39,27 @@ export const mock_dataSource: FormSchemaItem[] = [
     tooltip: "购入的总数量",
   },
   {
+    field_key: "department",
+    field: "部门",
+    type: "select",
+
+    defaultValue: "tech",
+    disabled: false,
+    hidden: false,
+    componentProps: {
+      mode: "multiple",
+      options: [
+        { label: "技术部", value: "tech" },
+        { label: "销售部", value: "sales" },
+        { label: "财务部", value: "finance" },
+      ],
+    },
+  },
+  {
     field_key: "describe",
     field: "用途",
     type: "input",
-    defaultValue: '业务采购',
+    defaultValue: "业务采购",
     disabled: false,
     hidden: false,
   },
