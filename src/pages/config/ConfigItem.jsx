@@ -4,6 +4,7 @@ import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import BlockTitle from "@/components/BlockTitle";
 import ConfigItemModal from "./component/ConfigItemModal";
+import DndWrapper from "@/components/DndWrapper";
 
 import "./ConfigItem.css";
 
@@ -23,7 +24,9 @@ const ConfigItem = (props) => {
   const handleSwitchChange = (record, field, checked) => {
     const newData = dataSource.map((item) => {
       const newItem =
-        item.field_key === record.field_key ? { ...item, [field]: !checked } : item;
+        item.field_key === record.field_key
+          ? { ...item, [field]: !checked }
+          : item;
       return newItem;
     });
 
@@ -32,7 +35,8 @@ const ConfigItem = (props) => {
 
   const handleChange = (newDataItem) => {
     const newData = dataSource.map((item) => {
-      const newItem = item.field_key === newDataItem.field_key ? newDataItem : item;
+      const newItem =
+        item.field_key === newDataItem.field_key ? newDataItem : item;
       return newItem;
     });
     onChange?.(configKey, newData);
@@ -50,6 +54,11 @@ const ConfigItem = (props) => {
     if (!newDataItem) return;
     activeItem ? handleChange(newDataItem) : handleAdd(newDataItem);
     clearModal();
+  };
+
+  const onDndDragChange = async (newData) => {
+    const res = await onChange?.(configKey, newData);
+    return true;
   };
 
   const clearModal = () => {
@@ -158,15 +167,22 @@ const ConfigItem = (props) => {
           </Space>
         </div>
         <div className="item_list">
-          <Table
+          <DndWrapper
+            rowKey="field_key"
             dataSource={dataSource}
             columns={columns}
-            bordered
-            rowKey="field_key"
-            rowSelection={'checkbox'}
-            pagination={false}
-            size="small"
-          />
+            onSortChange={onDndDragChange}
+          >
+            <Table
+              dataSource={dataSource}
+              columns={columns}
+              // bordered
+              rowKey="field_key"
+              // rowSelection={"checkbox"}
+              pagination={false}
+              size="small"
+            />
+          </DndWrapper>
         </div>
         <Button
           block
