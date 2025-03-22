@@ -42,7 +42,7 @@ const Config = () => {
   };
 
   return (
-    <Spin spinning={loading} size="large" tip="Loading...">
+    <Spin spinning={loading} size="large" tip="Loading..." style={{ minHeight: "100px" }}>
       <div className="config_container">
         {configs.map((item: ConfigItemType) => {
           return (

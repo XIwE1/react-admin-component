@@ -13,8 +13,9 @@ const PreviewModal = (props) => {
         open={isOpen}
         onCancel={onCancel}
         destroyOnClose
-        width={"80%"}
+        width={"60%"}
         footer={null}
+        zIndex={9999}
       >
         <DynamicForm config={config} isPreview={true} />
       </Modal>

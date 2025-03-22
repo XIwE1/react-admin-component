@@ -93,7 +93,7 @@ export const useConfigStore = create<ConfigState>()(
         const response = await new Promise((resolve) => {
           setTimeout(() => {
             let _response = mock_configs;
-            // 优先读取本地存储
+            // 优先读取本地存储，模拟后台数据
             const localState = localStorage.getItem(LOCAL_CONFIG_KEY);
             if (localState) {
               const parsed_localState = JSON.parse(localState);
@@ -102,7 +102,7 @@ export const useConfigStore = create<ConfigState>()(
             }
             resolve(_response);
             set({ loading: false });
-          }, 1000);
+          }, 500);
         });
         const parsedItems = (response as ConfigItemType[]).map(parseConfigItem);
 
