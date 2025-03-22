@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Space, Table, Switch, Popconfirm } from "antd";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 
 import BlockTitle from "@/components/BlockTitle";
 import ConfigItemModal from "./component/ConfigItemModal";
+import PreviewModal from "./component/PreviewModal";
 import DndWrapper from "@/components/DndWrapper";
 
 import "./ConfigItem.css";
@@ -18,8 +19,14 @@ const ConfigItem = (props) => {
     onChange,
   } = props;
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [fieldModalVisible, setFieldModalVisible] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
+  const [previewModel, setPreviewModel] = useState({});
+
+  useEffect(() => {
+    setPreviewModel({ title, data: dataSource });
+  }, [title, dataSource]);
 
   const handleSwitchChange = (record, field, checked) => {
     const newData = dataSource.map((item) => {
@@ -63,7 +70,8 @@ const ConfigItem = (props) => {
 
   const clearModal = () => {
     setActiveItem(null);
-    setModalVisible(false);
+    setFieldModalVisible(false);
+    setPreviewVisible(false);
   };
 
   const columns = [
@@ -143,11 +151,14 @@ const ConfigItem = (props) => {
 
   const onClickAdd = () => {
     setActiveItem(null);
-    setModalVisible(true);
+    setFieldModalVisible(true);
   };
   const onClickEdit = (fieldItem) => {
     setActiveItem({ ...fieldItem });
-    setModalVisible(true);
+    setFieldModalVisible(true);
+  };
+  const onClickPreview = () => {
+    setPreviewVisible(true);
   };
 
   return (
@@ -160,6 +171,9 @@ const ConfigItem = (props) => {
           <Space>
             <Button icon={<PlusOutlined />} onClick={onClickAdd}>
               添加
+            </Button>
+            <Button icon={<EyeOutlined />} onClick={onClickPreview}>
+              预览
             </Button>
             <Button danger icon={<DeleteOutlined />}>
               删除
@@ -194,10 +208,15 @@ const ConfigItem = (props) => {
         </Button>
       </div>
       <ConfigItemModal
-        isOpen={modalVisible}
+        isOpen={fieldModalVisible}
         onSubmit={handleSubmit}
         onCancel={clearModal}
         fieldItem={activeItem}
+      />
+      <PreviewModal
+        isOpen={previewVisible}
+        onCancel={clearModal}
+        config={previewModel}
       />
     </div>
   );

@@ -8,12 +8,13 @@ import BlockTitle from "@/components/BlockTitle";
 import "./index.css";
 
 export interface DynamicFormProps {
-  onSubmit?: (value: Record<string, any>) => Promise<any>;
   config: ConfigItemType;
+  isPreview?: boolean;
+  onSubmit?: (value: Record<string, any>) => Promise<any>;
 }
 
 const DynamicForm = (props: DynamicFormProps) => {
-  const { onSubmit, config } = props;
+  const { onSubmit, config, isPreview } = props;
   const [isLoading, setLoading] = useState(false);
   const formRef = useRef<IFormRef>(null);
 
@@ -34,17 +35,21 @@ const DynamicForm = (props: DynamicFormProps) => {
       <div className="form_content">
         <IForm ref={formRef} schemaItems={configSchemas} />
         <div className="content_footer">
-          <Popconfirm
-            title={<span>确定要重置表单吗？</span>}
-            onConfirm={handleReset}
-            okText="确定"
-            cancelText="取消"
-          >
-            <Button>重置</Button>
-          </Popconfirm>
-          <Button loading={isLoading} type="primary" onClick={handleSubmit}>
-            提交
-          </Button>
+          {!isPreview && (
+            <>
+              <Popconfirm
+                title={<span>确定要重置表单吗？</span>}
+                onConfirm={handleReset}
+                okText="确定"
+                cancelText="取消"
+              >
+                <Button>重置</Button>
+              </Popconfirm>
+              <Button loading={isLoading} type="primary" onClick={handleSubmit}>
+                提交
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -64,6 +64,7 @@ const ConfigItemModal = (props) => {
       onOk={handleSubmit}
       onCancel={handleCancel}
       title={computedTitle(fieldItem)}
+      destroyOnClose
     >
       <div className="modal_content">
         {/* <Typography>
