@@ -65,7 +65,7 @@ const ConfigItemModal = (props) => {
       onCancel={handleCancel}
       title={computedTitle(fieldItem)}
       destroyOnClose
-      zIndex={9999}
+      zIndex={999}
     >
       <div className="modal_content">
         {/* <Typography>

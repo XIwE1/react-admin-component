@@ -1,3 +1,4 @@
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "./index.less";
 import Config from "@/pages/config";
 import Form1 from "@/pages/form_1";
@@ -12,13 +13,33 @@ const componentMap = {
 const Main = (props) => {
   const { active } = props;
 
+  const renderTransitionComponent = (key, Component) => {
+    return (
+      <CSSTransition key={key} timeout={300} classNames="fade">
+        <div className="content">
+          <Component />
+        </div>
+      </CSSTransition>
+    );
+  };
+
   const renderContent = (key) => {
     if (!key) return <>empty content</>;
     const Component = componentMap[key];
-    return Component ? <Component /> : <>invalid content</>;
+    return Component ? (
+      renderTransitionComponent(key, Component)
+    ) : (
+      <>invalid content</>
+    );
   };
-  
-  return <div className="main">{renderContent(active)}</div>;
+
+  return (
+    <div className="main">
+      <TransitionGroup component={null}>
+        {renderContent(active)}
+      </TransitionGroup>
+    </div>
+  );
 };
 
 export default Main;

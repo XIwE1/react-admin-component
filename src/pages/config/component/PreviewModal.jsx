@@ -4,7 +4,6 @@ import DynamicForm from "@/components/DynamicForm";
 
 const PreviewModal = (props) => {
   const { isOpen, config, onCancel } = props;
-  console.log("config", config);
 
   return (
     <div className="config_item">
@@ -15,7 +14,7 @@ const PreviewModal = (props) => {
         destroyOnClose
         width={"60%"}
         footer={null}
-        zIndex={9999}
+        zIndex={999}
       >
         <DynamicForm config={config} isPreview={true} />
       </Modal>
