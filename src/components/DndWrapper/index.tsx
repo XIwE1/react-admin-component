@@ -36,7 +36,7 @@ const DragHandle: React.FC = () => {
 };
 
 const sortColumn = {
-  title: "排序",
+  title: "",
   key: "sort",
   dataIndex: "sort",
   align: "center" as const,

@@ -1,8 +1,12 @@
-import Form from "antd/es/form";
-import React, { useEffect } from "react";
+import Form, { FormInstance } from "antd/es/form";
+import React, {
+  useImperativeHandle,
+  useEffect,
+  useState,
+  forwardRef,
+} from "react";
 import FormItem from "./components/FormItem";
 import { FormSchemaItem } from "./Form.types";
-import dayjs from "dayjs";
 import { formatValueByType } from "@/utils";
 
 export interface IFormProps {
@@ -10,11 +14,25 @@ export interface IFormProps {
   fieldValues: any;
 }
 
-const IForm = (props: IFormProps) => {
-  const { schemaItems, fieldValues } = props;
-  const [formInstance] = Form.useForm();
+export interface IFormRef {
+  formInstance: FormInstance;
+  resetFields: () => void;
+}
 
-  const [cloneSchemaItems, setCloneSchemaItems] = React.useState([] as FormSchemaItem[]);
+const IForm = (props: IFormProps, ref: React.Ref<unknown> | undefined) => {
+  const { schemaItems, fieldValues } = props;
+  const [cloneSchemaItems, setCloneSchemaItems] = useState(
+    [] as FormSchemaItem[]
+  );
+
+  const [formInstance] = Form.useForm();
+  formInstance.setFieldsValue(fieldValues);
+
+  useImperativeHandle(ref, () => ({
+    formInstance,
+    resetFields: () => formInstance.resetFields(),
+    getFieldsValue: () => formInstance.getFieldsValue(),
+  }));
 
   useEffect(() => {
     const cloneItems = schemaItems.map((item) => ({
@@ -23,8 +41,6 @@ const IForm = (props: IFormProps) => {
     }));
     setCloneSchemaItems(cloneItems);
   }, [schemaItems]);
-
-  formInstance.setFieldsValue(fieldValues);
 
   const renderFormItem = (item: FormSchemaItem) => {
     const itemProps = {
@@ -36,13 +52,12 @@ const IForm = (props: IFormProps) => {
   return (
     <Form
       labelCol={{ span: 4 }}
+      form={formInstance}
       // wrapperCol={{ span: 16 }}
-      // style={{ maxWidth: 600 }}
-      // form={formInstance}
     >
       {cloneSchemaItems?.map((item: FormSchemaItem) => renderFormItem(item))}
     </Form>
   );
 };
 
-export default IForm;
+export default forwardRef(IForm);
