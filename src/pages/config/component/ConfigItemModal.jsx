@@ -1,9 +1,21 @@
-import { Modal, Form, Input, Select, Switch, Space, Typography } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Select,
+  Switch,
+  Space,
+  Typography,
+  Divider,
+} from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
-import SelectItem from "./SelectItem";
 
+import SelectItem from "./SelectItem";
+import FormItem from "@/components/Form/components/FormItem";
+
+import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
 import { SELECT_TYPES } from "@/constants/type.js";
+import { formatValueByType } from "@/utils";
 import "./ConfigItemModal.css";
 
 const ConfigItemModal = (props) => {
@@ -13,6 +25,7 @@ const ConfigItemModal = (props) => {
 
   const [formInstance] = Form.useForm();
   const currentType = Form.useWatch("type", formInstance);
+  const currentFormValues = Form.useWatch([], formInstance);
 
   useEffect(() => {
     const clone = {
@@ -57,6 +70,32 @@ const ConfigItemModal = (props) => {
     if (!SELECT_TYPES.includes(currentType)) return <></>;
     return <SelectItem type={currentType} />;
   }, [currentType]);
+
+  const renderFieldItemPreview = useCallback(() => {
+    const currentValues = formInstance.getFieldsValue(true);
+    console.log("currentValues", currentValues);
+    const { field_key, field, type, defaultValue } = currentValues;
+    const showPreview = field_key && field && type;
+    return (
+      <Typography>
+        <pre>
+          <div>
+            <strong>preview</strong>
+          </div>
+          {showPreview && (
+            <div className="form_item_preview">
+              <Form>
+                <FormItem
+                  {...currentValues}
+                  defaultValue={formatValueByType(type, defaultValue)}
+                />
+              </Form>
+            </div>
+          )}
+        </pre>
+      </Typography>
+    );
+  }, [currentFormValues]);
 
   return (
     <Modal
@@ -124,6 +163,7 @@ const ConfigItemModal = (props) => {
                 getValueProps={(value) => ({ checked: !value })}
                 getValueFromEvent={(checked) => !checked}
                 initialValue={false}
+                style={{ marginBottom: 0 }}
               >
                 <Switch checkedChildren="可编辑" unCheckedChildren="不可编辑" />
               </Form.Item>
@@ -133,13 +173,16 @@ const ConfigItemModal = (props) => {
                 getValueProps={(value) => ({ checked: !value })}
                 getValueFromEvent={(checked) => !checked}
                 initialValue={false}
+                style={{ marginBottom: 0 }}
               >
                 <Switch checkedChildren="显示" unCheckedChildren="隐藏" />
               </Form.Item>
             </Space>
           </Form.Item>
-          <Form.Item key="reactions" label="关联字段"></Form.Item>
+          {/* <Form.Item key="reactions" label="关联字段"></Form.Item> */}
         </Form>
+        {/* <Divider /> */}
+        <div>{renderFieldItemPreview()}</div>
       </div>
     </Modal>
   );

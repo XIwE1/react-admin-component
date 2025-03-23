@@ -1,3 +1,8 @@
 .modal_content {
   margin: 15px 0;
+
+  .form_item_preview .ant-form-item {
+    padding: 10px 0;
+    margin-bottom: 0 !important;
+  }
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Space, Table, Switch, Popconfirm } from "antd";
+import { Button, Space, Table, Switch, Popconfirm, message } from "antd";
 import { PlusOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 
 import BlockTitle from "@/components/BlockTitle";
@@ -127,6 +127,7 @@ const ConfigItem = (props) => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => onClickEdit(record)}>设置</a>
+          <a onClick={() => onClickReaction(record)}>关联</a>
           <Popconfirm
             // title={`删除`}
             title={
@@ -139,7 +140,7 @@ const ConfigItem = (props) => {
             cancelText="取消"
             okType="danger"
           >
-            <Button type="link" danger>
+            <Button type="link" danger style={{ padding: 0 }}>
               删除
             </Button>
           </Popconfirm>
@@ -159,6 +160,9 @@ const ConfigItem = (props) => {
   };
   const onClickPreview = () => {
     setPreviewVisible(true);
+  };
+  const onClickReaction = (fieldItem) => {
+    message.info("功能加紧开发中...");
   };
 
   return (
