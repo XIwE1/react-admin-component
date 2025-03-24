@@ -82,7 +82,7 @@ const FormItem = (props: FormItemProps) => {
     }
   }
   function renderCheckComponent() {
-    return <Checkbox />;
+    return <Checkbox.Group />;
   }
   function renderRadioComponent() {
     return <Radio.Group />;

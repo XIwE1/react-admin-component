@@ -70,6 +70,18 @@ const ConfigItemModal = (props) => {
         );
         formInstance.setFieldValue("defaultValue", result);
       }
+    } else if (type === "radio") {
+      let result = defaultValue;
+      // defaultValue不在options中，需要清空
+      if (!options.find((item) => item.value === result)) result = null;
+      formInstance.setFieldValue("defaultValue", result);
+    } else if (type === "checkbox") {
+      let result = Array.isArray(defaultValue) ? defaultValue : [];
+      // defaultValue不在options中，需要移除
+      result = result.filter((item) =>
+        options.find((option) => option.value === item)
+      );
+      formInstance.setFieldValue("defaultValue", result);
     }
   }, [currentFormValues]);
 
@@ -103,6 +115,7 @@ const ConfigItemModal = (props) => {
 
   const handleTypechange = useCallback((type) => {
     formInstance.setFieldValue("defaultValue", undefined);
+    formInstance.setFieldValue(["componentProps", "options"], []);
     return type;
   }, []);
 
