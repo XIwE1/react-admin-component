@@ -44,6 +44,7 @@ function transformToDayjs(date: number | string | Date) {
 }
 
 const formatValueByType = (type: string, value: any) => {
+  if (!value) return value;
   if (type === "date") return transformToDayjs(value);
   if (type === "range")
     return [transformToDayjs(value[0]), transformToDayjs(value[1])];
