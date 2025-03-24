@@ -14,9 +14,20 @@ import {
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
-const FormItem = (props: FormSchemaItem) => {
-  const { field_key, field, extra, rules, tooltip, hidden, defaultValue } =
-    props;
+export interface FormItemProps extends FormSchemaItem {
+  isPreview?: boolean;
+}
+const FormItem = (props: FormItemProps) => {
+  const {
+    field_key,
+    field,
+    extra,
+    rules,
+    tooltip,
+    hidden,
+    defaultValue,
+    isPreview,
+  } = props;
 
   const componentMap = {
     input: renderInputComponent,
