@@ -51,7 +51,7 @@ const SelectItem = (props) => {
                 block
                 type="dashed"
                 icon={<PlusOutlined />}
-                onClick={() => add()}
+                onClick={() => add({ label: "", value: "" })}
                 // onClick={addOption}
               >
                 添加

@@ -71,9 +71,13 @@ const ConfigItemModal = (props) => {
     return <SelectItem type={currentType} />;
   }, [currentType]);
 
+  const onTypechange = useCallback((type) => {
+    formInstance.setFieldValue("defaultValue", undefined);
+    return type;
+  }, []);
+
   const renderFieldItemPreview = useCallback(() => {
-    const currentValues = formInstance.getFieldsValue(true);
-    console.log("currentValues", currentValues);
+    const currentValues = formInstance.getFieldsValue();
     const { field_key, field, type, defaultValue } = currentValues;
     const showPreview = field_key && field && type;
     return (
@@ -83,7 +87,10 @@ const ConfigItemModal = (props) => {
             <strong>preview</strong>
           </div>
           {showPreview && (
-            <div className="form_item_preview">
+            <div
+              key={field_key + type + defaultValue}
+              className="form_item_preview"
+            >
               <Form>
                 <FormItem
                   {...currentValues}
@@ -107,15 +114,6 @@ const ConfigItemModal = (props) => {
       zIndex={999}
     >
       <div className="modal_content">
-        {/* <Typography>
-          <pre>
-            <div><strong>cloneItem:</strong> {JSON.stringify(cloneItem)}</div>
-            <div>
-              <strong>formInstance:</strong> {JSON.stringify(formInstance.getFieldsValue())}
-            </div>
-          </pre>
-        </Typography> */}
-
         <Form form={formInstance} labelCol={{ span: 4 }}>
           <Form.Item
             key="field_key"
@@ -138,6 +136,7 @@ const ConfigItemModal = (props) => {
             name="type"
             label="类型"
             rules={[{ required: true, message: "请选择类型" }]}
+            getValueFromEvent={onTypechange}
           >
             <Select
               showSearch
@@ -149,6 +148,7 @@ const ConfigItemModal = (props) => {
             />
           </Form.Item>
           {renderSelectConfig()}
+          {/* {renderDefaultValue()} */}
           <Form.Item key="defaultValue" name="defaultValue" label="默认值">
             <Input />
           </Form.Item>
