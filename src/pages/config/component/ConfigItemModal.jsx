@@ -28,8 +28,14 @@ const ConfigItemModal = (props) => {
   const currentFormValues = Form.useWatch([], formInstance);
 
   useEffect(() => {
+    if (!fieldItem) {
+      setCloneItem({});
+      return;
+    }
+    const { type = "input", defaultValue } = fieldItem;
     const clone = {
       ...fieldItem,
+      defaultValue: formatValueByType(type, defaultValue),
     };
     setCloneItem(clone);
   }, [fieldItem]);
@@ -37,6 +43,35 @@ const ConfigItemModal = (props) => {
   useEffect(() => {
     formInstance.setFieldsValue(cloneItem);
   }, [cloneItem]);
+
+  useEffect(() => {
+    if (!currentFormValues || !isOpen) return;
+    const {
+      type = "input",
+      componentProps: { options = [], mode } = {},
+      defaultValue,
+    } = currentFormValues;
+    // 当options、mode发生变化时，正确的更新defaultValue
+    if (type === "select") {
+      if (mode === "radio") {
+        let result = defaultValue;
+        // mode从multiple变成radio，保留第一个
+        if (Array.isArray(defaultValue)) result = defaultValue[0];
+        // defaultValue不在options中，需要清空
+        if (!options.find((item) => item.value === result)) result = null;
+        formInstance.setFieldValue("defaultValue", result);
+      } else if (mode === "multiple") {
+        let result = Array.isArray(defaultValue)
+          ? defaultValue
+          : [defaultValue];
+        // defaultValue不在options中，需要移除
+        result = result.filter((item) =>
+          options.find((option) => option.value === item)
+        );
+        formInstance.setFieldValue("defaultValue", result);
+      }
+    }
+  }, [currentFormValues]);
 
   const computedTitle = (fieldItem) => {
     const edit = fieldItem ? "编辑 - " : "新增 - ";
@@ -66,15 +101,29 @@ const ConfigItemModal = (props) => {
     formInstance.setFieldValue(targetKey, value);
   };
 
+  const handleTypechange = useCallback((type) => {
+    formInstance.setFieldValue("defaultValue", undefined);
+    return type;
+  }, []);
+
   const renderSelectConfig = useCallback(() => {
     if (!SELECT_TYPES.includes(currentType)) return <></>;
     return <SelectItem type={currentType} />;
   }, [currentType]);
 
-  const onTypechange = useCallback((type) => {
-    formInstance.setFieldValue("defaultValue", undefined);
-    return type;
-  }, []);
+  const renderDefaultValue = useCallback(() => {
+    const currentValues = formInstance.getFieldsValue();
+    const { type = "input", defaultValue, componentProps } = currentValues;
+    const itemProps = {
+      field_key: "defaultValue",
+      field: "默认值",
+      type,
+      defaultValue: null,
+      componentProps,
+    };
+    // return <></>;
+    return <FormItem {...itemProps} />;
+  }, [currentFormValues]);
 
   const renderFieldItemPreview = useCallback(() => {
     const currentValues = formInstance.getFieldsValue();
@@ -136,7 +185,7 @@ const ConfigItemModal = (props) => {
             name="type"
             label="类型"
             rules={[{ required: true, message: "请选择类型" }]}
-            getValueFromEvent={onTypechange}
+            getValueFromEvent={handleTypechange}
           >
             <Select
               showSearch
@@ -148,10 +197,10 @@ const ConfigItemModal = (props) => {
             />
           </Form.Item>
           {renderSelectConfig()}
-          {/* {renderDefaultValue()} */}
-          <Form.Item key="defaultValue" name="defaultValue" label="默认值">
+          {renderDefaultValue()}
+          {/* <Form.Item key="defaultValue" name="defaultValue" label="默认值">
             <Input />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item key="tooltip" name="tooltip" label="提示">
             <Input />
           </Form.Item>
