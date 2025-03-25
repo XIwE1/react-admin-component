@@ -14,7 +14,7 @@ import SelectItem from "./SelectItem";
 import FormItem from "@/components/Form/components/FormItem";
 
 import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
-import { SELECT_TYPES } from "@/constants/type.js";
+import { SELECT_TYPES, TYPES_KEYNAME_MAP } from "@/constants/type.js";
 import { formatValueByType } from "@/utils";
 import "./ConfigItemModal.css";
 
@@ -115,7 +115,7 @@ const ConfigItemModal = (props) => {
 
   const handleTypechange = useCallback((type) => {
     formInstance.setFieldValue("defaultValue", undefined);
-    formInstance.setFieldValue(["componentProps", "options"], []);
+    formInstance.setFieldValue(["componentProps"], {});
     return type;
   }, []);
 
@@ -205,7 +205,7 @@ const ConfigItemModal = (props) => {
               optionFilterProp="label"
               options={FORM_ITEM_TYPES.map((item) => ({
                 value: item,
-                label: item,
+                label: TYPES_KEYNAME_MAP[item] ,
               }))}
             />
           </Form.Item>
