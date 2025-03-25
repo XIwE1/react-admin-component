@@ -26,6 +26,14 @@ export const mock_dataSource: FormSchemaItem[] = [
     },
   },
   {
+    field_key: "urls",
+    field: "采购链接",
+    type: "dynamic",
+    defaultValue: ["https://www.jd.com", "https://www.taobao.com"],
+    disabled: false,
+    hidden: false,
+  },
+  {
     field_key: "money",
     field: "金额",
     type: "number",

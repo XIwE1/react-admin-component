@@ -89,6 +89,8 @@ const ConfigItem = (props) => {
       title: "默认值",
       dataIndex: "defaultValue",
       key: "defaultValue",
+      width: "20%",
+      ellipsis: true,
     },
     {
       title: "可编辑",

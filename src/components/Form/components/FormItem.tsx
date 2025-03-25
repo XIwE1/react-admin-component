@@ -11,8 +11,9 @@ import {
   Switch,
   Radio,
   Upload,
+  Button,
 } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import { InboxOutlined, PlusOutlined } from "@ant-design/icons";
 
 export interface FormItemProps extends FormSchemaItem {
   isPreview?: boolean;
@@ -36,6 +37,7 @@ const FormItem = (props: FormItemProps) => {
     number: renderInputComponent,
     select: renderSelectComponent,
     cascader: renderSelectComponent,
+    dynamic: renderDynamicComponent,
     checkbox: renderCheckComponent,
     radio: renderRadioComponent,
     date: renderDateComponent,
@@ -73,6 +75,36 @@ const FormItem = (props: FormItemProps) => {
     } else if (type === "cascader") {
       return <Cascader />;
     }
+  }
+  function renderDynamicComponent() {
+    return (
+      <Form.List name={field_key}>
+        {(fields, { add, remove }) => (
+          <>
+            {fields.map((item, index) => {
+              return (
+                <div key={index} style={{ display: "flex", marginBottom: 8 }}>
+                  <Form.Item noStyle name={[item.name]} required>
+                    <Input />
+                  </Form.Item>
+                  <Button type="link" danger onClick={() => remove(item.name)}>
+                    删除
+                  </Button>
+                </div>
+              );
+            })}
+            <Button
+              block
+              type="dashed"
+              icon={<PlusOutlined />}
+              onClick={() => add()}
+            >
+              添加
+            </Button>
+          </>
+        )}
+      </Form.List>
+    );
   }
   function renderDateComponent(type: string) {
     if (type === "date") {

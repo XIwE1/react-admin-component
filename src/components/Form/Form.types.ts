@@ -6,6 +6,7 @@ export const FORM_ITEM_TYPES = [
   "password", // 密码框
   "textarea", // 文本域
   "number", // 数字输入框
+  "dynamic",  // 动态项
   "select", // 下拉框
   "checkbox", // 多选框
   "cascader", // 级联选择

@@ -52,6 +52,7 @@ const IForm = (props: IFormProps, ref: React.Ref<unknown> | undefined) => {
   return (
     <Form
       labelCol={{ span: 4 }}
+      labelWrap
       form={formInstance}
       // wrapperCol={{ span: 16 }}
     >
