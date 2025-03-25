@@ -7,6 +7,7 @@ import ConfigItemModal from "./component/ConfigItemModal";
 import PreviewModal from "./component/PreviewModal";
 import DndWrapper from "@/components/DndWrapper";
 
+import { formatDefaultValueByConfigItem } from "@/utils";
 import "./ConfigItem.css";
 
 const ConfigItem = (props) => {
@@ -91,6 +92,15 @@ const ConfigItem = (props) => {
       key: "defaultValue",
       width: "20%",
       ellipsis: true,
+      render: (_, record) => {
+        let _value;
+        try {
+          _value = formatDefaultValueByConfigItem(record);
+        } catch (error) {
+          console.error(error);
+        }
+        return _value;
+      },
     },
     {
       title: "可编辑",
