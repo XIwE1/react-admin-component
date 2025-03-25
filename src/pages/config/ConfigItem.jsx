@@ -224,6 +224,7 @@ const ConfigItem = (props) => {
         </Button>
       </div>
       <ConfigItemModal
+        key={fieldModalVisible}
         isOpen={fieldModalVisible}
         onSubmit={handleSubmit}
         onCancel={clearModal}
