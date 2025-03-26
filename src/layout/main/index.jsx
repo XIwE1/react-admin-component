@@ -1,8 +1,13 @@
+import React, { Suspense } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+
 import "./index.less";
 import Config from "@/pages/config";
-import Form1 from "@/pages/form_1";
+// import Form1 from "@/pages/form_1";
 import Form2 from "@/pages/form_2";
+
+const Form1 = React.lazy(() => import("@/pages/form_1"));
+// const Config = React.lazy(() => import("@/pages/config"));
 
 const componentMap = {
   Config: Config,
@@ -17,7 +22,9 @@ const Main = (props) => {
     return (
       <CSSTransition key={key} timeout={300} classNames="fade">
         <div className="content">
-          <Component />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Component />
+          </Suspense>
         </div>
       </CSSTransition>
     );
