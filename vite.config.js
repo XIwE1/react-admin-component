@@ -37,10 +37,10 @@ export default defineConfig({
       external: ["react", "react-dom"],
       output: {
         manualChunks(id) {
-          if (id.includes("antd/es/table")) {
-            return "antd_es_table";
+          if (id.includes("rc-tree" || id.includes("@ant-design"))) {
+            return "antd";
           }
-          if (id.includes("table")) {
+          if (id.includes("antd/es/table")) {
             return "table";
           }
         },
