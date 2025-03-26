@@ -32,6 +32,7 @@ const IForm = (props: IFormProps, ref: React.Ref<unknown> | undefined) => {
     formInstance,
     resetFields: () => formInstance.resetFields(),
     getFieldsValue: () => formInstance.getFieldsValue(),
+    validateFields: () => formInstance.validateFields(),
   }));
 
   useEffect(() => {

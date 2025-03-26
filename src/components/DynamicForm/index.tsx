@@ -1,4 +1,4 @@
-import { Button, Popconfirm } from "antd";
+import { Button, message, Popconfirm } from "antd";
 import React, { useRef, useState } from "react";
 
 import { ConfigItemType } from "@/store/configStore";
@@ -25,6 +25,15 @@ const DynamicForm = (props: DynamicFormProps) => {
   };
   const handleSubmit = async () => {
     setLoading(true);
+    let isValid = false;
+    try {
+      await formRef.current?.validateFields();
+      isValid = true;
+    } catch (error) {
+      message.error("表单校验失败");
+      setLoading(false);
+      return;
+    }
     await onSubmit?.(formRef.current?.getFieldsValue() || {});
     setLoading(false);
   };
