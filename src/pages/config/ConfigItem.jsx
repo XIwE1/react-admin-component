@@ -102,6 +102,37 @@ const ConfigItem = (props) => {
         return _value;
       },
     },
+    // {
+    //   title: "状态",
+    //   dataIndex: "status",
+    //   key: "status",
+    //   render: (_, record) => {
+    //     if (!record) return null;
+    //     const { disabled, hidden, required } = record;
+    //     return (
+    //       <Space>
+    //         <Switch
+    //           value={!disabled}
+    //           onChange={(checked) => handleSwitchChange(record, "disabled", checked)}
+    //           checkedChildren="可编辑"
+    //           unCheckedChildren="不可编辑"
+    //         />
+    //         <Switch
+    //           value={!hidden}
+    //           onChange={(checked) => handleSwitchChange(record, "hidden", checked)}
+    //           checkedChildren="显示"
+    //           unCheckedChildren="隐藏"
+    //         />
+    //         <Switch
+    //           value={required}
+    //           onChange={(checked) => handleSwitchChange(record, "required", checked)}
+    //           checkedChildren="必填"
+    //           unCheckedChildren="可选"
+    //         />
+    //       </Space>
+    //     );
+    //   },
+    // },
     {
       title: "可编辑",
       dataIndex: "disabled",
@@ -116,15 +147,27 @@ const ConfigItem = (props) => {
         />
       ),
     },
+    // {
+    //   title: "显示",
+    //   dataIndex: "hidden",
+    //   key: "hidden",
+    //   render: (_, record) => (
+    //     <Switch
+    //       size="normal"
+    //       value={!record?.hidden}
+    //       onChange={(checked) => handleSwitchChange(record, "hidden", checked)}
+    //     />
+    //   ),
+    // },
     {
-      title: "显示",
-      dataIndex: "hidden",
-      key: "hidden",
+      title: "必填",
+      dataIndex: "required",
+      key: "required",
       render: (_, record) => (
         <Switch
           size="normal"
-          value={!record?.hidden}
-          onChange={(checked) => handleSwitchChange(record, "hidden", checked)}
+          value={record?.required}
+          onChange={(checked) => handleSwitchChange(record, "required", checked)}
         />
       ),
     },

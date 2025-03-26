@@ -27,6 +27,7 @@ const FormItem = (props: FormItemProps) => {
     tooltip,
     hidden,
     defaultValue,
+    required,
     isPreview,
   } = props;
 
@@ -148,9 +149,10 @@ const FormItem = (props: FormItemProps) => {
       key={field_key}
       name={field_key}
       label={field}
-      rules={rules}
+      rules={[{ required}]}
       tooltip={tooltip}
       hidden={hidden}
+      // required={required}
       initialValue={defaultValue}
     >
       {renderFieldComponent(props)}

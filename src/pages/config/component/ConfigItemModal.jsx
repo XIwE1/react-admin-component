@@ -205,7 +205,7 @@ const ConfigItemModal = (props) => {
               optionFilterProp="label"
               options={FORM_ITEM_TYPES.map((item) => ({
                 value: item,
-                label: TYPES_KEYNAME_MAP[item] ,
+                label: TYPES_KEYNAME_MAP[item],
               }))}
             />
           </Form.Item>
@@ -238,6 +238,15 @@ const ConfigItemModal = (props) => {
                 style={{ marginBottom: 0 }}
               >
                 <Switch checkedChildren="显示" unCheckedChildren="隐藏" />
+              </Form.Item>
+              <Form.Item
+                key="required"
+                name="required"
+                // getValueFromEvent={(checked) => !checked}
+                initialValue={false}
+                style={{ marginBottom: 0 }}
+              >
+                <Switch checkedChildren="必填" unCheckedChildren="可选" />
               </Form.Item>
             </Space>
           </Form.Item>

@@ -96,12 +96,13 @@ export interface FormSchemaItem {
   // namePath?: string[];
   disabled?: boolean;
   hidden?: boolean;
+  required?: boolean;
   rules?: Rule[];
   // suffix?: React.ReactNode;
   extra?: React.ReactNode;
   tooltip?: LabelTooltipType;
   // tooltip?: string | { title: string; icon?: React.ReactNode };
-  componentProps?: Record<string, any>; // 透传给antd组件的属性，如placeholder、options
+  componentProps?: Record<string, any>; // 透传给受控组件的属性，如placeholder、options
   customRender?: (
     form: FormInstance,
     formData: Record<string, any>
