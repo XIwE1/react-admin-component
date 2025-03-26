@@ -242,7 +242,7 @@ const ConfigItemModal = (props) => {
               <Form.Item
                 key="required"
                 name="required"
-                // getValueFromEvent={(checked) => !checked}
+                getValueFromEvent={(checked) => checked}
                 initialValue={false}
                 style={{ marginBottom: 0 }}
               >

@@ -33,7 +33,7 @@ const ConfigItem = (props) => {
     const newData = dataSource.map((item) => {
       const newItem =
         item.field_key === record.field_key
-          ? { ...item, [field]: !checked }
+          ? { ...item, [field]: checked }
           : item;
       return newItem;
     });
@@ -102,37 +102,6 @@ const ConfigItem = (props) => {
         return _value;
       },
     },
-    // {
-    //   title: "状态",
-    //   dataIndex: "status",
-    //   key: "status",
-    //   render: (_, record) => {
-    //     if (!record) return null;
-    //     const { disabled, hidden, required } = record;
-    //     return (
-    //       <Space>
-    //         <Switch
-    //           value={!disabled}
-    //           onChange={(checked) => handleSwitchChange(record, "disabled", checked)}
-    //           checkedChildren="可编辑"
-    //           unCheckedChildren="不可编辑"
-    //         />
-    //         <Switch
-    //           value={!hidden}
-    //           onChange={(checked) => handleSwitchChange(record, "hidden", checked)}
-    //           checkedChildren="显示"
-    //           unCheckedChildren="隐藏"
-    //         />
-    //         <Switch
-    //           value={required}
-    //           onChange={(checked) => handleSwitchChange(record, "required", checked)}
-    //           checkedChildren="必填"
-    //           unCheckedChildren="可选"
-    //         />
-    //       </Space>
-    //     );
-    //   },
-    // },
     {
       title: "可编辑",
       dataIndex: "disabled",
@@ -142,7 +111,7 @@ const ConfigItem = (props) => {
           size="normal"
           value={!record?.disabled}
           onChange={(checked) =>
-            handleSwitchChange(record, "disabled", checked)
+            handleSwitchChange(record, "disabled", !checked)
           }
         />
       ),
@@ -155,7 +124,7 @@ const ConfigItem = (props) => {
     //     <Switch
     //       size="normal"
     //       value={!record?.hidden}
-    //       onChange={(checked) => handleSwitchChange(record, "hidden", checked)}
+    //       onChange={(checked) => handleSwitchChange(record, "hidden", !checked)}
     //     />
     //   ),
     // },
