@@ -17,6 +17,7 @@ import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
 import { SELECT_TYPES, TYPES_KEYNAME_MAP } from "@/constants/type.js";
 import { formatValueByType } from "@/utils";
 import "./ConfigItemModal.css";
+import RulesItem from "./RulesItem";
 
 const ConfigItemModal = (props) => {
   const { onSubmit, isOpen, onCancel, fieldItem } = props;
@@ -119,6 +120,10 @@ const ConfigItemModal = (props) => {
     return type;
   }, []);
 
+  const renderRulesConfig = useCallback(() => {
+    return <RulesItem type={currentType} rules={currentFormValues?.rules || []} />;
+  }, [currentType, currentFormValues?.rules]);
+
   const renderSelectConfig = useCallback(() => {
     if (!SELECT_TYPES.includes(currentType)) return <></>;
     return <SelectItem type={currentType} />;
@@ -210,6 +215,7 @@ const ConfigItemModal = (props) => {
             />
           </Form.Item>
           {renderSelectConfig()}
+          {renderRulesConfig()}
           {renderDefaultValue()}
           {/* <Form.Item key="defaultValue" name="defaultValue" label="默认值">
             <Input />

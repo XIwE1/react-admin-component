@@ -7,6 +7,7 @@ export const mock_dataSource: FormSchemaItem[] = [
     type: "input",
     required: true,
     defaultValue: "显示器",
+    rules: [],
     disabled: false,
     hidden: false,
   },
