@@ -33,7 +33,7 @@ export const mock_dataSource: FormSchemaItem[] = [
     field: "采购链接",
     type: "dynamic",
     defaultValue: ["https://www.jd.com", "https://www.taobao.com"],
-    rules: [{ type: "array", min: 1, max: 3 }],
+    rules: [{ type: "arrayLength", min: 1, max: 3 }],
     disabled: false,
     hidden: false,
   },
