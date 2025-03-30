@@ -4,11 +4,11 @@ export const LOCAL_CONFIG_KEY = "configs";
  * 预设规则配置
  */
 export const PRESET_RULES = {
-  required: {
-    label: "必填",
-    description: "字段不能为空",
-    supportTypes: "all", // 支持所有类型
-  },
+  // required: {
+  //   label: "必填",
+  //   description: "字段不能为空",
+  //   supportTypes: "all", // 支持所有类型
+  // },
 
   length: {
     label: "字符长度",
@@ -45,7 +45,23 @@ export const PRESET_RULES = {
       },
     ],
   },
-
+  range: {
+    label: "数值范围",
+    description: "数值范围限制",
+    supportTypes: ["number"],
+    params: [
+      {
+        name: "min",
+        label: "最小值",
+        type: "number",
+      },
+      {
+        name: "max",
+        label: "最大值",
+        type: "number",
+      },
+    ],
+  },
   dateRange: {
     label: "日期范围",
     description: "限制可选择的日期范围",
@@ -63,20 +79,6 @@ export const PRESET_RULES = {
       },
     ],
   },
-
-  fileSize: {
-    label: "文件大小",
-    description: "限制上传文件的大小",
-    supportTypes: ["upload"],
-    params: [
-      {
-        name: "maxSize",
-        label: "最大大小(MB)",
-        type: "number",
-      },
-    ],
-  },
-
   fileCount: {
     label: "文件数量",
     description: "限制可上传的文件数量",
@@ -107,5 +109,22 @@ export const PRESET_RULES = {
       },
     ],
   },
-  // ... 其他规则
+  // pattern: {
+  //   label: "格式校验",
+  //   description: "检查邮箱/手机号等格式",
+  //   supportTypes: ["input", "password"],
+  //   params: [
+  //     {
+  //       name: "email",
+  //       label: "电子邮箱",
+  //       type: "string",
+  //     },
+  //     {
+  //       name: "phone",
+  //       label: "手机号码",
+  //       type: "string",
+  //     },
+  //   ],
+  // }
+  // 其他规则
 };

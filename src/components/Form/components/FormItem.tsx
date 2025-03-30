@@ -14,6 +14,7 @@ import {
   Button,
 } from "antd";
 import { InboxOutlined, PlusOutlined } from "@ant-design/icons";
+import { transformRules } from "@/utils/rules";
 
 export interface FormItemProps extends FormSchemaItem {
   isPreview?: boolean;
@@ -30,6 +31,8 @@ const FormItem = (props: FormItemProps) => {
     required,
     isPreview,
   } = props;
+
+  const itemRules = transformRules(rules || []);
 
   const componentMap = {
     input: renderInputComponent,
@@ -149,7 +152,7 @@ const FormItem = (props: FormItemProps) => {
       key={field_key}
       name={field_key}
       label={field}
-      rules={[{ required}]}
+      rules={[{ required }, ...itemRules]}
       tooltip={tooltip}
       hidden={hidden}
       // required={required}

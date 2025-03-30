@@ -99,7 +99,22 @@ const ConfigItemModal = (props) => {
   const handleSubmit = async () => {
     const isValid = await beforeSubmit(formInstance);
     if (!isValid) return;
-    onSubmit?.({ ...cloneItem, ...formInstance.getFieldsValue() });
+    // 提交前对数据进行格式化，例如Date -> String
+    const fieldsValue = formInstance.getFieldsValue();
+    // const isDate = fieldsValue.type === "date" || fieldsValue.type === "range";
+    // if (isDate) {
+    //   fieldsValue.defaultValue = formatValueByType(
+    //     fieldsValue.type,
+    //     fieldsValue.defaultValue
+    //   ).format("YYYY-MM-DD");
+    //   const _rules = fieldsValue.rules.map((item) => ({
+    //     ...item,
+    //     min: formatValueByType("date", item.min)?.format("YYYY-MM-DD"),
+    //     max: formatValueByType("date", item.max)?.format("YYYY-MM-DD"),
+    //   }));
+    //   fieldsValue.rules = _rules;
+    // }
+    onSubmit?.({ ...cloneItem, ...fieldsValue });
   };
 
   const handleCancel = () => {
@@ -116,12 +131,15 @@ const ConfigItemModal = (props) => {
 
   const handleTypechange = useCallback((type) => {
     formInstance.setFieldValue("defaultValue", undefined);
+    formInstance.setFieldValue("rules", []);
     formInstance.setFieldValue(["componentProps"], {});
     return type;
   }, []);
 
   const renderRulesConfig = useCallback(() => {
-    return <RulesItem type={currentType} rules={currentFormValues?.rules || []} />;
+    return (
+      <RulesItem type={currentType} rules={currentFormValues?.rules || []} />
+    );
   }, [currentType, currentFormValues?.rules]);
 
   const renderSelectConfig = useCallback(() => {
