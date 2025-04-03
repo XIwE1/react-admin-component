@@ -1,5 +1,5 @@
 import { PRESET_RULES } from "@/constants/config";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { TYPE_RULES_MAP } from "@/constants/type";
 import { Form, InputNumber, Select, Space, Button, DatePicker } from "antd";
 import dayjs from "dayjs";
@@ -130,8 +130,7 @@ const RulesItem = (props) => {
       <>
         {HeadSide}
         {MainSide}
-        <Button type="link" danger onClick={() => remove(item.name)}>
-          删除
+        <Button type="link" danger onClick={() => remove(item.name)} icon={<DeleteOutlined />}>
         </Button>
       </>
     );

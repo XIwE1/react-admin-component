@@ -37,9 +37,11 @@ export default defineConfig({
       external: ["react", "react-dom"],
       output: {
         manualChunks(id) {
+          // 先拆出antd
           if (id.includes("rc-tree" || id.includes("@ant-design"))) {
             return "antd";
           }
+          // 从antd中再拆除table
           if (id.includes("antd/es/table")) {
             return "table";
           }

@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 /**
  * 将配置规则根据type和params 转换为 antd Form 规则
@@ -9,7 +9,8 @@ export const transformRules = (configRules: any[]) => {
   return configRules.map((rule) => {
     if (!rule) return null;
     const { type, min, max } = rule;
-
+    let message;
+    let prefixFn;
     switch (type) {
       case "required":
         return { required: true, message: "该字段为必填项" };
@@ -33,38 +34,54 @@ export const transformRules = (configRules: any[]) => {
       //   };
 
       case "length":
+        prefixFn = formatRangeMessage("字符长度");
+        message = prefixFn(min, max);
         return {
           type: "string",
           min: min,
           max: max,
-          message: `字符长度必须在 ${min || 0} - ${max || "∞"} 之间`,
+          message,
         };
       case "multipleLimit":
+        prefixFn = formatRangeMessage("选项数量");
+        message = prefixFn(min, max);
         return {
           type: "array",
           min: min,
           max: max,
-          message: `选项数量必须在 ${min || 0} - ${max || "∞"} 之间`,
+          message,
         };
       case "range":
+        prefixFn = formatRangeMessage("数值");
+        message = prefixFn(min, max);
         return {
           type: "number",
           min: min,
           max: max,
-          message: `数值必须在 ${min || 0} - ${max || "∞"} 之间`,
+          message,
         };
 
       case "dateRange":
         const startDate = dayjs(min);
         const endDate = dayjs(max);
-        const validator = (_: any, value: string) => {
-          if (!value) return Promise.resolve();
-          const date = dayjs(value);
-          if (min && date.isBefore(startDate, "day")) {
-            return Promise.reject(`日期不能早于 ${startDate.format("YYYY-MM-DD")}`);
+        message =
+          startDate &&
+          endDate &&
+          `日期应在 ${startDate.format("YYYY-MM-DD")} - ${endDate.format(
+            "YYYY-MM-DD"
+          )} 以内`;
+        const validator = (_: any, source: any) => {
+          const [begin, end] = formatDateSource(source);
+          if (!begin || !end) return Promise.resolve();
+          if (min && begin.isBefore(startDate, "day")) {
+            return Promise.reject(
+              message || `日期不能早于 ${startDate.format("YYYY-MM-DD")}`
+            );
           }
-          if (max && date.isAfter(endDate, "day")) {
-            return Promise.reject(`日期不能晚于 ${endDate.format("YYYY-MM-DD")}`);
+          if (max && end.isAfter(endDate, "day")) {
+            return Promise.reject(
+              message || `日期不能晚于 ${endDate.format("YYYY-MM-DD")}`
+            );
           }
           return Promise.resolve();
         };
@@ -73,23 +90,53 @@ export const transformRules = (configRules: any[]) => {
           validator,
           // min: new Date(min),
           // max: new Date(max),
-          // message: `日期必须在 ${min || 0} - ${max || "∞"} 之间`,
+          // message: `日期应在 ${min || 0} - ${max || "∞"} 以内`,
         };
       case "arrayLength":
+        prefixFn = formatRangeMessage("字段项个数");
+        message = prefixFn(min, max);
         return {
           type: "array",
           min: min,
           max: max,
-          message: `项数必须在 ${min || 0} - ${max || "∞"} 之间`,
+          message,
         };
       case "fileCount":
         return {
           type: "array",
           max: max,
-          message: `文件数量不能超过 ${max || "∞"} 个`,
+          message: `文件数量不能超过 ${max || 1} 个`,
         };
       default:
         return {};
     }
   });
 };
+
+function formatDateSource(
+  dateSource: string | Date | Dayjs | Array<string | Date | Dayjs>
+) {
+  if (!dateSource) return [];
+  if (Array.isArray(dateSource) && !dateSource.length) return [];
+  const value = Array.isArray(dateSource)
+    ? dateSource
+    : [dateSource, dateSource];
+  const begin = dayjs(value[0]);
+  const end = dayjs(value[1]);
+  return [begin, end];
+}
+
+function formatRangeMessage(typeStr: string) {
+  let message = "";
+  const prefix = typeStr;
+  message = `${prefix}应在`;
+  return function (min: number, max: number) {
+    if (min && max) {
+      return `${message} ${min} - ${max} 之间`;
+    } else if (min && !max) {
+      return `${message} ${min} 及以上`;
+    } else if (!min && max) {
+      return `${message} ${max} 及以内`;
+    }
+  };
+}
