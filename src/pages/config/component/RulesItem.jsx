@@ -11,30 +11,36 @@ const RulesItem = (props) => {
   const [availableRules, setAvailableRules] = useState([]);
 
   useEffect(() => {
+    if (!type) return;
     const _rules = getAvailableRules(type);
     setAvailableRules(_rules);
   }, [type]);
 
   const getAvailableRules = (type) => {
     const allowerRuleType = TYPE_RULES_MAP[type] || [];
-    const rules = Object.entries(PRESET_RULES).reduce((res, cur, idx) => {
+    const _rules = Object.entries(PRESET_RULES).reduce((res, cur, idx) => {
       const [type, value] = cur;
       const ruleItem = { type, ...value };
       if (allowerRuleType.includes(type)) res.push(ruleItem);
       return res;
     }, []);
-    return rules;
+    return _rules;
   };
 
   const renderHeaderSide = (listItem, availableRules) => {
     return (
-      <Form.Item noStyle name={[listItem.name, "type"]}>
+      <Form.Item
+        style={{ marginBottom: 0 }}
+        name={[listItem.name, "type"]}
+        rules={[{ required: true, message: "请选择规则类型" }]}
+      >
         <Select
           placeholder="校验规则"
           style={{ width: 100 }}
           options={availableRules.map((ruleItem) => ({
             label: ruleItem.label,
             value: ruleItem.type,
+            disabled: rules.map((item) => item?.type)?.includes(ruleItem.type),
             help: ruleItem.description,
           }))}
         ></Select>
@@ -130,8 +136,12 @@ const RulesItem = (props) => {
       <>
         {HeadSide}
         {MainSide}
-        <Button type="link" danger onClick={() => remove(item.name)} icon={<DeleteOutlined />}>
-        </Button>
+        <Button
+          type="link"
+          danger
+          onClick={() => remove(item.name)}
+          icon={<DeleteOutlined />}
+        ></Button>
       </>
     );
   };
