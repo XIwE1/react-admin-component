@@ -83,12 +83,23 @@ const FormItem = (props: FormItemProps) => {
   function renderDynamicComponent() {
     return (
       <Form.List name={field_key}>
-        {(fields, { add, remove }) => (
+        {(fields, { add, remove }, { errors }) => (
           <>
             {fields.map((item, index) => {
               return (
                 <div key={index} style={{ display: "flex", marginBottom: 8 }}>
-                  <Form.Item noStyle name={[item.name]} required>
+                  <Form.Item
+                    name={[item.name]}
+                    style={{ marginBottom: 0, padding: 0, flex: 1 }}
+                    validateTrigger={["onChange", "onBlur"]}
+                    rules={[
+                      {
+                        required: true,
+                        whitespace: true,
+                        message: "请输入内容或删除该项",
+                      },
+                    ]}
+                  >
                     <Input />
                   </Form.Item>
                   <Button type="link" danger onClick={() => remove(item.name)}>
@@ -105,6 +116,7 @@ const FormItem = (props: FormItemProps) => {
             >
               添加
             </Button>
+            {errors.length > 0 && <div style={{ color: "red" }}>{errors}</div>}
           </>
         )}
       </Form.List>
