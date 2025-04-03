@@ -103,9 +103,14 @@ export const transformRules = (configRules: any[]) => {
         };
       case "fileCount":
         return {
-          type: "array",
-          max: max,
-          message: `文件数量不能超过 ${max || 1} 个`,
+          validator: (_: any, source: any) => {
+            const { fileList } = source;
+            if (!fileList || !fileList.length) return Promise.resolve();
+            if (max && fileList.length > max) {
+              return Promise.reject(`文件数量不能超过 ${max || 1} 个`);
+            }
+            return Promise.resolve();
+          },
         };
       default:
         return {};
