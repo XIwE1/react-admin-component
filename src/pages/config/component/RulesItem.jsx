@@ -48,7 +48,10 @@ const RulesItem = (props) => {
     );
   };
 
-  const renderMainSide = (listItem, ruleType) => {
+  const renderMainSide = (listItem, ruleItem) => {
+    if (!ruleItem) return null;
+    const { type: ruleType, description, params } = ruleItem;
+
     if (ruleType) {
       if (ruleType === "length") {
         return (
@@ -121,16 +124,33 @@ const RulesItem = (props) => {
             </Form.Item>
           </>
         );
+      } else if (ruleType === "pattern") {
+        return (
+          <>
+            <Form.Item noStyle name={[listItem.name, "pattern"]}>
+              <Select
+                style={{ width: 100 }}
+                placeholder="格式"
+                options={params?.map(
+                  (item) => ({ label: item.label, value: item.value } || [])
+                )}
+              ></Select>
+            </Form.Item>
+          </>
+        );
       }
     }
     return <></>;
   };
 
   const renderRuleItem = (item, index, remove) => {
-    const ruleType = rules[index]?.type;
+    const ruleItem = rules[index] || {};
+    const ruleConfigItem = availableRules?.find(
+      (item) => item.type === ruleItem.type
+    );
 
     const HeadSide = renderHeaderSide(item, availableRules);
-    const MainSide = renderMainSide(item, ruleType);
+    const MainSide = renderMainSide(item, ruleConfigItem);
 
     return (
       <>
@@ -152,10 +172,10 @@ const RulesItem = (props) => {
         <Form.Item key="rules" label="校验规则">
           <Form.List name="rules">
             {(rules, { add, remove }) => (
-              <>
+              <Space direction="vertical" style={{ width: "100%" }}>
                 {rules.map((item, index) => {
                   return (
-                    <Space key={index} style={{ marginBottom: 8 }}>
+                    <Space key={index} style={{ marginBottom: 0 }}>
                       {renderRuleItem(item, index, remove)}
                     </Space>
                   );
@@ -168,7 +188,7 @@ const RulesItem = (props) => {
                 >
                   添加规则
                 </Button>
-              </>
+              </Space>
             )}
           </Form.List>
         </Form.Item>

@@ -8,30 +8,40 @@ export const transformRules = (configRules: any[]) => {
 
   return configRules.map((rule) => {
     if (!rule) return null;
-    const { type, min, max } = rule;
-    let message;
-    let prefixFn;
+    const { type, min, max, pattern } = rule;
+    let message: string;
+    let prefixFn: (min: number, max: number) => string;
     switch (type) {
       case "required":
         return { required: true, message: "该字段为必填项" };
 
-      // case 'email':
-      //   return {
-      //     pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      //     message: '请输入有效的邮箱地址'
-      //   };
-
-      // case 'phone':
-      //   return {
-      //     pattern: /^1[3-9]\d{9}$/,
-      //     message: '请输入有效的手机号码'
-      //   };
-
-      // case 'url':
-      //   return {
-      //     pattern: /^https?:\/\/.+/,
-      //     message: '请输入有效的URL地址'
-      //   };
+      case "pattern": {
+        let _RegEx: RegExp;
+        message = "请输入有效的";
+        if (pattern === "email") {
+          _RegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          message += "邮箱地址";
+        } else if (pattern === "phone") {
+          _RegEx = /^1[3-9]\d{9}$/;
+          message += "手机号码";
+        } else if (pattern === "url") {
+          _RegEx = /^https?:\/\/.+/;
+          message += "URL地址";
+        }
+        const validator = (_: any, source: any) => {
+          const value = Array.isArray(source) ? source : [source];
+          if (!value || !value.length) return Promise.resolve();
+          for (let item of value) {
+            if (!_RegEx.test(item)) {
+              return Promise.reject(message);
+            }
+          }
+          return Promise.resolve();
+        };
+        return {
+          validator,
+        };
+      }
 
       case "length":
         prefixFn = formatRangeMessage("字符长度");
@@ -61,7 +71,7 @@ export const transformRules = (configRules: any[]) => {
           message,
         };
 
-      case "dateRange":
+      case "dateRange": {
         const startDate = dayjs(min);
         const endDate = dayjs(max);
         message =
@@ -92,6 +102,7 @@ export const transformRules = (configRules: any[]) => {
           // max: new Date(max),
           // message: `日期应在 ${min || 0} - ${max || "∞"} 以内`,
         };
+      }
       case "arrayLength":
         prefixFn = formatRangeMessage("字段项个数");
         message = prefixFn(min, max);
@@ -143,5 +154,6 @@ function formatRangeMessage(typeStr: string) {
     } else if (!min && max) {
       return `${message} ${max} 及以内`;
     }
+    return "";
   };
 }

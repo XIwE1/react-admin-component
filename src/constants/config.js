@@ -109,22 +109,27 @@ export const PRESET_RULES = {
       },
     ],
   },
-  // pattern: {
-  //   label: "格式校验",
-  //   description: "检查邮箱/手机号等格式",
-  //   supportTypes: ["input", "password"],
-  //   params: [
-  //     {
-  //       name: "email",
-  //       label: "电子邮箱",
-  //       type: "string",
-  //     },
-  //     {
-  //       name: "phone",
-  //       label: "手机号码",
-  //       type: "string",
-  //     },
-  //   ],
-  // }
+  pattern: {
+    label: "格式校验",
+    description: "检查邮箱/网络链接/手机号等格式",
+    supportTypes: ["input", "dynamic"],
+    params: [
+      {
+        value: "email",
+        label: "电子邮箱",
+        type: "string",
+      },
+      {
+        value: "phone",
+        label: "手机号码",
+        type: "string",
+      },
+      {
+        value: "url",
+        label: "URL链接",
+        type: "string",
+      },
+    ],
+  },
   // 其他规则
 };

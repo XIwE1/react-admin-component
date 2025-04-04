@@ -21,14 +21,14 @@ const TYPE_RULES_MAP = {
   input: ["required", "length", "email", "url", "pattern"],
   textarea: ["required", "length"],
   number: ["required", "range"],
-  password: ["required", "length", "pattern"],
+  password: ["required", "length"],
   select: ["required", "multipleLimit"],
   checkbox: ["required", "multipleLimit"],
   radio: ["required"],
   date: ["required", "dateRange"],
   range: ["required", "dateRange"],
   upload: ["required", "fileSize", "fileType", "fileCount"],
-  dynamic: ["required", "arrayLength"],
+  dynamic: ["required", "arrayLength", "pattern"],
   switch: ["required"],
 };
 
