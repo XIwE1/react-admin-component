@@ -50,7 +50,7 @@ interface FormItemOption {
  * Schema 字段联动的配置协议
  * 如果 reaction 对象里包含 target，则代表主动联动模式，否则代表被动联动模式
  */
-type SchemaReaction =
+export type SchemaReaction =
   | {
       dependencies?: //依赖的字段路径列表，支持FormPathPattern数据路径语法, 只能以点路径描述依赖，支持相对路径
       | Array<
