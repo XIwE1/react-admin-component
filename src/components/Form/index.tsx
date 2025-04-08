@@ -55,6 +55,7 @@ const IForm = (props: IFormProps, ref: React.Ref<unknown> | undefined) => {
       labelCol={{ span: 4 }}
       labelWrap
       form={formInstance}
+      onValuesChange={(changedValues) => console.log(changedValues)}
       // wrapperCol={{ span: 16 }}
     >
       {cloneSchemaItems?.map((item: FormSchemaItem) => renderFormItem(item))}
