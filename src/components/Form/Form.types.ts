@@ -66,6 +66,7 @@ export type SchemaReaction =
         | Record<string, string>; //如果是对象格式，读的时候也是对象格式，只是对象的key相当于别名
       when?: string | boolean; // 联动条件
       target?: string; // 主动影响的字段
+      self?: string;
       fulfill?: {
         //满足条件
         state?: Record<string, any>; //更新状态
