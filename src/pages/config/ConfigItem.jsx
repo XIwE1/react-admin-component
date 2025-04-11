@@ -44,7 +44,7 @@ const ConfigItem = (props) => {
   const handleChange = (newDataItem) => {
     const newData = dataSource.map((item) => {
       const newItem =
-        item.field_key === newDataItem.field_key ? newDataItem : item;
+        item.field_key === activeItem.field_key ? newDataItem : item;
       return newItem;
     });
     onChange?.(configKey, newData);
