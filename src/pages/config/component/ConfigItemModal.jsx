@@ -11,18 +11,20 @@ import {
 import { useCallback, useEffect, useState } from "react";
 
 import SelectItem from "./SelectItem";
-import FormItem from "@/components/Form/components/FormItem";
+import FormItem from "@/components/Form/components/FormItem.tsx";
+import RulesItem from "./RulesItem";
 
+import ProxyFormInstance from "@/components/PorxyHoc/index.ts";
 import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
 import { SELECT_TYPES, TYPES_KEYNAME_MAP } from "@/constants/type.js";
 import { formatValueByType } from "@/utils";
 import "./ConfigItemModal.css";
-import RulesItem from "./RulesItem";
 
 const ConfigItemModal = (props) => {
   const { onSubmit, isOpen, onCancel, fieldItem } = props;
 
   const [cloneItem, setCloneItem] = useState({});
+  const [proxyFormInstance, setProxyFormInstance] = useState(null);
 
   const [formInstance] = Form.useForm();
   const currentType = Form.useWatch("type", formInstance);
@@ -41,8 +43,37 @@ const ConfigItemModal = (props) => {
     setCloneItem(clone);
   }, [fieldItem]);
 
+  const _formItem = {
+    type: "string",
+    field_key: "field_key",
+    field: "field_key",
+
+    disabled: false,
+    hidden: false,
+    reactions: [
+      {
+        when: "{{$self.value == '123'}}",
+        // dependencies: ["count"],
+        target: "field",
+        fulfill: {
+          state: {
+            // visible: true,
+            value: "{{$self.value * 2}}",
+            // display: "{{$self.value}}",
+          },
+        },
+        // otherwise: {
+        //   state: {
+        //     visible: false,
+        //   },
+        // },
+      },
+    ], // 配置字段联动
+  };
+
   useEffect(() => {
     formInstance.setFieldsValue(cloneItem);
+    setProxyFormInstance(new ProxyFormInstance(formInstance, [_formItem]));
   }, [cloneItem]);
 
   useEffect(() => {
@@ -199,7 +230,10 @@ const ConfigItemModal = (props) => {
       zIndex={999}
     >
       <div className="modal_content">
-        <Form form={formInstance} labelCol={{ span: 4 }}>
+        <Form form={formInstance} labelCol={{ span: 4 }} onFieldsChange={(changedFields) => {
+          console.log("changedFields", changedFields);
+          proxyFormInstance.trigger(changedFields[0].name);
+        }}>
           <Form.Item
             key="field_key"
             name="field_key"
