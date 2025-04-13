@@ -4,6 +4,7 @@ import { PlusOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 
 import BlockTitle from "@/components/BlockTitle";
 import ConfigItemModal from "./component/ConfigItemModal";
+import ReactionItemModal from "./component/reaction";
 import PreviewModal from "./component/PreviewModal";
 import DndWrapper from "@/components/DndWrapper";
 
@@ -21,6 +22,7 @@ const ConfigItem = (props) => {
   } = props;
 
   const [fieldModalVisible, setFieldModalVisible] = useState(false);
+  const [reactionModalVisible, setReactionModalVisible] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [activeItem, setActiveItem] = useState(null);
   const [previewModel, setPreviewModel] = useState({});
@@ -72,6 +74,7 @@ const ConfigItem = (props) => {
   const clearModal = () => {
     setActiveItem(null);
     setFieldModalVisible(false);
+    setReactionModalVisible(false);
     setPreviewVisible(false);
   };
 
@@ -136,7 +139,9 @@ const ConfigItem = (props) => {
         <Switch
           size="normal"
           value={record?.required}
-          onChange={(checked) => handleSwitchChange(record, "required", checked)}
+          onChange={(checked) =>
+            handleSwitchChange(record, "required", checked)
+          }
         />
       ),
     },
@@ -178,15 +183,19 @@ const ConfigItem = (props) => {
     setActiveItem(null);
     setFieldModalVisible(true);
   };
-  const onClickEdit = (fieldItem) => {
-    setActiveItem({ ...fieldItem });
-    setFieldModalVisible(true);
-  };
   const onClickPreview = () => {
     setPreviewVisible(true);
   };
+  const onClickEdit = (fieldItem) => {
+    setActiveItem({ ...fieldItem });
+    setFieldModalVisible(true);
+    setReactionModalVisible(false);
+  };
   const onClickReaction = (fieldItem) => {
-    message.info("功能加紧开发中...");
+    // message.info("功能加紧开发中...");
+    setActiveItem({ ...fieldItem });
+    setFieldModalVisible(false);
+    setReactionModalVisible(true);
   };
 
   return (
@@ -236,10 +245,18 @@ const ConfigItem = (props) => {
         </Button>
       </div>
       <ConfigItemModal
-        key={fieldModalVisible}
+        key={'config' + fieldModalVisible}
         isOpen={fieldModalVisible}
         onSubmit={handleSubmit}
         onCancel={clearModal}
+        fieldItem={activeItem}
+      />
+      <ReactionItemModal
+        key={'reaction' + reactionModalVisible}
+        isOpen={reactionModalVisible}
+        onSubmit={handleSubmit}
+        onCancel={clearModal}
+        fields={dataSource}
         fieldItem={activeItem}
       />
       <PreviewModal
