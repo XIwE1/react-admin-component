@@ -2,6 +2,22 @@ import { ConfigItemType, FormSchemaItem } from "@/store/configStore";
 
 export const mock_dataSource: FormSchemaItem[] = [
   {
+    field_key: "switch",
+    field: "审批",
+    type: "switch",
+    defaultValue: false,
+    disabled: false,
+    hidden: false,
+    tooltip: "打开进入审批流程",
+    reactions: [
+      {
+        target: "touch",
+        when: "{{$self.value == true}}",
+        fulfill: { state: { hidden: false } },
+      },
+    ],
+  },
+  {
     field_key: "goods",
     field: "商品",
     type: "input",
@@ -21,10 +37,10 @@ export const mock_dataSource: FormSchemaItem[] = [
     hidden: false,
     componentProps: {
       options: [
-        { label: "化工产品", value: '1' },
-        { label: "医疗制剂", value: '2' },
-        { label: "机械设备", value: '3' },
-        { label: "灯具空调", value: '4' },
+        { label: "化工产品", value: "1" },
+        { label: "医疗制剂", value: "2" },
+        { label: "机械设备", value: "3" },
+        { label: "灯具空调", value: "4" },
       ],
     },
   },
@@ -73,15 +89,7 @@ export const mock_dataSource: FormSchemaItem[] = [
     hidden: false,
     tooltip: "购入的总数量",
   },
-  {
-    field_key: "switch",
-    field: "审批",
-    type: "switch",
-    defaultValue: false,
-    disabled: false,
-    hidden: false,
-    tooltip: "打开进入审批流程",
-  },
+
   {
     field_key: "touch",
     field: "联系方式",

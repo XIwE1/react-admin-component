@@ -1,6 +1,6 @@
-import { Input, Select, SelectProps, Space } from "antd";
+import { Form, FormItemProps, Input, Select, SelectProps, Space } from "antd";
 import { ConfigItemType } from "../../../../store/configStore";
-import React from "react";
+import React, { useCallback } from "react";
 import { FormSchemaItem } from "../../../../components/Form/Form.types";
 
 type ReactionItemProps = {
@@ -9,30 +9,37 @@ type ReactionItemProps = {
    */
   isActive: boolean;
   fields: ConfigItemType[];
-  fieldItem: FormSchemaItem;
+  fieldItem: FormItemProps;
+  type: string;
 };
 
 // dependencies/target + when/fulfill/otherwise
 const ReactionItem = (props: ReactionItemProps) => {
-  const { isActive, fields, fieldItem } = props;
-  console.log("ReactionItem", fields, fieldItem);
+  const { isActive, fields, type, fieldItem } = props;
+
   const field_options = fields.map((item) => ({
     label: item.field,
     value: item.field_key,
   }));
 
   const renderSelectField = () => {
-    let seletItem = <Select  style={{minWidth: '98px'}}showSearch options={field_options}></Select>;
-    if (isActive) {
-      const value = fieldItem.field_key;
-      seletItem = (
-        <Select  style={{minWidth: '98px'}}showSearch options={field_options} value={value} disabled></Select>
-      );
-    }
-    const stateOrValue = renderFieldStateOrValue(fieldItem);
+    let seletItem = (
+      <Select
+        style={{ minWidth: "98px" }}
+        showSearch
+        options={field_options}
+        disabled={isActive}
+      ></Select>
+    );
+
     return (
       <Space>
-        当 {seletItem} {stateOrValue} 时，
+        <span>当 </span>
+        <Form.Item name={[fieldItem.name, "whenTarget"]} noStyle>
+          {seletItem}
+        </Form.Item>
+        <Form.Item noStyle>{renderFieldStateOrValue(type)}</Form.Item>
+        <span>时，</span>
       </Space>
     );
   };
@@ -42,43 +49,53 @@ const ReactionItem = (props: ReactionItemProps) => {
   //  input、textarea: 包含/不包含
   //  select、checkbox、dynamic、radio: 包含/不包含
   //  switch: 开启/关闭
-  const renderFieldStateOrValue = (item: FormSchemaItem) => {
-    const { type } = item;
+  const renderFieldStateOrValue = (itemType: string) => {
     const nums = ["number", "date", "range"];
     const strs = ["input", "textarea"];
     const selects = ["select", "checkbox", "dynamic", "radio"];
     const switchs = ["switch"];
     let pre_options: any[] = [];
     let extra_item = <></>;
-    if (nums.includes(type)) {
+    if (nums.includes(itemType)) {
       pre_options = [
         { label: "大于", value: ">" },
         { label: "小于", value: "<" },
         { label: "等于", value: "=" },
       ];
-      extra_item = <Input style={{maxWidth: '100px'}}></Input>;
-    } else if (strs.includes(type)) {
+      extra_item = <Input style={{ maxWidth: "100px" }}></Input>;
+    } else if (strs.includes(itemType)) {
       pre_options = [
         { label: "包含", value: "contain" },
         { label: "不包含", value: "notContain" },
       ];
-      extra_item = <Input style={{maxWidth: '100px'}}></Input>;
-    } else if (selects.includes(type)) {
+      extra_item = <Input style={{ maxWidth: "100px" }}></Input>;
+    } else if (selects.includes(itemType)) {
       pre_options = [
         { label: "包含", value: "contain" },
         { label: "不包含", value: "notContain" },
       ];
-      extra_item = <Input style={{maxWidth: '100px'}}></Input>;
-    } else if (switchs.includes(type)) {
+      extra_item = <Input style={{ maxWidth: "100px" }}></Input>;
+    } else if (switchs.includes(itemType)) {
       pre_options = [
-        { label: "开启", value: "open" },
-        { label: "关闭", value: "close" },
+        { label: "开启", value: true },
+        { label: "关闭", value: false },
       ];
     }
-    const seletItem = <Select  style={{minWidth: '98px'}}showSearch options={pre_options}></Select>;
+    const seletItem = (
+      <Select
+        style={{ minWidth: "98px" }}
+        showSearch
+        options={pre_options}
+      ></Select>
+    );
     return (
       <Space>
-        {seletItem} {extra_item}
+        <Form.Item name={[fieldItem.name, "whenState"]} noStyle>
+          {seletItem}
+        </Form.Item>
+        <Form.Item name={[fieldItem.name, "whenValue"]} noStyle>
+          {extra_item}
+        </Form.Item>
       </Space>
     );
   };
@@ -88,30 +105,52 @@ const ReactionItem = (props: ReactionItemProps) => {
       { label: "显示", value: true },
       { label: "隐藏", value: false },
     ];
-    let effectItem = <Select  style={{minWidth: '98px'}}showSearch options={field_options}></Select>;
+    let effectItem = (
+      <Select
+        style={{ minWidth: "98px" }}
+        showSearch
+        options={field_options}
+      ></Select>
+    );
     if (!isActive) {
-      const value = fieldItem.field_key;
       effectItem = (
-        <Select  style={{minWidth: '98px'}}showSearch options={field_options} value={value} disabled></Select>
+        <Select
+          style={{ minWidth: "98px" }}
+          showSearch
+          options={field_options}
+          disabled
+        ></Select>
       );
     }
-    const statusItem = <Select  style={{minWidth: '98px'}}showSearch options={visible_options}></Select>;
+    const statusItem = (
+      <Select
+        style={{ minWidth: "98px" }}
+        showSearch
+        options={visible_options}
+      ></Select>
+    );
     return (
       <Space>
-        {effectItem} 的状态 {statusItem}
+        <Form.Item name={[fieldItem.name, "effectTarget"]} noStyle>
+          {effectItem}
+        </Form.Item>
+        <span>的状态</span>
+        <Form.Item name={[fieldItem.name, "effectState"]} noStyle>
+          {statusItem}
+        </Form.Item>
       </Space>
     );
   };
 
   const renderReaction = () => {
-    const target = renderSelectField();
-    const effect = renderEffectField();
     return (
       <Space direction="vertical">
-        {target} {effect}
+        {renderSelectField()}
+        {renderEffectField()}
       </Space>
     );
   };
+
   return <>{renderReaction()}</>;
 };
 

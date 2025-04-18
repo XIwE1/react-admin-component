@@ -48,9 +48,10 @@ const ReactionItemModal = (props) => {
   const handleSubmit = async () => {
     const isValid = await beforeSubmit(formInstance);
     if (!isValid) return;
-    // 提交前对数据进行格式化，例如Date -> String
     const fieldsValue = formInstance.getFieldsValue();
-    onSubmit?.({ ...cloneItem, ...fieldsValue });
+    const { effects, dependencies } = fieldsValue;
+    const reactions = [...effects, ...dependencies];
+    onSubmit?.({ ...cloneItem, ...fieldsValue, reactions });
   };
 
   // 根据isActive 生成不同的item模板
@@ -78,7 +79,7 @@ const ReactionItemModal = (props) => {
     if (!instance) return null;
     const list_name = isActive ? "effects" : "dependencies";
     return (
-      <Form.Item key={"options" + isActive} required>
+      <Form.Item key={list_name} required>
         <Form.List name={list_name}>
           {(_fields, { add, remove }, { errors }) => (
             <>
@@ -94,7 +95,8 @@ const ReactionItemModal = (props) => {
                   >
                     <ReactionItem
                       fields={fields}
-                      fieldItem={fieldItem}
+                      type={fieldItem.type}
+                      fieldItem={item}
                       isActive={isActive}
                     />
                     <Button

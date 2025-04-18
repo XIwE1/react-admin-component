@@ -10,7 +10,7 @@ const parser = new Parser();
 // 1. schema reactions（dependencies 依赖/target 目标 字段 + when?条件语句 + fulfill/otherwise 副作用） ->
 // 2. transform -> token 拆解 出依赖/目标 ->
 // 3. when+fulfill/otherwise 在依赖/目标上注册回调
-// 模板解析 + 依赖管理
+// 模板解析 + 依赖管理（发布 订阅） + 响应式
 
 type CallBackItem = {
   reaction: SchemaReaction;

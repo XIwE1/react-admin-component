@@ -145,11 +145,11 @@ const ConfigItem = (props) => {
         />
       ),
     },
-    {
-      title: "关联字段",
-      dataIndex: "reactions",
-      key: "reactions",
-    },
+    // {
+    //   title: "关联字段",
+    //   dataIndex: "reactions",
+    //   key: "reactions",
+    // },
     {
       title: "操作",
       key: "action",
