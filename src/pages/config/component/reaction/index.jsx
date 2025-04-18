@@ -20,10 +20,14 @@ const ReactionItemModal = (props) => {
       setCloneItem({});
       return;
     }
-    const { type = "input", defaultValue } = fieldItem;
+    const { type = "input", defaultValue, reactions } = fieldItem;
+    const effects = reactions?.filter((r) => r.target) || [];
+    const dependencies = reactions?.filter((r) => !r.target) || [];
     const clone = {
       ...fieldItem,
-      defaultValue: formatValueByType(type, defaultValue),
+      type,
+      effects,
+      dependencies,
     };
     setCloneItem(clone);
   }, [fieldItem]);
@@ -49,6 +53,20 @@ const ReactionItemModal = (props) => {
     onSubmit?.({ ...cloneItem, ...fieldsValue });
   };
 
+  // 根据isActive 生成不同的item模板
+  const getReactionItemModel = (isActive) => {
+    const model = {
+      isActive,
+      whenTarget: isActive ? fieldItem.field_key : null,
+      whenState: "",
+      whenValue: "",
+      effectTarget: isActive ? null : fieldItem.field_key,
+      effectState: "",
+      effectValue: "",
+    };
+    return model;
+  };
+
   const handleCancel = () => {
     onCancel?.();
     setTimeout(() => {
@@ -56,61 +74,53 @@ const ReactionItemModal = (props) => {
     }, 160);
   };
 
-  const renderReactionFields = (formInstance, isActive) => {
-    if (!formInstance) return null;
-    const reactions = formInstance.getFieldValue("reactions");
+  const renderReactionFields = (instance, isActive) => {
+    if (!instance) return null;
+    const list_name = isActive ? "effects" : "dependencies";
     return (
-      <Form.Item key="options" required>
-        <Form.List name={"reactions"} >
-          {(_fields, { add, remove }, { errors }) => {
-            
-            return (
-              <>
-                {_fields.map((item, index) => {
-                  // 排除不符合当前目标的reaction项
-                  const source = formInstance.getFieldValue(["reactions", index]);
-                  const isActiveItem = source?.target || source?.isActive;
-                  if (isActiveItem !== isActive) return null;
-
-                  return (
-                    <Space
-                      key={index}
-                      style={{
-                        marginBottom: 8,
-                        width: "100%",
-                        justifyContent: "space-around",
-                      }}
+      <Form.Item key={"options" + isActive} required>
+        <Form.List name={list_name}>
+          {(_fields, { add, remove }, { errors }) => (
+            <>
+              {_fields.map((item, index) => {
+                return (
+                  <Space
+                    key={index}
+                    style={{
+                      marginBottom: 8,
+                      width: "100%",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <ReactionItem
+                      fields={fields}
+                      fieldItem={fieldItem}
+                      isActive={isActive}
+                    />
+                    <Button
+                      size="small"
+                      type="link"
+                      danger
+                      onClick={() => remove(item.name)}
                     >
-                      <ReactionItem
-                        fields={fields}
-                        fieldItem={fieldItem}
-                        isActive={isActive}
-                      />
-                      <Button
-                        size="small"
-                        type="link"
-                        danger
-                        onClick={() => remove(item.name)}
-                      >
-                        删除
-                      </Button>
-                    </Space>
-                  );
-                })}
-                <Button
-                  block
-                  type="dashed"
-                  icon={<PlusOutlined />}
-                  onClick={() => add({ isActive })}
-                >
-                  添加
-                </Button>
-                {errors.length > 0 && (
-                  <div style={{ color: "red" }}>{errors}</div>
-                )}
-              </>
-            );
-          }}
+                      删除
+                    </Button>
+                  </Space>
+                );
+              })}
+              <Button
+                block
+                type="dashed"
+                icon={<PlusOutlined />}
+                onClick={() => add(getReactionItemModel(isActive))}
+              >
+                添加
+              </Button>
+              {errors.length > 0 && (
+                <div style={{ color: "red" }}>{errors}</div>
+              )}
+            </>
+          )}
         </Form.List>
       </Form.Item>
     );
@@ -125,7 +135,14 @@ const ReactionItemModal = (props) => {
       zIndex={999}
     >
       <div className="modal_content">
-        <Form form={formInstance} labelCol={{ span: 4 }}>
+        <Form
+          form={formInstance}
+          labelCol={{ span: 4 }}
+          onValuesChange={(changesValue, allValues) => {
+            console.log("changesValue", changesValue);
+            console.log("allValues", allValues);
+          }}
+        >
           <BlockTitle title={"主动影响"} />
 
           {renderReactionFields(formInstance, true)}
@@ -133,8 +150,6 @@ const ReactionItemModal = (props) => {
           <BlockTitle title={"被动依赖"} />
 
           {renderReactionFields(formInstance, false)}
-
-          {/* <Form.Item key="reactions" label="关联字段"></Form.Item> */}
         </Form>
       </div>
     </Modal>
