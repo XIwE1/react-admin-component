@@ -7,6 +7,7 @@ import ReactionItem from "./ReactionItem";
 
 import { FORM_ITEM_TYPES } from "@/components/Form/Form.types.js";
 import { formatValueByType } from "@/utils";
+import { serializerReaction, deserializerReaction } from './util';
 
 const ReactionItemModal = (props) => {
   const { onSubmit, isOpen, onCancel, fields, fieldItem } = props;
@@ -50,6 +51,8 @@ const ReactionItemModal = (props) => {
     if (!isValid) return;
     const fieldsValue = formInstance.getFieldsValue();
     const { effects, dependencies } = fieldsValue;
+    const parseEffects = effects.map((item) => serializerReaction(item));
+    const parseDependencies = dependencies.map((item) => serializerReaction(item));
     const reactions = [...effects, ...dependencies];
     onSubmit?.({ ...cloneItem, ...fieldsValue, reactions });
   };
