@@ -1,11 +1,8 @@
 kind: pipeline
 name: default
 
-clone:
-  disable: true
-
 steps:
-  - name: 编译步骤
-    image: alpine:latest
-    commands:
-      - echo hello drone
+- name: test
+  image: node
+  commands:
+  - yarn -v
