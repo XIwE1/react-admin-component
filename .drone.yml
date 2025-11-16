@@ -7,6 +7,6 @@ clone:
 
 steps:
   - name: 编译步骤
-    image: alpine
+    image: alpine:latest
     commands:
       - echo hello drone
