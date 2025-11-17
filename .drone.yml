@@ -3,6 +3,10 @@ kind: pipeline
 type: docker
 name: default
 
+# 重试以防网络问题导致clone失败
+clone:
+  retries: 2
+
 trigger:
   branch:
     - main
