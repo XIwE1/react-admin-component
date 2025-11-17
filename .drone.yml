@@ -6,8 +6,6 @@ name: default
 # 重试以防网络问题导致clone失败
 clone:
   retries: 2
-  commands:
-    - git config --global http.version HTTP/1.1
     
 trigger:
   branch:
@@ -20,6 +18,11 @@ volumes:
       path: /var/run/docker.sock
 
 steps:
+  - name: fetch
+    image: alpine/git:latest
+    commands:
+      - git config --global http.version HTTP/1.1
+
   # 编译阶段
   - name: build
     image: node:23
