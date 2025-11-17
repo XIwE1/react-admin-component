@@ -16,7 +16,7 @@ volumes:
 steps:
   # 编译阶段
   - name: build
-    image: node:latest
+    image: node:23
     commands:
       - npm i -g yarn
       - yarn install
