@@ -6,7 +6,7 @@ name: default
 # 重试以防网络问题导致clone失败
 clone:
   retries: 2
-    
+
 trigger:
   branch:
     - main
@@ -22,11 +22,14 @@ steps:
   - name: build
     image: node:23
     commands:
+      # 配置镜像源
+      - npm config set registry https://registry.npmmirror.com
+      - yarn config set registry https://registry.npmmirror.com
       - yarn --version ||npm install -g yarn
       - yarn install
       - yarn build
       - ls -la dist || exit 1
-      
+
   # 部署阶段
   - name: deploy
     image: docker:cli
