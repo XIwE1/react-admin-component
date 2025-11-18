@@ -1,18 +1,29 @@
+# 定义一个管道
 kind: pipeline
+# 定义管道类型
 # 使用Docker执行器运行流水线
 type: docker
 name: default
 
-# 重试以防网络问题导致clone失败
+# drone启动时，都会先执行clone代码操作，将对应仓库代码拉取到/drone/src目录下
 clone:
+  # 重试以防网络问题导致clone失败
   retries: 2
 
 trigger:
   branch:
     - main
 
-# 挂载Docker套接字
 volumes:
+  # - name: node_modules
+  #   # 将node_modules缓存到宿主机指定目录下
+  #   # 避免重新install延迟或者失败
+  #   host:
+  #     path: /home/drone/cache/fe/node_modules
+  # - name: pnpm-cache
+  #   host:
+  #     path: /home/drone/cache/fe/pnpm-store
+  # 挂载Docker套接字
   - name: docker-sock
     host:
       path: /var/run/docker.sock
@@ -21,22 +32,64 @@ steps:
   # 编译阶段
   - name: build
     image: node:23
+    # volumes:
+    #   - name: node_modules
+    #     # 将node_modules缓存到/drone/src/node_modules目录下
+    #     path: /drone/src/node_modules
+    #   - name: pnpm-cache
+    #     path: /drone/src/.pnpm-store
     commands:
+      - pwd
+      - ls -alt
       # 配置镜像源
       - npm config set registry https://registry.npmmirror.com
-      - yarn config set registry https://registry.npmmirror.com
       - yarn --version ||npm install -g yarn
+      - yarn config set registry https://registry.npmmirror.com
       - yarn install
+      # - pnpm config set store-dir .pnpm-store
       - yarn build
       - ls -la dist || exit 1
 
   # 部署阶段
+  # - name: deploy
+  #   image: drillster/drone-rsync
+  #   settings:
+  #     hosts:
+  #       - localhost
+  #       # 或者服务器ip
+  #     user: root
+  #     key:
+  #       from_secret: deploy_ssh_secret
+  #     port: 22
+  #     source: dist
+  #     target: /home/admin-website
+
+  # 如果在同一个服务器，可以把代码直接编译进挂载目录或者移入挂载目录
   - name: deploy
-    image: docker:cli
+    image: alpine:latest
     volumes:
-      - name: docker-sock
-        path: /var/run/docker.sock
+      - name: admin-website
+        host:
+          path: /home/admin-website
     commands:
-      # 复制构建产物到nginx容器
-      - docker cp /drone/src/dist my-nginx:/usr/share/nginx/html/
-      - docker exec my-nginx nginx -s reload
+      - apk add --no-cache rsync
+      - rsync -av --delete /drone/src/dist/ /home/admin-website/
+
+
+# 将上个步骤中构建的产物打包成镜像并且上传到自己的镜像仓库
+# 镜像构建阶段
+# - name: image
+#   depends_on: [build] ## 定义这个步骤依赖哪些步骤
+#   image: plugins/docker
+#   privileged: true
+#   pull: if-not-exists
+#   settings:
+#     registry: registry.cn-hangzhou.aliyuncs.com
+#     repo: registry.cn-hangzhou.aliyuncs.com/XXXXXXxxx # 需要上传的镜像仓库地址
+#     use_cache: true
+#     username:  # 我使用了阿里云的镜像仓库
+#       from_secret: aliyun_docker_username
+#     password:
+#       from_secret: aliyun_docker_password
+#     tags:
+#       - ${DRONE_COMMIT_SHA:0:7} # 直接截取了commit的7位hash值作为镜像的tag
