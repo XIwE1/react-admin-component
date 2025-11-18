@@ -27,6 +27,9 @@ volumes:
   - name: docker-sock
     host:
       path: /var/run/docker.sock
+  - name: admin-website
+    host:
+      path: /home/admin-website
 
 steps:
   # 编译阶段
@@ -39,8 +42,10 @@ steps:
     #   - name: pnpm-cache
     #     path: /drone/src/.pnpm-store
     commands:
+      - echo "============构建前的文件==============="
       - pwd
       - ls -alt
+      - echo "======================================"
       # 配置镜像源
       - npm config set registry https://registry.npmmirror.com
       - yarn --version ||npm install -g yarn
@@ -48,6 +53,7 @@ steps:
       - yarn install
       # - pnpm config set store-dir .pnpm-store
       - yarn build
+      - echo "============构建后的产物==============="
       - ls -la dist || exit 1
 
   # 部署阶段
@@ -69,9 +75,11 @@ steps:
     image: alpine:latest
     volumes:
       - name: admin-website
+      # 在容器内提供target目录 挂载到宿主机的host目录下
         path: /target
     commands:
       - apk add --no-cache rsync
+      # 将容器内的dist目录同步到target目录，给volumes挂载
       - rsync -av --delete /drone/src/dist/ /target/
       # 验证文件是否复制成功
       - ls -la /target/ || exit 1
