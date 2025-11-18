@@ -69,12 +69,13 @@ steps:
     image: alpine:latest
     volumes:
       - name: admin-website
-        host:
-          path: /home/admin-website
+        path: /target
     commands:
       - apk add --no-cache rsync
-      - rsync -av --delete /drone/src/dist/ /home/admin-website/
-
+      - rsync -av --delete /drone/src/dist/ /target/
+      # 验证文件是否复制成功
+      - ls -la /target/ || exit 1
+      - echo "Files synced to /home/admin-website on host"
 
 # 将上个步骤中构建的产物打包成镜像并且上传到自己的镜像仓库
 # 镜像构建阶段
