@@ -48,9 +48,7 @@ steps:
       - ls -alt
       - echo "======================================"
       # 配置镜像源
-      # - npm config set registry https://registry.npmmirror.com
       - yarn --version ||npm install -g yarn
-      # - yarn config set registry https://registry.npmmirror.com
       - yarn install --frozen-lockfile
       # - pnpm config set store-dir .pnpm-store
       - yarn build
@@ -69,7 +67,7 @@ steps:
       key:
         from_secret: deploy_ssh_secret
       port: 22
-      source: dist
+      source: dist/
       target: /home/admin-website
 
   # 如果在同一个服务器，可以把代码直接编译进挂载目录或者移入挂载目录
