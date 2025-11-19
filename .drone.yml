@@ -51,7 +51,7 @@ steps:
       - npm config set registry https://registry.npmmirror.com
       - yarn --version ||npm install -g yarn
       - yarn config set registry https://registry.npmmirror.com
-      - yarn install
+      - yarn install --frozen-lockfile
       # - pnpm config set store-dir .pnpm-store
       - yarn build
       - echo "============构建后的产物==============="
