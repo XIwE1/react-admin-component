@@ -60,6 +60,7 @@ steps:
   # 部署阶段
   - name: deploy
     image: drillster/drone-rsync
+    network_mode: host  # 使用宿主机网络
     settings:
       hosts:
         - localhost
