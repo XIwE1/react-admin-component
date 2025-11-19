@@ -15,11 +15,11 @@ trigger:
     - main
 
 volumes:
-  # - name: node_modules
-  #   # 将node_modules缓存到宿主机指定目录下
-  #   # 避免重新install延迟或者失败
-  #   host:
-  #     path: /home/drone/cache/fe/node_modules
+  - name: node_modules
+    # 将node_modules缓存到宿主机指定目录下
+    # 避免重新install延迟或者失败
+    host:
+      path: /home/drone/cache/fe/node_modules
   # - name: pnpm-cache
   #   host:
   #     path: /home/drone/cache/fe/pnpm-store
@@ -35,10 +35,11 @@ steps:
   # 编译阶段
   - name: build
     image: node:23
-    # volumes:
-    #   - name: node_modules
-    #     # 将node_modules缓存到/drone/src/node_modules目录下
-    #     path: /drone/src/node_modules
+    volumes:
+      - name: node_modules
+        # 挂载到容器内的路径
+        # 将node_modules缓存到/drone/src/node_modules目录下
+        path: /drone/src/node_modules
     #   - name: pnpm-cache
     #     path: /drone/src/.pnpm-store
     commands:
