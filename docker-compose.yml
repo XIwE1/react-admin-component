@@ -1,0 +1,69 @@
+services:
+  # drone 服务端（web）
+  drone-server:
+    container_name: drone-server
+    image: drone/drone:latest
+    ports:
+      #  端口映射
+      - "8082:80"
+      - "4443:43"
+
+    volumes:
+      # 挂载数据目录，持久化 Drone 的配置信息和数据库
+      - ./drone-data:/data
+
+    environment:
+      # Git OAuth - Client ID
+      - DRONE_GITHUB_CLIENT_ID=Ov23liw9BYS4cgryAfhF
+      # Git OAuth - Client Secret
+      - DRONE_GITHUB_CLIENT_SECRET=d6064593816f04429b9bf79f735d86f9de892da5
+      # Drone Server 和 Runner 之间的 RPC 认证密钥，需保持一致
+      - DRONE_RPC_SECRET=c1da0391a1ae93ef63b423d9f5d7167e
+      # Drone Server的公网地址
+      - DRONE_SERVER_HOST=115.190.227.247:8082
+      # 通信协议
+      - DRONE_SERVER_PROTO=http
+      # 创建管理员账户
+      - DRONE_USER_CREATE=username:XIwE1,admin:true
+    restart: always
+  # drone 执行者（runer）
+  drone-runner:
+    container_name: drone-runner
+    image: drone/drone-runner-docker:latest
+    restart: always
+    ports:
+      - 3000:3000
+
+    volumes:
+      # 允许 Runner 在宿主机上操作 Docker 容器
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    environment:
+      - DRONE_RPC_PROTO=http
+      # 与 drone server 的container_name一致
+      - DRONE_RPC_HOST=drone-server
+      # Drone Server 和 Runner 之间的 RPC 认证密钥，需保持一致
+      - DRONE_RPC_SECRET=c1da0391a1ae93ef63b423d9f5d7167e
+      # 设置并发任务数上限
+      - DRONE_RUNNER_CAPACITY=3
+      - DRONE_RUNNER_NAME=drone-runner
+    depends_on:
+      - drone-server
+  # nginx
+  nginx:
+    image: nginx:1.20.1
+    container_name: my-nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      # 挂载 Nginx 主配置文件
+      - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # 挂载 Nginx 配置文件目录
+      - /etc/nginx/conf.d:/etc/nginx/conf.d:ro
+      # 挂载日志目录
+      - /var/log/nginx:/var/log/nginx
+      # 挂载静态资源文件
+      - /usr/share/nginx/html:/usr/share/nginx/html:ro
+      # 挂载项目代码
+      - /home:/home:ro
