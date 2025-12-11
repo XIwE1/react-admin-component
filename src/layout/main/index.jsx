@@ -7,9 +7,11 @@ import Config from "@/pages/config";
 import Form2 from "@/pages/form_2";
 
 const Form1 = React.lazy(() => import("@/pages/form_1"));
+const Editor = React.lazy(() => import("@/pages/editor"));
 // const Config = React.lazy(() => import("@/pages/config"));
 
 const componentMap = {
+  Editor: Editor,
   Config: Config,
   Form_1: Form1,
   Form_2: Form2,
