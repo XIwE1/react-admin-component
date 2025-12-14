@@ -3,12 +3,14 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import importToCDN from "vite-plugin-cdn-import";
 import { visualizer } from "rollup-plugin-visualizer";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
   base: "./",
   plugins: [
     react(),
+    tailwindcss(),
     visualizer({
       open: true, // 构建完成后自动打开报告
       filename: "stats.html", // 输出文件名
