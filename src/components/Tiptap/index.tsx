@@ -1,11 +1,12 @@
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import StarterKit from "@tiptap/starter-kit";
 import { Collapse, CollapseExtension } from "./Collapse";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
 import { SelectAllExtension } from "./KeyBoard/SelectAllExtension";
-import React from "react";
+import React, { useEffect } from "react";
+import MenuBar from "./components/MenuBar";
 
 const handleInsertCollapse = (editor: Editor) => {
   if (!editor) return;
@@ -55,16 +56,23 @@ export default function Tiptap({ content, onChange }) {
       // 调用外部 onChange 回调
       onChange?.(editor);
     },
+    editorProps: {
+      attributes: {
+        class: "p-4 border-1 border-gray-200",
+      },
+    },
   });
-
-  //   editor.chain().insertCollapse().run();
 
   return (
     <div style={{ position: "relative", maxHeight: "100%", overflow: "auto" }}>
-      {/* <MenuBar editor={editor} /> */}
-      <Button onClick={() => handleInsertCollapse(editor)}>插入折叠</Button>
-      <Button onClick={() => handleInsertCodeBlock(editor)}>插入代码块</Button>
-      <EditorContent editor={editor} />
+      <Space>
+        <MenuBar editor={editor} />
+        <Button onClick={() => handleInsertCollapse(editor)}>插入折叠</Button>
+        <Button onClick={() => handleInsertCodeBlock(editor)}>
+          插入代码块
+        </Button>
+      </Space>
+      <EditorContent editor={editor} className="my-1" />
     </div>
   );
 }
