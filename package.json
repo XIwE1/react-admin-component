@@ -27,6 +27,7 @@
     "react-dom": "^18.0.0",
     "react-transition-group": "^4.4.5",
     "rollup-plugin-visualizer": "^5.14.0",
+    "sass-embedded": "^1.97.0",
     "tailwindcss": "^4.1.18",
     "zustand": "^5.0.3"
   },

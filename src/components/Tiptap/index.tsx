@@ -8,6 +8,8 @@ import { SelectAllExtension } from "./KeyBoard/SelectAllExtension";
 import React, { useEffect } from "react";
 import MenuBar from "./components/MenuBar";
 
+import "./index.scss";
+
 const handleInsertCollapse = (editor: Editor) => {
   if (!editor) return;
   editor.chain().insertCollapse("test").run();
@@ -24,13 +26,16 @@ const handleInsertCodeBlock = (editor: Editor) => {
 };
 
 export default function Tiptap({ content, onChange }) {
+
   const lowlight = createLowlight(all);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         // undoRedo: false,
         // codeBlock: false,
         // code: false,
+        heading: { levels: [1, 2, 3] },
       }),
       Collapse,
       CollapseExtension,
@@ -72,7 +77,7 @@ export default function Tiptap({ content, onChange }) {
           插入代码块
         </Button>
       </Space>
-      <EditorContent editor={editor} className="my-1" />
+      <EditorContent editor={editor} className="my-4" />
     </div>
   );
 }
