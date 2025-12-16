@@ -1,29 +1,18 @@
+import React, { useEffect } from "react";
+import { Space } from "antd";
+// tiptap扩展
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
-import { Button, Space } from "antd";
 import StarterKit from "@tiptap/starter-kit";
 import { Collapse, CollapseExtension } from "./Collapse";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
-import { SelectAllExtension } from "./KeyBoard/SelectAllExtension";
-import React, { useEffect } from "react";
+import { SelectAllExtension } from "./extensions/SelectAllExtension";
+import Image from '@tiptap/extension-image';
+
+// 自定义的工具栏 菜单栏 样式
 import MenuBar from "./components/MenuBar";
-
+import ToolBar from "./components/ToolBar";
 import "./index.scss";
-
-const handleInsertCollapse = (editor: Editor) => {
-  if (!editor) return;
-  editor.chain().insertCollapse("test").run();
-};
-
-const handleInsertCodeBlock = (editor: Editor) => {
-  if (!editor) return;
-  editor
-    .chain()
-    .insertContent("\n")
-    .setCodeBlock()
-    .insertContent("const a = 1;")
-    .run();
-};
 
 export default function Tiptap({ content, onChange }) {
 
@@ -45,6 +34,7 @@ export default function Tiptap({ content, onChange }) {
       // TaskList,
       // TaskItem,
       SelectAllExtension,
+      Image
     ],
     // editable: true,
     // autofocus: true,
@@ -72,10 +62,7 @@ export default function Tiptap({ content, onChange }) {
     <div style={{ position: "relative", maxHeight: "100%", overflow: "auto" }}>
       <Space>
         <MenuBar editor={editor} />
-        <Button onClick={() => handleInsertCollapse(editor)}>插入折叠</Button>
-        <Button onClick={() => handleInsertCodeBlock(editor)}>
-          插入代码块
-        </Button>
+        <ToolBar editor={editor} />
       </Space>
       <EditorContent editor={editor} className="my-4" />
     </div>

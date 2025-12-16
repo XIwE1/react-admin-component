@@ -5,6 +5,7 @@ import {
   BoldOutlined,
   ItalicOutlined,
   StrikethroughOutlined,
+  UnderlineOutlined,
 } from "@ant-design/icons";
 
 interface MenuBarProps {
@@ -34,12 +35,14 @@ export default function MenuBar({ editor }: MenuBarProps) {
     const BoldComponent = BoldButton(editor);
     const ItalicComponent = ItalicButton(editor);
     const StrikeComponent = StrikeButton(editor);
+    const UnderlineComponent = UnderlineButton(editor);
 
     return (
       <Space>
         {BoldComponent}
         {ItalicComponent}
         {StrikeComponent}
+        {UnderlineComponent}
       </Space>
     );
   };
@@ -104,6 +107,17 @@ const StrikeButton = (editor: Editor) => {
   );
 };
 
+const UnderlineButton = (editor: Editor) => {
+  const isActive = editor.isActive("underline");
+  return (
+    <Button
+      type={isActive ? "primary" : "default"}
+      icon={<UnderlineOutlined />}
+      onClick={() => editor.chain().focus().toggleUnderline().run()}
+      disabled={!editor.can().chain().focus().toggleUnderline().run()}
+    />
+  );
+};
 // 标题
 const HeadLv1Button = (editor: Editor) => {
   const isActive = editor.isActive("heading", { level: 1 });
