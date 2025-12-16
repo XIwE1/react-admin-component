@@ -1041,6 +1041,11 @@
   resolved "https://registry.npmmirror.com/@tiptap/extension-dropcursor/-/extension-dropcursor-3.13.0.tgz#04f7659c86558ebeb068fd7d5c2474d8bd28b430"
   integrity sha512-m7GPT3c/83ni+bbU8c+3dpNa8ug+aQ4phNB1Q52VQG3oTonDJnZS7WCtn3lB/Hi1LqoqMtEHwhepU2eD+JeXqQ==
 
+"@tiptap/extension-file-handler@^3.13.0":
+  version "3.13.0"
+  resolved "https://registry.npmmirror.com/@tiptap/extension-file-handler/-/extension-file-handler-3.13.0.tgz#40f8826f8f5b4bbb335ea1e32c8779700ccaef7a"
+  integrity sha512-2S48xcrt5hSiLCmHdbcjLubE36+lF3/qAJhbnTGeeegJg1VL3m9gEN3jiqjR2vitQ8CnXkMVOE9Z9boLZpij6A==
+
 "@tiptap/extension-floating-menu@^3.13.0":
   version "3.13.0"
   resolved "https://registry.npmmirror.com/@tiptap/extension-floating-menu/-/extension-floating-menu-3.13.0.tgz#03d03292add49d1b380cdb1ff3890b2956d4e3f5"

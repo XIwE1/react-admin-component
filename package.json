@@ -15,6 +15,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tiptap/extension-code-block-lowlight": "^3.13.0",
+    "@tiptap/extension-file-handler": "^3.13.0",
     "@tiptap/extension-image": "^3.13.0",
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
