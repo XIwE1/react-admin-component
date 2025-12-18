@@ -8,6 +8,7 @@ import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
 import { SelectAllExtension } from "./extensions/SelectAllExtension";
 import Image from '@tiptap/extension-image';
+import { CustomFileHandler } from "./extensions/FileHandler";
 
 // 自定义的工具栏 菜单栏 样式
 import MenuBar from "./components/MenuBar";
@@ -34,7 +35,8 @@ export default function Tiptap({ content, onChange }) {
       // TaskList,
       // TaskItem,
       SelectAllExtension,
-      Image
+      Image,
+      CustomFileHandler
     ],
     // editable: true,
     // autofocus: true,

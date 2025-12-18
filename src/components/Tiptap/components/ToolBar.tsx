@@ -36,6 +36,7 @@ export default function ToolBar({ editor }: ToolBarProps) {
       <Button onClick={() => handleInsertCollapse(editor)}>插入折叠</Button>
       <Button onClick={() => handleInsertCodeBlock(editor)}>插入代码块</Button>
       <Button onClick={() => handleInserImage(editor)}>插入图片</Button>
+      <Button onClick={() => editor.commands.clearContent()}>清空内容</Button>
     </Space>
   );
 }

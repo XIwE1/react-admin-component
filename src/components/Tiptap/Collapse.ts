@@ -3,6 +3,7 @@ import {
   Extension,
   type CommandProps,
   type RawCommands,
+  nodeInputRule,
 } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import CollapseComponent from "./CollapseComponent";
@@ -28,6 +29,14 @@ export const Collapse = Node.create({
   },
   addNodeView() {
     return ReactNodeViewRenderer(CollapseComponent);
+  },
+  addInputRules() {
+    return [
+      nodeInputRule({
+        find: /^>>\s$/,
+        type: this.type,
+      }),
+    ];
   },
 });
 
@@ -59,7 +68,6 @@ export const CollapseExtension = Extension.create({
 // renderText({ node }) {
 //   return `@${node.attrs.id}`
 // },
-
 
 // Node.create({
 //   // 必须有一个或多个块
