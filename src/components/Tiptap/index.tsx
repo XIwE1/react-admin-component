@@ -14,6 +14,7 @@ import { CustomFileHandler } from "./extensions/FileHandler";
 import MenuBar from "./components/MenuBar";
 import ToolBar from "./components/ToolBar";
 import "./index.scss";
+import { CustomImage } from "./extensions/CustomImage";
 
 export default function Tiptap({ content, onChange }) {
 
@@ -35,7 +36,8 @@ export default function Tiptap({ content, onChange }) {
       // TaskList,
       // TaskItem,
       SelectAllExtension,
-      Image,
+      // Image,
+      CustomImage,
       CustomFileHandler
     ],
     // editable: true,

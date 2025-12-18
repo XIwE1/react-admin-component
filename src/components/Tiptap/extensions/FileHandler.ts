@@ -1,29 +1,30 @@
-import React from "react";
 import FileHandler from "@tiptap/extension-file-handler";
+import {
+  generateUploadId,
+  handleImageUpload,
+  updateImageStatus,
+} from "../utils/ImageUtils";
+import { DEFAULT_LOADING_SRC } from "../utils/ImageUtils";
+import { Editor } from "@tiptap/react";
 
-const getRandomTime = () => 2000 * Math.random();
+function insertUploadingImage(editor: Editor, pos: number, uploadId: string) {
+  editor
+    .chain()
+    .insertContentAt(pos, {
+      type: "image",
+      attrs: {
+        src: DEFAULT_LOADING_SRC,
+        uploadStatus: "uploading",
+        uploadId,
+      },
+    })
+    .focus()
+    .run();
+}
 
 export const CustomFileHandler = FileHandler.configure({
   allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp"],
-  onDrop: (editor, files, pos) => {
-    files.forEach((file) => {
-      const fileReader = new FileReader();
-
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        editor
-          .chain()
-          .insertContentAt(pos, {
-            type: "image",
-            attrs: {
-              src: fileReader.result,
-            },
-          })
-          .focus()
-          .run();
-      };
-    });
-  },
+  onDrop: (editor, files, pos) => {},
   onPaste: (editor, files, htmlContent) => {
     console.log("onPaste", files, htmlContent);
     if (htmlContent) {
@@ -32,23 +33,13 @@ export const CustomFileHandler = FileHandler.configure({
       console.log(htmlContent); // eslint-disable-line no-console
       return false;
     }
-    
-    files.forEach((file) => {
-      const fileReader = new FileReader();
 
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        editor
-          .chain()
-          .insertContentAt(editor.state.selection.anchor, {
-            type: "image",
-            attrs: {
-              src: fileReader.result,
-            },
-          })
-          .focus()
-          .run();
-      };
+    files.forEach((file) => {
+      const uploadId = generateUploadId();
+      insertUploadingImage(editor, editor.state.selection.anchor, uploadId);
+      handleImageUpload(file, uploadId).then(({ status, src }) => {
+        updateImageStatus(editor, uploadId, { status, src });
+      });
     });
   },
 });
