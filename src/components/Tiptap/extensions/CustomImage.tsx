@@ -12,7 +12,7 @@ const UploadImageComponent = (props: NodeViewProps) => {
   const { src, uploadId, uploadStatus } = node.attrs;
 
   const renderImageContent = () => {
-    const isUploading = uploadStatus === "uploading" || uploadStatus === "loading";
+    const isUploading = !!uploadId && uploadStatus === "uploading" || uploadStatus === "loading";
     return <img src={isUploading ? DEFAULT_LOADING_SRC : src} />;
   };
 
@@ -30,7 +30,7 @@ export const CustomImage = Image.extend({
     return {
       ...this.parent?.(),
       uploadStatus: {
-        default: "loading",
+        default: null,
         parseHTML: (element) => element.getAttribute("data-uploadStatus"),
         renderHTML: (attributes) => {
           if (!attributes.uploadStatus) return {};
