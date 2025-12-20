@@ -7,31 +7,30 @@ import {
 } from "@tiptap/react";
 import { DEFAULT_LOADING_SRC } from "../utils/ImageUtils";
 
-const UploadImageComponent = (props: NodeViewProps) => {
-  const { node, updateAttributes } = props;
-  const { src, uploadId, uploadStatus } = node.attrs;
+// const UploadImageComponent = (props: NodeViewProps) => {
+//   const { node, selected } = props;
+//   const { src, uploadId, uploadStatus, alt, title } = node.attrs;
 
-  const renderImageContent = () => {
-    const isUploading =
-      (!!uploadId && uploadStatus === "uploading") ||
-      uploadStatus === "loading";
-    return (
-      <img
-        src={isUploading ? DEFAULT_LOADING_SRC : src}
-        data-uploadId={uploadId}
-        data-uploadStatus={uploadStatus}
-      />
-    );
-  };
+//   const renderImageContent = () => {
+//     const isUploading =
+//       (!!uploadId && uploadStatus === "uploading") ||
+//       uploadStatus === "loading";
+//     return (
+//       <img
+//         alt={alt || ""}
+//         title={title || ""}
+//         src={isUploading ? DEFAULT_LOADING_SRC : src}
+//         data-uploadId={uploadId}
+//         data-uploadStatus={uploadStatus}
+//         draggable="true"
+//         data-drag-handle
+//         className={selected ? "ProseMirror-selectednode" : ""}
+//       />
+//     );
+//   };
 
-  return (
-    <NodeViewWrapper>
-      <Suspense fallback={<div>Loading...</div>}>
-        {renderImageContent()}
-      </Suspense>
-    </NodeViewWrapper>
-  );
-};
+//   return <NodeViewWrapper>{renderImageContent()}</NodeViewWrapper>;
+// };
 
 export const CustomImage = Image.extend({
   addAttributes() {
@@ -55,7 +54,27 @@ export const CustomImage = Image.extend({
       },
     };
   },
-  addNodeView() {
-    return ReactNodeViewRenderer(UploadImageComponent);
+  renderHTML({ HTMLAttributes }) {
+    const { src, uploadId, uploadStatus } = HTMLAttributes;
+
+    const isUploading =
+      (!!uploadId && uploadStatus === "uploading") ||
+      uploadStatus === "loading";
+    const imageSrc = isUploading ? DEFAULT_LOADING_SRC : src;
+
+    return [
+      "img",
+      {
+        ...HTMLAttributes,
+        src: imageSrc,
+        draggable: "true",
+      },
+    ];
   },
+
+  // addNodeView() {
+  //   return ReactNodeViewRenderer(UploadImageComponent, {
+  //     contentDOMElementTag: "img",
+  //   });
+  // },
 });

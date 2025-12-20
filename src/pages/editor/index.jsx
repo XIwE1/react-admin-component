@@ -1,6 +1,11 @@
 import { useState } from "react";
 import Tiptap from "@/components/Tiptap";
 
+const INIT_CONTENT = `
+<p>Hello World!</p>
+<img src="https://placehold.co/600x400" alt="image" />
+`;
+
 export default function Editor() {
   const [textContent, setTextContent] = useState(null);
   const [wordCount, setWordCount] = useState(0);
@@ -15,7 +20,7 @@ export default function Editor() {
   return (
     <div>
       <div className="p-4 max-h-[800px] border-1 border-gray-300">
-        <Tiptap content="<p>Hello World!bbb</p>" onChange={handleChange} />
+        <Tiptap content={INIT_CONTENT} onChange={handleChange} />
       </div>
       <div className="mt-4 p-4 bg-gray-100">
         <p>当前字数: {wordCount}</p>
