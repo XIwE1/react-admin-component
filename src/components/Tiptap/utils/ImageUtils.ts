@@ -47,14 +47,14 @@ export function updateImageStatus(
     ...node.attrs,
     src: next.src,
     uploadStatus: next.status,
-  } ;
+  };
 
   editor.view.dispatch(editor.state.tr.setNodeMarkup(pos, undefined, attrs));
   return true;
 }
 
 // 图片上传
-export async function handleImageUpload(file: File, uploadId: string) {
+export async function UploadImageToServer(file: File, uploadId: string) {
   const form = new FormData();
   form.append("file", file);
   // 假设这里上传文件到服务端
@@ -66,6 +66,53 @@ export async function handleImageUpload(file: File, uploadId: string) {
     uploadId,
     src: status === "success" ? SUCCESS_URL : ERROR_URL,
   };
+}
+
+// 插入上传中的图片节点
+export function insertUploadingImage(
+  editor: Editor,
+  uploadId: string,
+  pos?: number
+) {
+  const insertPos = pos ?? editor.state.selection.anchor;
+  editor
+    .chain()
+    .insertContentAt(insertPos, {
+      type: "image",
+      attrs: {
+        src: DEFAULT_LOADING_SRC,
+        uploadStatus: "uploading",
+        uploadId,
+      },
+    })
+    .focus()
+    .run();
+}
+
+// 通用的图片上传函数
+export function handleImageUpload(
+  editor: Editor,
+  files: File | File[] | FileList,
+  pos?: number
+) {
+  if (!editor) return;
+
+  const fileArray = Array.isArray(files)
+    ? files
+    : files instanceof FileList
+    ? Array.from(files)
+    : [files];
+
+  fileArray.forEach((file) => {
+    console.log("file", file);
+    
+    if (!file.type.startsWith("image/")) return;
+    const uploadId = generateUploadId();
+    insertUploadingImage(editor, uploadId, pos);
+    UploadImageToServer(file, uploadId).then(({ status, src }) => {
+      updateImageStatus(editor, uploadId, { status, src });
+    });
+  });
 }
 
 // 默认加载图

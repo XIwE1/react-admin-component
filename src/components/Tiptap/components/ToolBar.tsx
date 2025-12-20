@@ -1,6 +1,9 @@
 import { Editor } from "@tiptap/react";
-import { Button, Space } from "antd";
+import { Button, Space, Upload } from "antd";
 import React from "react";
+import { UploadOutlined } from "@ant-design/icons";
+import { handleImageUpload } from "../utils/ImageUtils";
+import type { UploadProps } from "antd";
 
 interface ToolBarProps {
   editor: Editor;
@@ -30,13 +33,32 @@ const handleInserImage = (editor: Editor) => {
   }
 };
 
+const handleClearContent = (editor: Editor) => {
+  if (!editor) return;
+  editor.commands.clearContent();
+};
+
+const renderUploadImage = (editor: Editor) => {
+  return (
+    <Upload
+      showUploadList={false}
+      multiple
+      accept="image/*"
+      beforeUpload={(file) => handleImageUpload(editor, file)}
+    >
+      <Button icon={<UploadOutlined />}>上传图片</Button>
+    </Upload>
+  );
+};
+
 export default function ToolBar({ editor }: ToolBarProps) {
   return (
     <Space>
       <Button onClick={() => handleInsertCollapse(editor)}>插入折叠</Button>
       <Button onClick={() => handleInsertCodeBlock(editor)}>插入代码块</Button>
       <Button onClick={() => handleInserImage(editor)}>插入图片</Button>
-      <Button onClick={() => editor.commands.clearContent()}>清空内容</Button>
+      {renderUploadImage(editor)}
+      <Button onClick={() => handleClearContent(editor)}>清空内容</Button>
     </Space>
   );
 }

@@ -12,8 +12,16 @@ const UploadImageComponent = (props: NodeViewProps) => {
   const { src, uploadId, uploadStatus } = node.attrs;
 
   const renderImageContent = () => {
-    const isUploading = !!uploadId && uploadStatus === "uploading" || uploadStatus === "loading";
-    return <img src={isUploading ? DEFAULT_LOADING_SRC : src} />;
+    const isUploading =
+      (!!uploadId && uploadStatus === "uploading") ||
+      uploadStatus === "loading";
+    return (
+      <img
+        src={isUploading ? DEFAULT_LOADING_SRC : src}
+        data-uploadId={uploadId}
+        data-uploadStatus={uploadStatus}
+      />
+    );
   };
 
   return (

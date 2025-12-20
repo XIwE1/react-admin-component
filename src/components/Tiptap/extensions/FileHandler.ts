@@ -1,26 +1,5 @@
 import FileHandler from "@tiptap/extension-file-handler";
-import {
-  generateUploadId,
-  handleImageUpload,
-  updateImageStatus,
-} from "../utils/ImageUtils";
-import { DEFAULT_LOADING_SRC } from "../utils/ImageUtils";
-import { Editor } from "@tiptap/react";
-
-function insertUploadingImage(editor: Editor, pos: number, uploadId: string) {
-  editor
-    .chain()
-    .insertContentAt(pos, {
-      type: "image",
-      attrs: {
-        src: DEFAULT_LOADING_SRC,
-        uploadStatus: "uploading",
-        uploadId,
-      },
-    })
-    .focus()
-    .run();
-}
+import { handleImageUpload } from "../utils/ImageUtils";
 
 export const CustomFileHandler = FileHandler.configure({
   allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp"],
@@ -34,12 +13,6 @@ export const CustomFileHandler = FileHandler.configure({
       return false;
     }
 
-    files.forEach((file) => {
-      const uploadId = generateUploadId();
-      insertUploadingImage(editor, editor.state.selection.anchor, uploadId);
-      handleImageUpload(file, uploadId).then(({ status, src }) => {
-        updateImageStatus(editor, uploadId, { status, src });
-      });
-    });
+    handleImageUpload(editor, files);
   },
 });
