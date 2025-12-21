@@ -1,10 +1,13 @@
 import { Editor } from "@tiptap/react";
 
-interface IUploadApi {
+export interface IUploadApi {
   (file: File, id: string): Promise<{ status: string; uploadId: string; src: string }>;
 }
 
 type UploadResult = ReturnType<IUploadApi>;
+
+// 图片与id的map，用于记录和重试，todo：增删改为函数式
+const ImageMap: Map<string, File> = new Map();
 
 const getRandomTime = () => 2000 * Math.random();
 const getRandomStatus = () =>
@@ -77,12 +80,13 @@ export async function UploadImageToServer(
   const form = new FormData();
   form.append("file", file);
   const res = await uploadApi(file, uploadId);
+  if (res.status === "success") ImageMap.delete(uploadId);
 
   return {
     status: res.status,
     uploadId: res.uploadId,
     // 假设服务器返回的src正常，这里先用本地的预设内容
-    src: res.status === "success" ? SUCCESS_URL : ERROR_URL,
+    src: res.status === "success" ? res.src : ERROR_URL,
   };
 }
 
@@ -124,14 +128,48 @@ export function handleImageUpload(
 
   fileArray.forEach((file) => {
     console.log("file", file);
-
     if (!file.type.startsWith("image/")) return;
     const uploadId = generateUploadId();
+    ImageMap.set(uploadId, file);
     insertUploadingImage(editor, uploadId, pos);
     UploadImageToServer(file, uploadId, uploadApi).then(({ status, src }) => {
       updateImageStatus(editor, uploadId, { status, src });
     });
   });
+}
+
+// 重新上传图片
+export async function retryUploadImage(
+  editor: Editor,
+  uploadId: string,
+  uploadApi: IUploadApi
+) {
+  if (!editor || !uploadId) return false;
+
+  const file = ImageMap.get(uploadId);
+  if (!file) {
+    console.warn(`File not found for uploadId: ${uploadId}`);
+    return false;
+  }
+
+  updateImageStatus(editor, uploadId, {
+    status: "uploading",
+    src: DEFAULT_LOADING_SRC,
+  });
+
+  // 重新上传
+  try {
+    const { status, src } = await UploadImageToServer(file, uploadId, uploadApi);
+    updateImageStatus(editor, uploadId, { status, src });
+    return true;
+  } catch (error) {
+    console.error("Retry upload failed:", error);
+    updateImageStatus(editor, uploadId, {
+      status: "error",
+      src: ERROR_URL,
+    });
+    return false;
+  }
 }
 
 // 默认加载图

@@ -15,6 +15,7 @@ import MenuBar from "./components/MenuBar";
 import ToolBar from "./components/ToolBar";
 import "./index.scss";
 import { CustomImage } from "./extensions/CustomImage";
+import { MyUploadApi } from "./utils/ImageUtils";
 
 export default function Tiptap({ content, onChange }) {
 
@@ -37,7 +38,9 @@ export default function Tiptap({ content, onChange }) {
       // TaskItem,
       SelectAllExtension,
       // Image,
-      CustomImage,
+      CustomImage.configure({
+        uploadApi: MyUploadApi,
+      }),
       CustomFileHandler
     ],
     // editable: true,

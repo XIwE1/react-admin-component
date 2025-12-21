@@ -1,38 +1,77 @@
 import Image from "@tiptap/extension-image";
-import React, { Suspense } from "react";
+import React from "react";
 import {
   NodeViewWrapper,
   ReactNodeViewRenderer,
   type NodeViewProps,
 } from "@tiptap/react";
-import { DEFAULT_LOADING_SRC } from "../utils/ImageUtils";
+import {
+  DEFAULT_LOADING_SRC,
+  retryUploadImage,
+  type IUploadApi,
+} from "../utils/ImageUtils";
+import { Button } from "antd";
 
-// const UploadImageComponent = (props: NodeViewProps) => {
-//   const { node, selected } = props;
-//   const { src, uploadId, uploadStatus, alt, title } = node.attrs;
+export interface CustomImageOptions {
+  uploadApi?: IUploadApi;
+}
 
-//   const renderImageContent = () => {
-//     const isUploading =
-//       (!!uploadId && uploadStatus === "uploading") ||
-//       uploadStatus === "loading";
-//     return (
-//       <img
-//         alt={alt || ""}
-//         title={title || ""}
-//         src={isUploading ? DEFAULT_LOADING_SRC : src}
-//         data-uploadId={uploadId}
-//         data-uploadStatus={uploadStatus}
-//         draggable="true"
-//         data-drag-handle
-//         className={selected ? "ProseMirror-selectednode" : ""}
-//       />
-//     );
-//   };
+const UploadImageComponent = (props: NodeViewProps) => {
+  const { node, selected, editor, extension } = props;
+  const { src, uploadId, uploadStatus, alt, title } = node.attrs;
+  const uploadApi = (extension.options as CustomImageOptions).uploadApi;
 
-//   return <NodeViewWrapper>{renderImageContent()}</NodeViewWrapper>;
-// };
+  const handleRetry = () => {
+    if (!uploadApi) {
+      console.warn("uploadApi is not configured");
+      return;
+    }
+    retryUploadImage(editor, uploadId, uploadApi);
+  };
 
-export const CustomImage = Image.extend({
+  const renderImageContent = () => {
+    const isUploading = !!uploadId && uploadStatus === "uploading";
+    return (
+      <img
+        alt={alt || ""}
+        title={title || ""}
+        src={isUploading ? DEFAULT_LOADING_SRC : src}
+        data-uploadId={uploadId}
+        data-uploadStatus={uploadStatus}
+        draggable="true"
+        className={
+          selected
+            ? "ProseMirror-selectednode position-relative"
+            : "position-relative"
+        }
+      />
+    );
+  };
+
+  return (
+    <NodeViewWrapper>
+      <div style={{ position: "relative", display: "inline-block" }}>
+        {renderImageContent()}
+        {uploadId && uploadStatus === "error" && (
+          <div className="display-block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+            <Button onClick={handleRetry} block>
+              重试
+            </Button>
+          </div>
+        )}
+      </div>
+    </NodeViewWrapper>
+  );
+};
+
+export const CustomImage = Image.extend<CustomImageOptions>({
+  addOptions() {
+    return {
+      ...this.parent?.(),
+      uploadApi: undefined,
+    };
+  },
+
   addAttributes() {
     return {
       ...this.parent?.(),
@@ -54,27 +93,27 @@ export const CustomImage = Image.extend({
       },
     };
   },
-  renderHTML({ HTMLAttributes }) {
-    const { src, uploadId, uploadStatus } = HTMLAttributes;
+  // renderHTML({ HTMLAttributes }) {
+  //   const { src, uploadId, uploadStatus } = HTMLAttributes;
 
-    const isUploading =
-      (!!uploadId && uploadStatus === "uploading") ||
-      uploadStatus === "loading";
-    const imageSrc = isUploading ? DEFAULT_LOADING_SRC : src;
+  //   const isUploading =
+  //     (!!uploadId && uploadStatus === "uploading") ||
+  //     uploadStatus === "loading";
+  //   const imageSrc = isUploading ? DEFAULT_LOADING_SRC : src;
 
-    return [
-      "img",
-      {
-        ...HTMLAttributes,
-        src: imageSrc,
-        draggable: "true",
-      },
-    ];
-  },
-
-  // addNodeView() {
-  //   return ReactNodeViewRenderer(UploadImageComponent, {
-  //     contentDOMElementTag: "img",
-  //   });
+  //   return [
+  //     "img",
+  //     {
+  //       ...HTMLAttributes,
+  //       src: imageSrc,
+  //       draggable: "true",
+  //     },
+  //   ];
   // },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(UploadImageComponent, {
+      contentDOMElementTag: "img",
+    });
+  },
 });
