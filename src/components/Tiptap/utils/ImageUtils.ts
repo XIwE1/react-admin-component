@@ -1,5 +1,11 @@
 import { Editor } from "@tiptap/react";
 
+interface IUploadApi {
+  (file: File, id: string): Promise<{ status: string; uploadId: string; src: string }>;
+}
+
+type UploadResult = ReturnType<IUploadApi>;
+
 const getRandomTime = () => 2000 * Math.random();
 const getRandomStatus = () =>
   ["error", "success"][Math.floor(Math.random() * 2)];
@@ -7,8 +13,17 @@ const SUCCESS_URL =
   "https://img.tukuppt.com/png_preview/00/50/01/84qJlNNfgA.jpg!/fw/780";
 const ERROR_URL = "https://pic.616pic.com/ys_img/00/58/28/A1lMAEemor.jpg";
 
+export async function MyUploadApi(file: File, id: string) {
+  // 假设这里获取了token
+  // const token = window.localStorage.getItem("user-token");
+
+  // 假设这里上传文件到服务端
+  await new Promise((resolve) => setTimeout(resolve, getRandomTime()));
+  const status = getRandomStatus();
+  return { status, uploadId: id, src: status === "success" ? SUCCESS_URL : ERROR_URL };
+}
+
 // 通过 uploadId 找到对应 image 节点在文档中的位置（pos）
-// 注意：pos 是 ProseMirror 的 position，可直接给 tr.setNodeMarkup(pos, ...)
 export function findImagePosByUploadId(editor: Editor, uploadId: string) {
   if (!editor || !uploadId) return null;
   const { doc } = editor.state ?? {};
@@ -54,17 +69,20 @@ export function updateImageStatus(
 }
 
 // 图片上传
-export async function UploadImageToServer(file: File, uploadId: string) {
+export async function UploadImageToServer(
+  file: File,
+  uploadId: string,
+  uploadApi: IUploadApi
+) {
   const form = new FormData();
   form.append("file", file);
-  // 假设这里上传文件到服务端
-  await new Promise((resolve) => setTimeout(resolve, getRandomTime()));
-  const status = getRandomStatus();
+  const res = await uploadApi(file, uploadId);
 
   return {
-    status,
-    uploadId,
-    src: status === "success" ? SUCCESS_URL : ERROR_URL,
+    status: res.status,
+    uploadId: res.uploadId,
+    // 假设服务器返回的src正常，这里先用本地的预设内容
+    src: res.status === "success" ? SUCCESS_URL : ERROR_URL,
   };
 }
 
@@ -93,6 +111,7 @@ export function insertUploadingImage(
 export function handleImageUpload(
   editor: Editor,
   files: File | File[] | FileList,
+  uploadApi: IUploadApi,
   pos?: number
 ) {
   if (!editor) return;
@@ -105,11 +124,11 @@ export function handleImageUpload(
 
   fileArray.forEach((file) => {
     console.log("file", file);
-    
+
     if (!file.type.startsWith("image/")) return;
     const uploadId = generateUploadId();
     insertUploadingImage(editor, uploadId, pos);
-    UploadImageToServer(file, uploadId).then(({ status, src }) => {
+    UploadImageToServer(file, uploadId, uploadApi).then(({ status, src }) => {
       updateImageStatus(editor, uploadId, { status, src });
     });
   });

@@ -2,7 +2,7 @@ import { Editor } from "@tiptap/react";
 import { Button, Space, Upload } from "antd";
 import React from "react";
 import { UploadOutlined } from "@ant-design/icons";
-import { handleImageUpload } from "../utils/ImageUtils";
+import { handleImageUpload, MyUploadApi } from "../utils/ImageUtils";
 import type { UploadProps } from "antd";
 
 interface ToolBarProps {
@@ -44,7 +44,7 @@ const renderUploadImage = (editor: Editor) => {
       showUploadList={false}
       multiple
       accept="image/*"
-      beforeUpload={(file) => handleImageUpload(editor, file)}
+      beforeUpload={(file) => handleImageUpload(editor, file, MyUploadApi)}
     >
       <Button icon={<UploadOutlined />}>上传图片</Button>
     </Upload>

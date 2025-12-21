@@ -1,5 +1,5 @@
 import FileHandler from "@tiptap/extension-file-handler";
-import { handleImageUpload } from "../utils/ImageUtils";
+import { handleImageUpload, MyUploadApi } from "../utils/ImageUtils";
 
 export const CustomFileHandler = FileHandler.configure({
   allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp"],
@@ -13,6 +13,6 @@ export const CustomFileHandler = FileHandler.configure({
       return false;
     }
 
-    handleImageUpload(editor, files);
+    handleImageUpload(editor, files, MyUploadApi);
   },
 });
