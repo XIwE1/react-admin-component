@@ -7,7 +7,7 @@ import { Collapse, CollapseExtension } from "./Collapse";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
 import { SelectAllExtension } from "./extensions/SelectAllExtension";
-import Image from '@tiptap/extension-image';
+import { Mention } from "@tiptap/extension-mention";
 import { CustomFileHandler } from "./extensions/FileHandler";
 
 // 自定义的工具栏 菜单栏 样式
@@ -37,7 +37,14 @@ export default function Tiptap({ content, onChange }) {
       // TaskList,
       // TaskItem,
       SelectAllExtension,
-      // Image,
+      Mention.configure({
+        HTMLAttributes: {
+          class: "mention",
+        },
+        suggestion: {
+          char: "@",
+        },
+      }),
       CustomImage.configure({
         uploadApi: MyUploadApi,
       }),

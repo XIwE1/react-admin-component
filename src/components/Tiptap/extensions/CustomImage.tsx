@@ -39,6 +39,7 @@ const UploadImageComponent = (props: NodeViewProps) => {
         data-uploadId={uploadId}
         data-uploadStatus={uploadStatus}
         draggable="true"
+        data-drag-handle
         className={
           selected
             ? "ProseMirror-selectednode position-relative"

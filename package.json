@@ -17,9 +17,11 @@
     "@tiptap/extension-code-block-lowlight": "^3.13.0",
     "@tiptap/extension-file-handler": "^3.13.0",
     "@tiptap/extension-image": "^3.13.0",
+    "@tiptap/extension-mention": "^3.14.0",
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
     "@tiptap/starter-kit": "^3.13.0",
+    "@tiptap/suggestion": "^3.14.0",
     "@types/react-transition-group": "^4.4.12",
     "antd": "^5.24.3",
     "expr-eval": "^2.0.2",
@@ -31,6 +33,7 @@
     "rollup-plugin-visualizer": "^5.14.0",
     "sass-embedded": "^1.97.0",
     "tailwindcss": "^4.1.18",
+    "tippy.js": "^6.3.7",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
