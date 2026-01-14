@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Tiptap from "@/components/Tiptap";
-import NumberScroll from "../../components/NumberScroll";
-import { Button, Space } from "antd";
+import NumberScrollDemo from "./NumberScrollDemo";
 
 const INIT_CONTENT = `
 <p>Hello World!</p>
@@ -12,7 +11,6 @@ const INIT_CONTENT = `
 export default function MyEditor() {
   const [textContent, setTextContent] = useState(null);
   const [wordCount, setWordCount] = useState(0);
-  const [numberValue, setNumberValue] = useState(100);
   // const [selection, setSelection] = useState(null);
 
   const handleChange = (editor) => {
@@ -23,23 +21,15 @@ export default function MyEditor() {
 
   return (
     <div>
-      <div className="my-4 p-4 border-1 border-gray-300">
-        <Space>
-          <div>{numberValue}</div>
-          <NumberScroll value={numberValue} options={{ decimals: 2 }} className="justify-center self-center" />
-          <Space direction="vertical">
-            <Button onClick={() => setNumberValue(numberValue + 10)}>
-              +10
-            </Button>
-            <Button onClick={() => setNumberValue(numberValue - 10)}>
-              -10
-            </Button>
-          </Space>
-        </Space>
-      </div>
-      <div className="p-4 max-h-[800px] border-1 border-gray-300">
+      {/* 数字滚动演示组件 */}
+      <NumberScrollDemo />
+
+      {/* 富文本编辑器 */}
+      <div className="mt-8 p-4 max-h-[800px] border-1 border-gray-300">
         <Tiptap content={INIT_CONTENT} onChange={handleChange} />
       </div>
+      
+      {/* 编辑器信息 */}
       <div className="mt-4 p-4 bg-gray-100">
         <p>当前字数: {wordCount}</p>
         <p>文本内容: {textContent}</p>
