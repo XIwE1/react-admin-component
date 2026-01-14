@@ -7,11 +7,11 @@ import Config from "@/pages/config";
 import Form2 from "@/pages/form_2";
 
 const Form1 = React.lazy(() => import("@/pages/form_1"));
-const Editor = React.lazy(() => import("@/pages/editor"));
+const MyEditor = React.lazy(() => import("@/pages/editor"));
 // const Config = React.lazy(() => import("@/pages/config"));
 
 const componentMap = {
-  Editor: Editor,
+  Editor: MyEditor,
   Config: Config,
   Form_1: Form1,
   Form_2: Form2,
@@ -19,7 +19,6 @@ const componentMap = {
 
 const Main = (props) => {
   const { active } = props;
-
   const renderTransitionComponent = (key, Component) => {
     return (
       <CSSTransition key={key} timeout={300} classNames="fade">
