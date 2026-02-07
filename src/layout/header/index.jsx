@@ -1,4 +1,6 @@
-import { Avatar } from "antd";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { Avatar, Dropdown } from "antd";
 import "./index.less";
 import NavigateItem from "./NavigateItem.jsx";
 import {
@@ -6,10 +8,33 @@ import {
   HomeOutlined,
   UserOutlined,
   SettingOutlined,
+  GlobalOutlined,
 } from "@ant-design/icons";
+
+const LANG_ZH_CN = "zh-CN";
+const LANG_EN_US = "en-US";
 
 const Header = (props) => {
   const { title } = props;
+  const { t, i18n } = useTranslation("common");
+
+  const langMenuItems = useMemo(
+    () => [
+      {
+        key: LANG_ZH_CN,
+        label: t("language.zhCN"),
+      },
+      {
+        key: LANG_EN_US,
+        label: t("language.enUS"),
+      },
+    ],
+    [t]
+  );
+
+  const handleMenuClick = ({ key }) => {
+    i18n.changeLanguage(key);
+  };
 
   const navigateItems = [
     { name: "Home", icon: <HomeOutlined /> },
@@ -36,6 +61,18 @@ const Header = (props) => {
         <div className="navigate"> {renderNavigateItems(navigateItems)} </div>
       </div>
       <div className="right">
+        <Dropdown
+          menu={{
+            items: langMenuItems,
+            onClick: handleMenuClick,
+          }}
+          trigger={["click"]}
+          placement="bottomRight"
+        >
+          <div className="avatar header-lang-trigger">
+            <GlobalOutlined />
+          </div>
+        </Dropdown>
         <div className="avatar">
           <Avatar size={26} icon={<UserOutlined />}></Avatar>
         </div>

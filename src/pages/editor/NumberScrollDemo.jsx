@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import NumberScroll from "../../components/NumberScroll";
 import { Button, Space, Progress } from "antd";
 import useNumberScroll from "../../hooks/useNumberScroll";
 
 export default function NumberScrollDemo() {
+  const { t } = useTranslation("editor");
   const [numberValue, setNumberValue] = useState(100);
   const [currencyValue, setCurrencyValue] = useState(12345.67);
   const [progressValue, setProgressValue] = useState(68);
@@ -25,14 +27,18 @@ export default function NumberScrollDemo() {
     <div className="flex flex-col gap-8 font-Poppins">
       {/* 基础数字滚动演示 */}
       <div className="p-6 border border-gray-300 rounded-lg bg-gradient-to-br from-gray-50 to-white shadow-sm">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">基础演示</h3>
+        <h3 className="text-lg font-semibold mb-4 text-gray-800">
+          {t("numberScroll.basic.title")}
+        </h3>
 
         <div className="flex flex-col gap-6">
           {/* 数字展示区域 */}
           <div className="flex items-center gap-8">
             {/* 静态数字对比 */}
             <div className="flex flex-col items-center gap-2">
-              <div className="text-sm text-gray-500">静态</div>
+              <div className="text-sm text-gray-500">
+                {t("numberScroll.basic.static")}
+              </div>
               <div className="text-4xl font-bold text-gray-400 min-w-[120px] text-center">
                 {numberValue.toFixed(2)}
               </div>
@@ -43,7 +49,9 @@ export default function NumberScrollDemo() {
 
             {/* 滚动数字展示 */}
             <div className="flex flex-col items-center gap-2">
-              <div className="text-sm text-gray-500">滚动</div>
+              <div className="text-sm text-gray-500">
+                {t("numberScroll.basic.scroll")}
+              </div>
               <div className="text-4xl font-bold text-blue-600 min-w-[120px] text-center">
                 <NumberScroll
                   value={numberValue}
@@ -56,10 +64,12 @@ export default function NumberScrollDemo() {
 
           {/* 控制按钮区域 */}
           <div className="flex flex-col gap-3">
-            <div className="text-sm text-gray-600 mb-2">快速测试</div>
+            <div className="text-sm text-gray-600 mb-2">
+              {t("numberScroll.basic.quickTest")}
+            </div>
             <Space wrap>
               <Button type="primary" onClick={() => setNumberValue(0)}>
-                重置为 0
+                {t("numberScroll.basic.resetToZero")}
               </Button>
               <Button onClick={() => setNumberValue(100)}>100</Button>
               <Button onClick={() => setNumberValue(1000)}>1000</Button>
@@ -70,7 +80,9 @@ export default function NumberScrollDemo() {
 
           {/* 步进控制 */}
           <div className="flex flex-col gap-3">
-            <div className="text-sm text-gray-600 mb-2">手动调节</div>
+            <div className="text-sm text-gray-600 mb-2">
+              {t("numberScroll.basic.manualAdjust")}
+            </div>
             <Space>
               <Button onClick={() => setNumberValue(numberValue - 1000)}>
                 -1000
@@ -96,7 +108,7 @@ export default function NumberScrollDemo() {
           {/* 当前值显示 */}
           <div className="pt-3 border-t border-gray-200">
             <div className="text-sm text-gray-500">
-              当前目标值:{" "}
+              {t("numberScroll.basic.currentTarget")}:{" "}
               <span className="font-mono font-semibold text-gray-700">
                 {numberValue.toFixed(2)}
               </span>
@@ -107,13 +119,15 @@ export default function NumberScrollDemo() {
 
       {/* 金融货币展示 */}
       <div className="p-6 border border-gray-300 rounded-lg bg-gradient-to-br from-blue-50 to-white shadow-sm">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">货币</h3>
+        <h3 className="text-lg font-semibold mb-4 text-gray-800">
+          {t("numberScroll.currency.title")}
+        </h3>
 
         <div className="flex flex-col gap-6">
           {/* 人民币展示 */}
           <div className="flex flex-col gap-4">
             <div className="text-sm font-medium text-gray-600">
-              人民币 (CNY)
+              {t("numberScroll.currency.cny")}
             </div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl text-red-500 font-semibold">¥</span>
@@ -129,7 +143,9 @@ export default function NumberScrollDemo() {
 
           {/* 美元展示 */}
           <div className="flex flex-col gap-4">
-            <div className="text-sm font-medium text-gray-600">美元 (USD)</div>
+            <div className="text-sm font-medium text-gray-600">
+              {t("numberScroll.currency.usd")}
+            </div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl text-green-500 font-semibold">$</span>
               <div className="text-5xl font-bold text-green-600">
@@ -144,7 +160,9 @@ export default function NumberScrollDemo() {
 
           {/* 欧元展示 */}
           <div className="flex flex-col gap-4">
-            <div className="text-sm font-medium text-gray-600">欧元 (EUR)</div>
+            <div className="text-sm font-medium text-gray-600">
+              {t("numberScroll.currency.eur")}
+            </div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl text-blue-500 font-semibold">€</span>
               <div className="text-5xl font-bold text-blue-600">
@@ -159,7 +177,9 @@ export default function NumberScrollDemo() {
 
           {/* 控制按钮 */}
           <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
-            <div className="text-sm text-gray-600 mb-2">快速设置金额</div>
+            <div className="text-sm text-gray-600 mb-2">
+              {t("numberScroll.currency.quickSet")}
+            </div>
             <Space wrap>
               <Button onClick={() => setCurrencyValue(0)}>¥0</Button>
               <Button onClick={() => setCurrencyValue(123.45)}>¥123.45</Button>
@@ -183,7 +203,9 @@ export default function NumberScrollDemo() {
 
           {/* 手动调节 */}
           <div className="flex flex-col gap-3">
-            <div className="text-sm text-gray-600 mb-2">手动调节</div>
+            <div className="text-sm text-gray-600 mb-2">
+              {t("numberScroll.currency.manualAdjust")}
+            </div>
             <Space>
               <Button onClick={() => setCurrencyValue(currencyValue - 10000)}>
                 -¥10,000
@@ -210,14 +232,16 @@ export default function NumberScrollDemo() {
 
       {/* 进度条数字滚动 */}
       <div className="p-6 border border-gray-300 rounded-lg bg-gradient-to-br from-purple-50 to-white shadow-sm">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800">进度条</h3>
+        <h3 className="text-lg font-semibold mb-4 text-gray-800">
+          {t("numberScroll.progress.title")}
+        </h3>
 
         <div className="flex flex-col gap-6">
           {/* 进度条展示 */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-600">
-                任务完成度
+                {t("numberScroll.progress.taskCompletion")}
               </span>
               <div className="flex items-baseline gap-1">
                 <div className="text-3xl font-bold text-purple-600">
@@ -241,7 +265,9 @@ export default function NumberScrollDemo() {
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">项目A</span>
+                <span className="text-sm text-gray-600">
+                  {t("numberScroll.progress.projectA")}
+                </span>
                 <div className="flex items-baseline gap-1">
                   <div className="text-xl font-bold text-blue-600">
                     {progressCurrentDisplayB}
@@ -259,7 +285,9 @@ export default function NumberScrollDemo() {
 
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">项目B</span>
+                <span className="text-sm text-gray-600">
+                  {t("numberScroll.progress.projectB")}
+                </span>
                 <div className="flex items-baseline gap-1">
                   <div className="text-xl font-bold text-green-600">
                     {progressCurrentDisplayC}
@@ -278,7 +306,9 @@ export default function NumberScrollDemo() {
 
           {/* 控制按钮 */}
           <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
-            <div className="text-sm text-gray-600 mb-2">快速设置进度</div>
+            <div className="text-sm text-gray-600 mb-2">
+              {t("numberScroll.progress.quickSet")}
+            </div>
             <Space wrap>
               <Button onClick={() => setProgressValue(0)}>0%</Button>
               <Button onClick={() => setProgressValue(25)}>25%</Button>
@@ -292,7 +322,9 @@ export default function NumberScrollDemo() {
 
           {/* 手动调节 */}
           <div className="flex flex-col gap-3">
-            <div className="text-sm text-gray-600 mb-2">手动调节</div>
+            <div className="text-sm text-gray-600 mb-2">
+              {t("numberScroll.progress.manualAdjust")}
+            </div>
             <Space>
               <Button
                 onClick={() =>
