@@ -1,0 +1,48 @@
+/* BaseSelect 样式 - 使用 wrapper 作用域，避免污染全局 */
+.base-select {
+  --base-select-border: 1px solid rgba(0, 0, 0, 0.12);
+  --base-select-border-hover: 1px solid rgba(0, 0, 0, 0.25);
+  --base-select-border-focus: 1px solid #1677ff;
+  --base-select-shadow-focus: 0 0 0 2px rgba(22, 119, 255, 0.12);
+  --base-select-radius: 6px;
+  --base-select-transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.base-select .ant-select-selector {
+  border-radius: var(--base-select-radius) !important;
+  border: var(--base-select-border) !important;
+  transition: var(--base-select-transition) !important;
+}
+
+.base-select.ant-select-focused .ant-select-selector,
+.base-select:hover .ant-select-selector {
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+.base-select.ant-select-focused .ant-select-selector {
+  border-color: var(--base-select-border-focus) !important;
+  box-shadow: var(--base-select-shadow-focus) !important;
+}
+
+.base-select .ant-select-arrow {
+  transition: transform 0.2s ease;
+}
+
+.base-select.ant-select-open .ant-select-arrow {
+  transform: rotate(180deg);
+}
+
+/* 下拉面板样式（通过 popupClassName 应用到 portal 容器） */
+.base-select-dropdown.ant-select-dropdown {
+  --base-select-radius: 6px;
+  border-radius: var(--base-select-radius);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 3px 6px rgba(0, 0, 0, 0.04);
+}
+
+.base-select-dropdown .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: rgba(22, 119, 255, 0.06);
+}
+
+.base-select-dropdown .ant-select-item-option-selected {
+  font-weight: 500;
+}
