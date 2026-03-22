@@ -24,6 +24,7 @@
     "@tiptap/suggestion": "^3.14.0",
     "@types/react-transition-group": "^4.4.12",
     "antd": "^5.24.3",
+    "axios": "^1.13.6",
     "expr-eval": "^2.0.2",
     "i18next": "^25.8.4",
     "lowlight": "^3.3.0",
