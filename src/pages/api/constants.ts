@@ -6,6 +6,8 @@ export const DEFAULT_PORT = "8080";
 export const HTTP_METHOD_OPTIONS: { value: HttpDebugMethod; label: string }[] = [
   { value: "GET", label: "GET" },
   { value: "POST", label: "POST" },
+  { value: "PUT", label: "PUT" },
+  { value: "DELETE", label: "DELETE" },
 ];
 
 export const apiTw = {

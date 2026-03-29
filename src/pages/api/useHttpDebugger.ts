@@ -22,8 +22,8 @@ export function useHttpDebugger() {
   const send = useCallback(async () => {
     if (sendingRef.current) return;
 
-    const h = host.trim();
-    const p = port.trim();
+    const h = host.trim() || DEFAULT_HOST;
+    const p = port.trim() || DEFAULT_PORT;
     const path = normalizePath(uri);
 
     if (!h) {
@@ -40,7 +40,7 @@ export function useHttpDebugger() {
     }
 
     let bodyData: unknown | undefined = undefined;
-    if (method === "POST") {
+    if (method !== "GET") {
       const parsed = parseJsonBody(bodyText);
       if (!parsed.ok) {
         message.error("请求体不是合法 JSON");

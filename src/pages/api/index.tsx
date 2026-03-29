@@ -65,7 +65,7 @@ export default function Api() {
         />
       </FieldRow>
 
-      <LabeledBlock label="请求体（JSON，POST 时生效）">
+      <LabeledBlock label="请求体（JSON，非 GET 时生效）">
         <TextArea
           value={bodyText}
           onChange={(e) => setBodyText(e.target.value)}

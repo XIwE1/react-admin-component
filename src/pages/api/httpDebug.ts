@@ -64,7 +64,7 @@ export interface HttpDebugRequestInput {
   port: string;
   path: string;
   method: HttpDebugMethod;
-  /** POST 时已解析的 JSON；无请求体则为 undefined */
+  /** 非 GET 时已解析的 JSON；无请求体则为 undefined */
   bodyData?: unknown;
 }
 
@@ -74,7 +74,7 @@ export async function executeHttpDebugRequest(input: HttpDebugRequestInput): Pro
   const res = await axios({
     method: method.toLowerCase() as Lowercase<HttpDebugMethod>,
     url,
-    data: method === "POST" ? bodyData : undefined,
+    data: method === "GET" ? undefined : bodyData,
     validateStatus: () => true,
     timeout: 120_000,
   });

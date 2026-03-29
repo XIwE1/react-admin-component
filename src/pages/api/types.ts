@@ -1,1 +1,1 @@
-export type HttpDebugMethod = "GET" | "POST";
+export type HttpDebugMethod = "GET" | "POST" | "PUT" | "DELETE";
