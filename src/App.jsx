@@ -9,7 +9,13 @@ function App() {
 
   const clickItem = (key) => setActive(key);
 
-  const items = [{ key: "Editor" }, { key: "Config" }, { key: "Form_1" }, { key: "Form_2" }];
+  const items = [
+    { key: "Editor" },
+    { key: "Config" },
+    { key: "API" },
+    { key: "Form_1" },
+    { key: "Form_2" },
+  ];
 
   return (
     <div id="app">

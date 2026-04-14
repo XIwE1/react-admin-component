@@ -1,6 +1,7 @@
 import { Input, Select, Button, Typography } from "antd";
 import { FieldRow } from "./components/FieldRow";
 import { LabeledBlock } from "./components/LabeledBlock";
+import { UriWithHistoryInput } from "./components/UriWithHistoryInput";
 import { apiTw, DEFAULT_HOST, DEFAULT_PORT, HTTP_METHOD_OPTIONS } from "./constants";
 import { useHttpDebugger } from "./useHttpDebugger";
 import type { HttpDebugMethod } from "./types";
@@ -23,6 +24,9 @@ export default function Api() {
     responseText,
     sending,
     send,
+    requestHistory,
+    clearRequestHistory,
+    applyHistoryItem,
   } = useHttpDebugger();
 
   return (
@@ -56,13 +60,19 @@ export default function Api() {
           onChange={setMethod}
           options={HTTP_METHOD_OPTIONS}
         />
-        <Input
-          className="min-w-[200px] max-w-[560px] flex-1"
+        <UriWithHistoryInput
           placeholder="URI，如 /api/user"
           value={uri}
-          onChange={(e) => setUri(e.target.value)}
-          allowClear
+          onChange={setUri}
+          history={requestHistory}
+          bodyText={bodyText}
+          onPickHistory={applyHistoryItem}
+          onSend={send}
+          disabled={sending}
         />
+        <Button danger type="default" disabled={sending} onClick={clearRequestHistory}>
+          清空缓存
+        </Button>
       </FieldRow>
 
       <LabeledBlock label="请求体（JSON，非 GET 时生效）">
