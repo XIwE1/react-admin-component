@@ -2,10 +2,10 @@ import { Input, Select, Button, Typography } from "antd";
 import { FieldRow } from "./components/FieldRow";
 import { LabeledBlock } from "./components/LabeledBlock";
 import { UriWithHistoryInput } from "./components/UriWithHistoryInput";
+import { RequestBodyTable } from "./components/RequestBodyTable";
 import { apiTw, DEFAULT_HOST, DEFAULT_PORT, HTTP_METHOD_OPTIONS } from "./constants";
 import { useHttpDebugger } from "./useHttpDebugger";
 import type { HttpDebugMethod } from "./types";
-import React from "react";
 
 const { TextArea } = Input;
 
@@ -19,8 +19,12 @@ export default function Api() {
     setMethod,
     uri,
     setUri,
-    bodyText,
-    setBodyText,
+    bodyRows,
+    updateBodyKey,
+    updateBodyValue,
+    addBodyRow,
+    removeBodyRow,
+    bodyTextForHistory,
     responseText,
     sending,
     send,
@@ -65,7 +69,7 @@ export default function Api() {
           value={uri}
           onChange={setUri}
           history={requestHistory}
-          bodyText={bodyText}
+          bodyText={bodyTextForHistory}
           onPickHistory={applyHistoryItem}
           onSend={send}
           disabled={sending}
@@ -75,13 +79,14 @@ export default function Api() {
         </Button>
       </FieldRow>
 
-      <LabeledBlock label="请求体（JSON，非 GET 时生效）">
-        <TextArea
-          value={bodyText}
-          onChange={(e) => setBodyText(e.target.value)}
-          placeholder='例如 {"name":"test"}'
-          rows={8}
-          className={apiTw.mono}
+      <LabeledBlock label="请求体（非 GET 时生效）">
+        <RequestBodyTable
+          rows={bodyRows}
+          onChangeKey={updateBodyKey}
+          onChangeValue={updateBodyValue}
+          onAddRow={addBodyRow}
+          onRemoveRow={removeBodyRow}
+          disabled={sending}
         />
       </LabeledBlock>
 

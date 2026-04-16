@@ -1,12 +1,15 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { message } from "antd";
 import {
   normalizePath,
-  parseJsonBody,
   executeHttpDebugRequest,
   serializeCaughtError,
+  rowsToBodyData,
+  bodyTextToRows,
+  serializeBodyForHistory,
+  createEmptyBodyRow,
 } from "./httpDebug";
-import type { HttpDebugMethod } from "./types";
+import type { BodyKVRow, HttpDebugMethod } from "./types";
 import { DEFAULT_HOST, DEFAULT_PORT } from "./constants";
 import {
   appendRequestHistory,
@@ -20,7 +23,7 @@ export function useHttpDebugger() {
   const [port, setPort] = useState(DEFAULT_PORT);
   const [method, setMethod] = useState<HttpDebugMethod>("GET");
   const [uri, setUri] = useState("");
-  const [bodyText, setBodyText] = useState("");
+  const [bodyRows, setBodyRows] = useState<BodyKVRow[]>(() => [createEmptyBodyRow()]);
   const [responseText, setResponseText] = useState("");
   const [sending, setSending] = useState(false);
   const sendingRef = useRef(false);
@@ -38,8 +41,34 @@ export function useHttpDebugger() {
   const applyHistoryItem = useCallback((item: RequestHistoryItem) => {
     setMethod(item.method);
     setUri(item.uri);
-    setBodyText(item.bodyText);
+    setBodyRows(bodyTextToRows(item.bodyText));
   }, []);
+
+  const updateBodyKey = useCallback((id: string, key: string) => {
+    setBodyRows((rows) => rows.map((r) => (r.id === id ? { ...r, key } : r)));
+  }, []);
+
+  const updateBodyValue = useCallback((id: string, value: string) => {
+    setBodyRows((rows) => rows.map((r) => (r.id === id ? { ...r, value } : r)));
+  }, []);
+
+  const addBodyRow = useCallback(() => {
+    setBodyRows((rows) => [...rows, createEmptyBodyRow()]);
+  }, []);
+
+  const removeBodyRow = useCallback((id: string) => {
+    setBodyRows((rows) => {
+      if (rows.length <= 1) return [createEmptyBodyRow()];
+      return rows.filter((r) => r.id !== id);
+    });
+  }, []);
+
+  /** 与历史记录、URI 下拉筛选用的 JSON 文本（与原先 bodyText 语义一致） */
+  const bodyTextForHistory = useMemo(() => {
+    const r = rowsToBodyData(bodyRows);
+    if (!r.ok) return "";
+    return serializeBodyForHistory(r.data);
+  }, [bodyRows]);
 
   const send = useCallback(async () => {
     if (sendingRef.current) return;
@@ -63,7 +92,7 @@ export function useHttpDebugger() {
 
     let bodyData: unknown | undefined = undefined;
     if (method !== "GET") {
-      const parsed = parseJsonBody(bodyText);
+      const parsed = rowsToBodyData(bodyRows);
       if (!parsed.ok) {
         message.error("请求体不是合法 JSON");
         return;
@@ -83,7 +112,11 @@ export function useHttpDebugger() {
         bodyData,
       });
       setResponseText(text);
-      appendRequestHistory({ method, uri: path, bodyText });
+      appendRequestHistory({
+        method,
+        uri: path,
+        bodyText: serializeBodyForHistory(bodyData),
+      });
       setRequestHistory(readRequestHistory());
     } catch (err) {
       setResponseText(serializeCaughtError(err));
@@ -91,7 +124,7 @@ export function useHttpDebugger() {
       sendingRef.current = false;
       setSending(false);
     }
-  }, [host, port, method, uri, bodyText]);
+  }, [host, port, method, uri, bodyRows]);
 
   return {
     host,
@@ -102,8 +135,12 @@ export function useHttpDebugger() {
     setMethod,
     uri,
     setUri,
-    bodyText,
-    setBodyText,
+    bodyRows,
+    updateBodyKey,
+    updateBodyValue,
+    addBodyRow,
+    removeBodyRow,
+    bodyTextForHistory,
     responseText,
     sending,
     send,
