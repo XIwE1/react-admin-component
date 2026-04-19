@@ -1,8 +1,10 @@
-import { Input, Select, Button, Typography } from "antd";
+import React from "react";
+import { Input, Select, Button, Typography, Divider } from "antd";
 import { FieldRow } from "./components/FieldRow";
 import { LabeledBlock } from "./components/LabeledBlock";
 import { UriWithHistoryInput } from "./components/UriWithHistoryInput";
 import { RequestBodyTable } from "./components/RequestBodyTable";
+import { UserListSection } from "./components/UserListSection";
 import { apiTw, DEFAULT_HOST, DEFAULT_PORT, HTTP_METHOD_OPTIONS } from "./constants";
 import { useHttpDebugger } from "./useHttpDebugger";
 import type { HttpDebugMethod } from "./types";
@@ -35,6 +37,13 @@ export default function Api() {
 
   return (
     <div className={apiTw.page}>
+      <Typography.Title level={5} className="!mb-0">
+        列表展示
+      </Typography.Title>
+      <UserListSection host={host} port={port} />
+
+      <Divider className="!my-1 shrink-0" />
+
       <Typography.Title level={5} className="!mb-0">
         HTTP 调试
       </Typography.Title>
