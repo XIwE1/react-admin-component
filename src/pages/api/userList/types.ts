@@ -19,3 +19,23 @@ export interface UserListFilters extends Record<string, string> {
 export type UserListData = PaginatedListData<UserRow, "userList">;
 
 export type UserListApiResponse = ApiEnvelope<UserListData>;
+
+/** 更新用户请求体（字段名与后端约定） */
+export interface UserUpdatePayload {
+  Id: number;
+  name: string;
+  email: string;
+}
+
+/** 创建用户请求体 */
+export interface UserCreatePayload {
+  name: string;
+  email: string;
+}
+
+/** 简单 code 响应 */
+export interface UserMutationApiResponse {
+  code: number;
+  msg?: string;
+  data?: unknown;
+}
