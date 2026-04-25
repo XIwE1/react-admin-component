@@ -56,8 +56,8 @@ export function UserListSection({ host, port }: UserListSectionProps) {
       { title: "ID", dataIndex: "ID", width: 72, fixed: "left" },
       { title: "姓名", dataIndex: "name", width: 140 },
       { title: "邮箱", dataIndex: "email", ellipsis: true },
-      { title: "创建时间", dataIndex: "CreatedAt", width: 180, render: (v: string) => formatTime(v) },
-      { title: "更新时间", dataIndex: "UpdatedAt", width: 180, render: (v: string) => formatTime(v) },
+      { title: "创建时间", dataIndex: "created_at", width: 180, render: (v: string) => formatTime(v) },
+      { title: "更新时间", dataIndex: "updated_at", width: 180, render: (v: string) => formatTime(v) },
       {
         title: "操作",
         key: "actions",
@@ -106,6 +106,10 @@ export function UserListSection({ host, port }: UserListSectionProps) {
         defaultPageSize={10}
         onLoad={onLoad}
         onReady={onTableReady}
+        serverSortable={[
+          { dataIndex: "created_at", sortKey: "created_at" },
+          { dataIndex: "updated_at", sortKey: "updated_at" },
+        ]}
         toolbarExtra={
           <Button type="default" onClick={() => setUserModal({ mode: "create" })}>
             创建

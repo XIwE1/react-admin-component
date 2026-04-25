@@ -5,11 +5,21 @@ export interface ListMeta {
   total: number;
 }
 
-/** 拉取列表时传入的分页 + 筛选（筛选键由业务泛型 TFilter 决定） */
+/**
+ * 排序语义：field=排序字段、order=顺序。
+ * 具体查询名由业务层映射（如 `sort`+`sort_by` 或 `sort`+`order`）。
+ */
+export interface ListSort {
+  field: string;
+  order: "asc" | "desc";
+}
+
+/** 拉取列表时传入的分页 + 筛选 + 可选排序（筛选键由业务泛型 TFilter 决定） */
 export interface ListQueryParams<TFilter extends Record<string, unknown> = Record<string, unknown>> {
   page: number;
   size: number;
   filters: TFilter;
+  sort?: ListSort | null;
 }
 
 /** 表格内部使用的统一结果结构，与具体接口里的 list 字段名解耦 */

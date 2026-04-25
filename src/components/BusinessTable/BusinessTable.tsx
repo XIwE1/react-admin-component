@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ComponentProps, Key, ReactNode } from "react";
 import { Button, Space, Table, message } from "antd";
+import type { TableProps } from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import type { ListLoadResult, ListMeta, ListQueryParams } from "./types";
+import type { ListLoadResult, ListMeta, ListQueryParams, ListSort } from "./types";
 
 export interface BusinessTableFilterApi<TFilter extends Record<string, unknown>> {
   filters: TFilter;
@@ -32,6 +33,15 @@ export interface BusinessTableProps<
     ComponentProps<typeof Table<TRecord>>,
     "columns" | "dataSource" | "loading" | "pagination" | "rowKey"
   >;
+  /** 挂载后提供 reload，便于行内删除/编辑后刷新列表 */
+  onReady?: (ctrl: { reload: () => void }) => void;
+  /** 插在「查询」与「重置筛选」之间，例如「创建」 */
+  toolbarExtra?: ReactNode;
+  /**
+   * 服务端排序：表头 dataIndex 与列一致，sortKey 会出现在 {@link ListQueryParams.sort} 的 `field` 中。
+   * 不配置则无排序交互。
+   */
+  serverSortable?: { dataIndex: string; sortKey: string }[];
 }
 
 const emptyMeta: ListMeta = { page: 1, size: 10, total: 0 };
@@ -48,6 +58,9 @@ export function BusinessTable<TRecord, TFilter extends Record<string, unknown>>(
     onLoad,
     rowKey = "id" as keyof TRecord,
     tableProps,
+    onReady,
+    toolbarExtra,
+    serverSortable,
   } = props;
 
   const [draftFilters, setDraftFilters] = useState<TFilter>(() => ({ ...initialFilters }));
@@ -58,6 +71,11 @@ export function BusinessTable<TRecord, TFilter extends Record<string, unknown>>(
   const [rows, setRows] = useState<TRecord[]>([]);
   const [meta, setMeta] = useState<ListMeta>(emptyMeta);
   const [reloadTick, setReloadTick] = useState(0);
+  const [listSort, setListSort] = useState<{
+    dataIndex: string;
+    sortKey: string;
+    order: "asc" | "desc";
+  } | null>(null);
 
   const setFilters = useCallback((patch: Partial<TFilter> | ((prev: TFilter) => TFilter)) => {
     setDraftFilters((prev) => (typeof patch === "function" ? patch(prev) : { ...prev, ...patch }));
@@ -68,10 +86,14 @@ export function BusinessTable<TRecord, TFilter extends Record<string, unknown>>(
     (async () => {
       setLoading(true);
       try {
+        const sort: ListSort | null = listSort
+          ? { field: listSort.sortKey, order: listSort.order }
+          : null;
         const result = await onLoad({
           page,
           size: pageSize,
           filters: appliedFilters,
+          sort,
         });
         if (!cancelled) {
           setRows(result.rows);
@@ -90,7 +112,7 @@ export function BusinessTable<TRecord, TFilter extends Record<string, unknown>>(
     return () => {
       cancelled = true;
     };
-  }, [page, pageSize, appliedFilters, onLoad, reloadTick]);
+  }, [page, pageSize, appliedFilters, onLoad, reloadTick, listSort]);
 
   const submitSearch = useCallback(() => {
     setAppliedFilters({ ...draftFilters });
@@ -101,12 +123,19 @@ export function BusinessTable<TRecord, TFilter extends Record<string, unknown>>(
     setReloadTick((t) => t + 1);
   }, []);
 
+  useEffect(() => {
+    onReady?.({ reload });
+  }, [onReady, reload]);
+
   const resetFilters = useCallback(() => {
     const next = { ...initialFilters } as TFilter;
     setDraftFilters(next);
     setAppliedFilters(next);
     setPage(1);
-  }, [initialFilters]);
+    if (serverSortable?.length) {
+      setListSort(null);
+    }
+  }, [initialFilters, serverSortable]);
 
   const filterApi: BusinessTableFilterApi<TFilter> = {
     filters: draftFilters,
@@ -123,18 +152,88 @@ export function BusinessTable<TRecord, TFilter extends Record<string, unknown>>(
     showSizeChanger: true,
     pageSizeOptions: pageSizeOptions.map(String),
     showTotal: (t) => `共 ${t} 条`,
-    onChange: (p, ps) => {
-      if (ps !== undefined && ps !== pageSize) {
-        setPageSize(ps);
-        setPage(1);
-      } else {
-        setPage(p);
-      }
-    },
   };
 
   const resolveRowKey =
     typeof rowKey === "function" ? rowKey : (record: TRecord) => record[rowKey] as Key;
+
+  const displayedColumns: ColumnsType<TRecord> = useMemo(() => {
+    if (!serverSortable?.length) {
+      return columns;
+    }
+    return columns.map((col) => {
+      const dataIndex = (col as { dataIndex?: string | string[] }).dataIndex;
+      const key = Array.isArray(dataIndex) ? dataIndex.join(".") : dataIndex;
+      if (typeof key !== "string") {
+        return col;
+      }
+      const cfg = serverSortable.find((s) => s.dataIndex === key);
+      if (!cfg) {
+        return col;
+      }
+      const active = listSort?.dataIndex === key;
+      return {
+        ...col,
+        sorter: true,
+        sortOrder: active
+          ? listSort!.order === "asc"
+            ? "ascend"
+            : "descend"
+          : undefined,
+      };
+    });
+  }, [columns, serverSortable, listSort]);
+
+  const { onChange: userTableOnChange, ...restTableProps } = tableProps ?? {};
+
+  const handleTableChange: NonNullable<TableProps<TRecord>["onChange"]> = useCallback(
+    (pag, filters, sorter, extra) => {
+      if (serverSortable?.length && extra?.action === "sort") {
+        const s = Array.isArray(sorter) ? sorter[0] : sorter;
+        if (!s) {
+          setListSort(null);
+          setPage(1);
+          userTableOnChange?.(pag, filters, sorter, extra);
+          return;
+        }
+        if (s.order == null) {
+          setListSort(null);
+          setPage(1);
+          userTableOnChange?.(pag, filters, sorter, extra);
+          return;
+        }
+        if (s.field === undefined || s.field === null) {
+          setListSort(null);
+          setPage(1);
+          userTableOnChange?.(pag, filters, sorter, extra);
+          return;
+        }
+        const name = String(s.field);
+        const cfg = serverSortable.find((c) => c.dataIndex === name);
+        if (!cfg) {
+          userTableOnChange?.(pag, filters, sorter, extra);
+          return;
+        }
+        setListSort({
+          dataIndex: cfg.dataIndex,
+          sortKey: cfg.sortKey,
+          order: s.order === "ascend" ? "asc" : "desc",
+        });
+        setPage(1);
+        userTableOnChange?.(pag, filters, sorter, extra);
+        return;
+      }
+
+      if (pag?.pageSize !== undefined && pag.pageSize !== pageSize) {
+        setPageSize(pag.pageSize);
+        setPage(1);
+      } else if (pag?.current !== undefined) {
+        setPage(pag.current);
+      }
+      userTableOnChange?.(pag, filters, sorter, extra);
+    },
+    [serverSortable, pageSize, userTableOnChange]
+  );
 
   return (
     <div className="flex flex-col gap-3">
@@ -144,6 +243,7 @@ export function BusinessTable<TRecord, TFilter extends Record<string, unknown>>(
           <Button type="primary" loading={loading} onClick={submitSearch}>
             查询
           </Button>
+          {toolbarExtra}
           <Button disabled={loading} onClick={resetFilters}>
             重置筛选
           </Button>
@@ -153,12 +253,13 @@ export function BusinessTable<TRecord, TFilter extends Record<string, unknown>>(
       <Table<TRecord>
         size="small"
         rowKey={resolveRowKey}
-        columns={columns}
+        columns={displayedColumns}
         dataSource={rows}
         loading={loading}
+        onChange={handleTableChange}
         pagination={pagination}
         scroll={{ x: "max-content" }}
-        {...tableProps}
+        {...restTableProps}
       />
     </div>
   );

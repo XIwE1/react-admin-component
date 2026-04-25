@@ -25,6 +25,10 @@ export async function fetchUserListPage(
   const email = params.filters.email.trim();
   if (name) usp.set("name", name);
   if (email) usp.set("email", email);
+  if (params.sort) {
+    usp.set("sort", params.sort.field);
+    usp.set("sort_by", params.sort.order);
+  }
 
   const base = origin.replace(/\/$/, "");
   const url = `${base}${USER_LIST_PATH}?${usp.toString()}`;
@@ -47,8 +51,15 @@ export async function fetchUserListPage(
   }
 
   const d = body.data;
-  if (!d?.meta || !Array.isArray(d.userList)) {
+  if (!d?.meta) {
     throw new Error("data 结构不符合分页列表");
+  }
+
+  if (d.userList == null) {
+    return { rows: [], meta: d.meta };
+  }
+  if (!Array.isArray(d.userList)) {
+    throw new Error("userList 须为数组或 null");
   }
 
   return {

@@ -3,8 +3,8 @@ import type { ApiEnvelope, PaginatedListData } from "@/components/BusinessTable"
 /** 用户行：与后端字段对齐；新增列时在此补类型 */
 export interface UserRow {
   ID: number;
-  CreatedAt: string;
-  UpdatedAt: string;
+  created_at: string;
+  updated_at: string;
   DeletedAt: string | null;
   name: string;
   email: string;
