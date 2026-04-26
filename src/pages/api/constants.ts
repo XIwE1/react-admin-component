@@ -1,6 +1,11 @@
 import type { HttpDebugMethod } from "./types";
 
-export const DEFAULT_HOST = "localhost";
+const viteEnv = (import.meta as unknown as { env: { PROD: boolean; VITE_HTTP_DEBUG_HOST?: string } })
+  .env;
+
+const envHost = viteEnv.VITE_HTTP_DEBUG_HOST?.trim();
+export const DEFAULT_HOST =
+  envHost || (viteEnv.PROD ? "115.190.227.247" : "localhost");
 export const DEFAULT_PORT = "8080";
 
 export const HTTP_METHOD_OPTIONS: { value: HttpDebugMethod; label: string }[] = [
