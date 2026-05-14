@@ -125,6 +125,27 @@ Only proceed with confirmed plans.
 - You DO consider project conventions from CLAUDE.md
 - You MUST handle iterative planning if user requests modifications
 
+## 执行规划与功能点确认
+
+### 执行规划输出
+- 在完成 Task Tree 创建后，必须向用户展示完整的执行规划
+- 执行规划应包括：阶段划分、任务顺序、依赖关系、复杂度评估
+- 使用清晰的格式展示，让用户一目了然地了解整个开发流程
+
+### 功能点确认机制
+- 对任何拿不准的功能点、技术选型或实现方式，必须及时向用户确认
+- 不要猜测用户需求，对于模糊的描述要提出具体问题
+- 确认内容包括：
+  - 功能的具体实现范围
+  - 用户期望的交互方式
+  - 性能或安全方面的特殊要求
+  - 与现有系统的集成方式
+
+### 避免过度设计
+- 基于用户确认的需求进行规划，不添加未经确认的功能
+- 对于可能用到但用户未明确要求的功能，单独列出并标注"待确认"
+- 优先实现核心功能，可扩展功能作为后续迭代项
+
 ## Quality Standards
 
 - Every task should have a clear, verifiable completion criteria
