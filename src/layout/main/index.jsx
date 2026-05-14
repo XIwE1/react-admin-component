@@ -9,6 +9,7 @@ import Form2 from "@/pages/form_2";
 const Form1 = React.lazy(() => import("@/pages/form_1"));
 const MyEditor = React.lazy(() => import("@/pages/editor"));
 const ApiPage = React.lazy(() => import("@/pages/api"));
+const TodoList = React.lazy(() => import("@/pages/todo"));
 // const Config = React.lazy(() => import("@/pages/config"));
 
 const componentMap = {
@@ -17,6 +18,7 @@ const componentMap = {
   API: ApiPage,
   Form_1: Form1,
   Form_2: Form2,
+  ToDoList: TodoList,
 };
 
 const Main = (props) => {
