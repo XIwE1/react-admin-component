@@ -8,7 +8,10 @@
 调用 `workflow-planner`，传入用户需求原文。
 解析返回结果：
 - 若 `QUESTIONS` 不为"无" → 暂停，向用户逐条提问，拿到答案后重新调用 `workflow-planner`
-- 若 `QUESTIONS` 为"无" → 进入 Step 2
+- 若 `QUESTIONS` 为"无" → 检查是否有 **PLAN CONFIRMATION** 部分
+  - 有且用户确认 → 进入 Step 2
+  - 有但用户提出修改 → 将修改建议反馈给 `workflow-planner` 重新规划
+  - 无 → 进入 Step 2（兼容旧版本）
 
 ### Step 2 — 逐任务编码
 按 `BREAKDOWN_RESULT` 中任务树的依赖顺序，对每个叶子任务：
@@ -18,7 +21,11 @@
    - 接口约定（来自 planner 的接口约定）
 2. 解析返回的 `CODE_RESULT`：
    - `状态: failed` → 触发中断规则
-   - `状态: success` → 进入 Step 3
+   - `状态: success` → **检查是否有 CHECKPOINT 提示**
+     - 有 CHECKPOINT → 暂停并等待用户确认代码实现
+       - 用户确认 → 进入 Step 3
+       - 用户提出修改 → 将修改意见回传给 `workflow-coder` 修复，修复后重新检查 CHECKPOINT
+     - 无 CHECKPOINT → 直接进入 Step 3
 
 ### Step 3 — 代码审查
 调用 `workflow-reviewer`，传入 `CODE_RESULT` 中的修改文件列表。
@@ -42,10 +49,13 @@
 - 🔍 审查发现的问题及处理结果
 - 🧪 测试覆盖情况
 
+如有目录结构的更新，需要更新CLAUDE.md
+
 ## 中断规则
 以下情况必须暂停并告知用户，不自动决策：
 - `workflow-planner` 返回 QUESTIONS 不为"无"
 - `workflow-coder` 返回 `状态: failed`
+- `workflow-coder` 代码实现后用户确认修改（通过 CHECKPOINT）
 - `workflow-reviewer` 连续两次 `pass: false`
 - `workflow-tester` 修复后仍然失败
 
