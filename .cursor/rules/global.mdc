@@ -1,7 +1,7 @@
 ---
 alwaysApply: true
 ---
-这是一个基于 React 18 + Vite + TypeScript 的后台管理系统组件库，包含多个独立的功能模块演示。项目使用 Ant Design 作为 UI 框架，Zustand 进行状态管理。样式多使用 TailwindCSS
+这是一个基于 React 18 + Vite + TypeScript 的后台管理系统组件库，包含多个独立的功能模块演示。项目使用 Ant Design 作为 UI 框架，Zustand 进行状态管理，样式统一使用 Tailwind CSS
 
 如果有更新导致目录变化，同步到本文件的 [目录结构](#目录结构) 中
 
@@ -10,6 +10,13 @@ alwaysApply: true
 如果有不清晰的问题先提出问题再做决定，而不是去猜测一个选项
 
 如果没有明确要求 不要去修改已有文件 只修改实现目标而必须要修改的文件
+
+## 样式
+
+- **默认用 Tailwind**：布局、间距、宽高、颜色、排版等一律写 `className`，不要写内联 `style`
+- **Ant Design 组件**：通过 `className` 传 Tailwind（如 `className="w-full"`），与原生元素相同
+- **仅当无法用 class 表达时**才用 `style`，例如运行时动态计算的颜色/坐标；需在代码旁简要说明原因
+- 不要新增 `.less` / `.css` 模块，除非用户明确要求
 
 ## 常用命令
 
@@ -31,12 +38,13 @@ src/
 │   ├── DynamicForm/  # 动态表单容器，封装 IForm
 │   ├── Tiptap/       # 富文本编辑器 (基于 TipTap)
 │   ├── BusinessTable/# 业务表格组件
+│   ├── ProTable/     # 表格封装
 │   └── DndWrapper/   # 拖拽排序封装 (基于 @dnd-kit)
 ├── pages/            # 页面模块
 │   ├── config/       # 表单配置器页面
 │   ├── editor/       # 富文本编辑器演示
 │   ├── numberscroll/ # 数字滚动演示
-│   ├── component/    # 组件演示（待开发）
+│   ├── component/    # 组件演示（ProTable 等）
 │   ├── api/          # HTTP 调试工具 & 用户列表演示
 │   ├── todo/         # 待办事项列表
 ├── store/            # Zustand 状态管理
