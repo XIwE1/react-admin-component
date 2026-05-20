@@ -13,6 +13,7 @@ function App() {
     { key: "Editor" },
     { key: "Config" },
     { key: "API" },
+    { key: "Component" },
     { key: "Form_1" },
     { key: "Form_2" },
     { key: "ToDoList" },
