@@ -1,5 +1,5 @@
 /**
- * Editor (English) - NumberScrollDemo etc.
+ * NumberScroll module (English)
  */
 export default {
   'numberScroll.basic.title': 'Basic Demo',

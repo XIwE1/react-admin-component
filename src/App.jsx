@@ -11,6 +11,7 @@ function App() {
 
   const items = [
     { key: "Editor" },
+    { key: "NumberScroll" },
     { key: "Config" },
     { key: "API" },
     { key: "Component" },

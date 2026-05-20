@@ -1,7 +1,7 @@
 import common from './common';
-import editor from './editor';
+import numberscroll from './numberscroll';
 
 export default {
   common,
-  editor,
+  numberscroll,
 };

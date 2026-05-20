@@ -1,5 +1,5 @@
 /**
- * 编辑器相关文案（默认中文）- NumberScrollDemo 等
+ * 数字滚动模块文案（默认中文）
  */
 export default {
   'numberScroll.basic.title': '基础演示',

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import NumberScroll from "../../components/NumberScroll";
+import NumberScroll from "@/components/NumberScroll";
 import { Button, Space, Progress } from "antd";
-import useNumberScroll from "../../hooks/useNumberScroll";
+import useNumberScroll from "@/hooks/useNumberScroll";
 
-export default function NumberScrollDemo() {
-  const { t } = useTranslation("editor");
+export default function NumberScrollPage() {
+  const { t } = useTranslation("numberscroll");
   const [numberValue, setNumberValue] = useState(100);
   const [currencyValue, setCurrencyValue] = useState(12345.67);
   const [progressValue, setProgressValue] = useState(68);

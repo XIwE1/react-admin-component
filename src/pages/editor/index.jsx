@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Tiptap from "@/components/Tiptap";
-import NumberScrollDemo from "./NumberScrollDemo";
 
 const INIT_CONTENT = `
 <p>Hello World!</p>
@@ -21,11 +20,7 @@ export default function MyEditor() {
 
   return (
     <div>
-      {/* 数字滚动演示组件 */}
-      <NumberScrollDemo />
-
-      {/* 富文本编辑器 */}
-      <div className="mt-8 p-4 max-h-[800px] border-1 border-gray-300">
+      <div className="p-4 max-h-[800px] border-1 border-gray-300">
         <Tiptap content={INIT_CONTENT} onChange={handleChange} />
       </div>
       

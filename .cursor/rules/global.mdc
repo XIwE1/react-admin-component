@@ -3,6 +3,8 @@ alwaysApply: true
 ---
 这是一个基于 React 18 + Vite + TypeScript 的后台管理系统组件库，包含多个独立的功能模块演示。项目使用 Ant Design 作为 UI 框架，Zustand 进行状态管理。样式多使用 TailwindCSS
 
+如果有更新导致目录变化，同步到本文件的 [目录结构](#目录结构) 中
+
 ## 常用命令
 
 ```bash
@@ -27,6 +29,8 @@ src/
 ├── pages/            # 页面模块
 │   ├── config/       # 表单配置器页面
 │   ├── editor/       # 富文本编辑器演示
+│   ├── numberscroll/ # 数字滚动演示
+│   ├── component/    # 组件演示（待开发）
 │   ├── api/          # HTTP 调试工具 & 用户列表演示
 │   ├── todo/         # 待办事项列表
 ├── store/            # Zustand 状态管理
@@ -37,7 +41,6 @@ src/
 └── layout/           # 页面布局组件
 ```
 
-如果有更新导致目录变化，同步到本文件中
 
 ### 状态管理
 
@@ -48,7 +51,7 @@ src/
 
 ### 国际化
 
-使用 `i18next` + `react-i18next`，支持中文 (默认) 和英文。命名空间包括 `common` 和 `editor`。
+使用 `i18next` + `react-i18next`，支持中文 (默认) 和英文。命名空间包括 `common` 和 `numberscroll`。
 
 ## 路径别名
 

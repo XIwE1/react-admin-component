@@ -8,6 +8,7 @@ import Form2 from "@/pages/form_2";
 
 const Form1 = React.lazy(() => import("@/pages/form_1"));
 const MyEditor = React.lazy(() => import("@/pages/editor"));
+const NumberScrollPage = React.lazy(() => import("@/pages/numberscroll"));
 const ApiPage = React.lazy(() => import("@/pages/api"));
 const TodoList = React.lazy(() => import("@/pages/todo"));
 const ComponentPage = React.lazy(() => import("@/pages/component"));
@@ -15,6 +16,7 @@ const ComponentPage = React.lazy(() => import("@/pages/component"));
 
 const componentMap = {
   Editor: MyEditor,
+  NumberScroll: NumberScrollPage,
   Config: Config,
   API: ApiPage,
   Component: ComponentPage,
