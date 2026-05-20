@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { useTodoStore } from "./todoStore";
+import { useTodoStore, useFilteredTodos } from "./todoStore";
 
 describe("TodoStore", () => {
   beforeEach(() => {
@@ -169,6 +169,111 @@ describe("TodoStore", () => {
       });
 
       expect(result.current.todos[0].dueDate).toBeUndefined();
+    });
+  });
+
+  describe("setFilter", () => {
+    it("should update filter state", () => {
+      const { result } = renderHook(() => useTodoStore());
+
+      expect(result.current.filter).toBe("all");
+
+      act(() => {
+        result.current.setFilter("today");
+      });
+
+      expect(result.current.filter).toBe("today");
+    });
+  });
+
+  describe("filteredTodos", () => {
+    const today = new Date().toISOString().split('T')[0];
+    const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+    it("should return all todos when filter is 'all'", () => {
+      const { result } = renderHook(() => useTodoStore());
+
+      act(() => {
+        result.current.addTodo("Today task", `${today}T00:00:00.000Z`);
+        result.current.addTodo("Tomorrow task", `${tomorrow}T00:00:00.000Z`);
+        result.current.addTodo("No date task");
+      });
+
+      act(() => {
+        result.current.setFilter("all");
+      });
+
+      const filteredTodos = useFilteredTodos();
+      expect(filteredTodos).toHaveLength(3);
+    });
+
+    it("should return only today's todos", () => {
+      const { result } = renderHook(() => useTodoStore());
+
+      act(() => {
+        result.current.addTodo("Today task", `${today}T00:00:00.000Z`);
+        result.current.addTodo("Tomorrow task", `${tomorrow}T00:00:00.000Z`);
+        result.current.addTodo("No date task");
+      });
+
+      act(() => {
+        result.current.setFilter("today");
+      });
+
+      const filteredTodos = useFilteredTodos();
+      expect(filteredTodos).toHaveLength(1);
+      expect(filteredTodos[0].text).toBe("Today task");
+    });
+
+    it("should return only upcoming todos", () => {
+      const { result } = renderHook(() => useTodoStore());
+
+      act(() => {
+        result.current.addTodo("Today task", `${today}T00:00:00.000Z`);
+        result.current.addTodo("Tomorrow task", `${tomorrow}T00:00:00.000Z`);
+        result.current.addTodo("No date task");
+      });
+
+      act(() => {
+        result.current.setFilter("upcoming");
+      });
+
+      const filteredTodos = useFilteredTodos();
+      expect(filteredTodos).toHaveLength(1);
+      expect(filteredTodos[0].text).toBe("Tomorrow task");
+    });
+
+    it("should return only todos without due date", () => {
+      const { result } = renderHook(() => useTodoStore());
+
+      act(() => {
+        result.current.addTodo("Today task", `${today}T00:00:00.000Z`);
+        result.current.addTodo("No date task");
+      });
+
+      act(() => {
+        result.current.setFilter("no-date");
+      });
+
+      const filteredTodos = useFilteredTodos();
+      expect(filteredTodos).toHaveLength(1);
+      expect(filteredTodos[0].text).toBe("No date task");
+    });
+
+    it("should return empty array when no todos match filter", () => {
+      const { result } = renderHook(() => useTodoStore());
+
+      act(() => {
+        result.current.addTodo("Today task", `${today}T00:00:00.000Z`);
+      });
+
+      act(() => {
+        result.current.setFilter("no-date");
+      });
+
+      const filteredTodos = useFilteredTodos();
+      expect(filteredTodos).toHaveLength(0);
     });
   });
 

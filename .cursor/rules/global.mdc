@@ -1,0 +1,76 @@
+---
+alwaysApply: true
+---
+这是一个基于 React 18 + Vite + TypeScript 的后台管理系统组件库，包含多个独立的功能模块演示。项目使用 Ant Design 作为 UI 框架，Zustand 进行状态管理。样式多使用 TailwindCSS
+
+## 常用命令
+
+```bash
+pnpm dev          # 启动开发服务器 (127.0.0.1，自动打开浏览器)
+pnpm build        # 构建生产版本
+pnpm lint         # 运行 ESLint 检查
+pnpm preview      # 预览构建结果
+```
+
+## 架构概览
+
+### 目录结构
+
+```
+src/
+├── components/       # 可复用组件
+│   ├── Form/         # 动态表单组件 (基于 Ant Design Form)
+│   ├── DynamicForm/  # 动态表单容器，封装 IForm
+│   ├── Tiptap/       # 富文本编辑器 (基于 TipTap)
+│   ├── BusinessTable/# 业务表格组件
+│   └── DndWrapper/   # 拖拽排序封装 (基于 @dnd-kit)
+├── pages/            # 页面模块
+│   ├── config/       # 表单配置器页面
+│   ├── editor/       # 富文本编辑器演示
+│   ├── api/          # HTTP 调试工具 & 用户列表演示
+│   ├── todo/         # 待办事项列表
+├── store/            # Zustand 状态管理
+├── api/              # HTTP 客户端 (axios 封装)
+├── hooks/            # 自定义 Hooks
+├── constants/        # 常量配置 (表单规则、预设等)
+├── locales/          # 国际化文件 (zh-CN, en-US)
+└── layout/           # 页面布局组件
+```
+
+### 状态管理
+
+项目使用 Zustand，主要 Store:
+
+- `configStore`: 表单配置管理，支持本地持久化
+- `formDataStore`: 表单数据存储
+
+### 国际化
+
+使用 `i18next` + `react-i18next`，支持中文 (默认) 和英文。命名空间包括 `common` 和 `editor`。
+
+## 路径别名
+
+配置在 `vite.config.js`:
+
+```javascript
+resolve: {
+  alias: { "@": path.resolve(__dirname, "./src") },
+  extensions: [".ts", ".tsx", ".js", ".jsx"],
+}
+```
+
+使用示例: `import { xxx } from "@/components/Form"`
+
+## 构建配置
+
+- React 和 ReactDOM 通过 CDN 加载 (vite-plugin-cdn-import)
+- 构建分析报告输出到 `stats.html` (rollup-plugin-visualizer)
+- 代码分割: antd 相关代码独立打包，table 组件单独拆分
+
+## 测试
+
+框架：Jest + React 测试库
+配置：（jest.config.ts）
+设置文件：（jest.setup.ts导入@testing-library/jest-dom）
+测试文件位置：与源文件位于同一目录
+测试文件命名：*.test.ts或*.test.tsx
