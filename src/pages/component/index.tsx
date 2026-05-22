@@ -1,5 +1,5 @@
 import React from "react";
-import { Space, Tag } from "antd";
+import { Form, Input, Space, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import ProTable from "../../components/ProTable";
 import {
@@ -26,12 +26,21 @@ const columns: ColumnsType<ComponentTableRow> = [
 
 export default function Component() {
   return (
-    <Space direction="vertical" size="middle" className="w-full">
-      <ProTable
-        request={{ request: fetchMockComponentTable }}
-      >
-        <ProTable.Table columns={columns} />
+    <div className="m-3">
+      <ProTable request={{ request: fetchMockComponentTable }}>
+        <Space direction="vertical" size="middle" className="w-full">
+          <ProTable.Header>
+            {columns.map((item) => {
+              return (
+                <Form.Item label={item.title}>
+                  <Input />
+                </Form.Item>
+              );
+            })}
+          </ProTable.Header>
+          <ProTable.Table columns={columns} />
+        </Space>
       </ProTable>
-    </Space>
+    </div>
   );
 }
