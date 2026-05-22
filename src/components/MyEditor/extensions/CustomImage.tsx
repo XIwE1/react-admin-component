@@ -1,5 +1,5 @@
-import Image from "@tiptap/extension-image";
-import React from "react";
+import Image, { type ImageOptions } from "@tiptap/extension-image";
+import React, { useEffect, useRef } from "react";
 import {
   NodeViewWrapper,
   ReactNodeViewRenderer,
@@ -12,12 +12,12 @@ import {
 } from "../utils/ImageUtils";
 import { Button } from "antd";
 
-export interface CustomImageOptions {
-  uploadApi?: IUploadApi;
+export interface CustomImageOptions extends ImageOptions {
+  uploadApi?: IUploadApi;  // 重试接口
 }
 
 const UploadImageComponent = (props: NodeViewProps) => {
-  const { node, selected, editor, extension } = props;
+  const { node, selected, editor, extension, HTMLAttributes } = props;
   const { src, uploadId, uploadStatus, alt, title } = node.attrs;
   const uploadApi = (extension.options as CustomImageOptions).uploadApi;
 
@@ -94,27 +94,20 @@ export const CustomImage = Image.extend<CustomImageOptions>({
       },
     };
   },
-  // renderHTML({ HTMLAttributes }) {
-  //   const { src, uploadId, uploadStatus } = HTMLAttributes;
-
-  //   const isUploading =
-  //     (!!uploadId && uploadStatus === "uploading") ||
-  //     uploadStatus === "loading";
-  //   const imageSrc = isUploading ? DEFAULT_LOADING_SRC : src;
-
-  //   return [
-  //     "img",
-  //     {
-  //       ...HTMLAttributes,
-  //       src: imageSrc,
-  //       draggable: "true",
-  //     },
-  //   ];
-  // },
 
   addNodeView() {
-    return ReactNodeViewRenderer(UploadImageComponent, {
-      contentDOMElementTag: "img",
-    });
+    const parentNodeView = this.parent?.()?.addNodeView?.();
+    const customNodeView = ReactNodeViewRenderer(UploadImageComponent);
+
+    return (props) => {
+      const { node } = props;
+      const { uploadId, uploadStatus } = node.attrs;
+
+      const isCustom = uploadId && (uploadStatus === "uploading" || uploadStatus === "error");
+      console.log("isCustom", isCustom);
+      
+      return isCustom ? customNodeView(props) : parentNodeView?.(props);
+    };
+
   },
 });

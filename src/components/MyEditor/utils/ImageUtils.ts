@@ -4,6 +4,18 @@ export interface IUploadApi {
   (file: File, id: string): Promise<{ status: string; uploadId: string; src: string }>;
 }
 
+type Keys = 'name' | 'sex';
+
+type Person = {
+  [key in Keys]: string;
+};
+
+
+type user = { name: string; sex: string };
+type Person2 = {
+  [key in keyof user]: string;
+}
+
 type UploadResult = ReturnType<IUploadApi>;
 
 // 图片与id的map，用于记录和重试，todo：增删改为函数式
@@ -107,7 +119,6 @@ export function insertUploadingImage(
         uploadId,
       },
     })
-    .focus()
     .run();
 }
 
@@ -118,7 +129,25 @@ export function handleImageUpload(
   uploadApi: IUploadApi,
   pos?: number
 ) {
+  function isNumber(value: unknown): value is number {
+    return typeof value === 'number' && !isNaN(value);
+}
+
   if (!editor) return;
+  let a : unknown = 1;
+  let b : string = "1";
+  let c : number = 1;
+  let d : any = 1;
+  let f: never;
+  isNumber(b);
+  isNumber(b);
+  isNumber(d);
+  function e(): never {
+    return 1 as never;
+  };
+  d = a;
+  let result = e();
+  d = result;
 
   const fileArray = Array.isArray(files)
     ? files

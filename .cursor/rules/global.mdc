@@ -5,18 +5,20 @@ alwaysApply: true
 
 如果有更新导致目录变化，同步到本文件的 [目录结构](#目录结构) 中
 
+## 开发前必须遵守的规范
 不要把问题想的太复杂，明确需求边界，不要做除目标外多余的优化和配置，尽量用简洁的代码实现目标
 
 如果有不清晰的问题先提出问题再做决定，而不是去猜测一个选项
 
 如果没有明确要求 不要去修改已有文件 只修改实现目标而必须要修改的文件
 
-## 样式
+## 样式（必须遵守）
 
-- **默认用 Tailwind**：布局、间距、宽高、颜色、排版等一律写 `className`，不要写内联 `style`
-- **Ant Design 组件**：通过 `className` 传 Tailwind（如 `className="w-full"`），与原生元素相同
-- **仅当无法用 class 表达时**才用 `style`，例如运行时动态计算的颜色/坐标；需在代码旁简要说明原因
-- 不要新增 `.less` / `.css` 模块，除非用户明确要求
+- **一律用 Tailwind**：布局、间距、宽高、颜色、边框、排版、overflow、flex 等全部写在 `className`，禁止为上述目的新增或修改 `.scss` / `.less` / `.css`
+- **禁止**：内联 `style`（除运行时动态值）、新建样式模块、在 scss 里写组件布局类（如 `.my-editor__toolbar`）
+- **Ant Design**：用 `className` 传 Tailwind（如 `className="w-full shrink-0"`）
+- **存量 scss**：仅当文件已存在且用于 TipTap/第三方内容区深层选择器（如 `.tiptap h1`）时可保留；新增需求不得往 scss 堆布局
+- **子元素选择器**：优先 `[&_.tiptap]:min-h-full` 等 Tailwind 任意变体，避免为此单独加 scss
 
 ## 常用命令
 

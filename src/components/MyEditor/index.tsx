@@ -17,8 +17,7 @@ import "./index.scss";
 import { CustomImage } from "./extensions/CustomImage";
 import { MyUploadApi } from "./utils/ImageUtils";
 
-export default function Tiptap({ content, onChange }) {
-
+export default function MyEditor({ content, onChange }) {
   const lowlight = createLowlight(all);
 
   const editor = useEditor({
@@ -47,8 +46,12 @@ export default function Tiptap({ content, onChange }) {
       }),
       CustomImage.configure({
         uploadApi: MyUploadApi,
+        resize: {
+          enabled: true,
+          alwaysPreserveAspectRatio: true,
+        },
       }),
-      CustomFileHandler
+      CustomFileHandler,
     ],
     // editable: true,
     // autofocus: true,
@@ -73,12 +76,18 @@ export default function Tiptap({ content, onChange }) {
   });
 
   return (
-    <div style={{ position: "relative", maxHeight: "100%", overflow: "auto" }}>
-      <Space>
+    <div className="flex max-h-[inherit] min-h-0 w-full flex-col overflow-hidden">
+      <Space
+        className="w-full shrink-0 border-b border-gray-200 pb-2"
+        wrap
+        size="small"
+      >
         <MenuBar editor={editor} />
         <ToolBar editor={editor} />
       </Space>
-      <EditorContent editor={editor} className="my-4" />
+      <div className="min-h-0 flex-1 overflow-auto [&_.tiptap]:min-h-full">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }

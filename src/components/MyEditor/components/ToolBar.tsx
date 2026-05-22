@@ -59,6 +59,8 @@ export default function ToolBar({ editor }: ToolBarProps) {
       <Button onClick={() => handleInserImage(editor)}>插入图片</Button>
       {renderUploadImage(editor)}
       <Button onClick={() => handleClearContent(editor)}>清空内容</Button>
+      <Button onClick={() => console.log(editor.getJSON())}>打印JSON</Button>
+      <Button onClick={() => console.log(editor.getHTML())}>打印HTML</Button>
     </Space>
   );
 }

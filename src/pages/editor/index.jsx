@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Tiptap from "@/components/Tiptap";
+import MyEditor from "@/components/MyEditor";
 
 const INIT_CONTENT = `
 <p>Hello World!</p>
@@ -7,10 +7,11 @@ const INIT_CONTENT = `
 <img src="https://placehold.co/400x800" alt="image" />
 `;
 
-export default function MyEditor() {
+export default function Editor() {
   const [textContent, setTextContent] = useState(null);
   const [wordCount, setWordCount] = useState(0);
   // const [selection, setSelection] = useState(null);
+
 
   const handleChange = (editor) => {
     setTextContent(editor.getText());
@@ -20,8 +21,8 @@ export default function MyEditor() {
 
   return (
     <div>
-      <div className="p-4 max-h-[800px] border-1 border-gray-300">
-        <Tiptap content={INIT_CONTENT} onChange={handleChange} />
+      <div className="px-4 pt-1 max-h-[800px]">
+        <MyEditor content={INIT_CONTENT} onChange={handleChange} />
       </div>
       
       {/* 编辑器信息 */}
