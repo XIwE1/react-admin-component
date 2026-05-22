@@ -29,8 +29,9 @@ export default function Component() {
     <Space direction="vertical" size="middle" className="w-full">
       <ProTable
         request={{ request: fetchMockComponentTable }}
-        columns={columns}
-      />
+      >
+        <ProTable.Table columns={columns} />
+      </ProTable>
     </Space>
   );
 }

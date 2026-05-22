@@ -1,33 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Button, Form, Space, Table } from "antd";
 import useTable from "./useTable";
 
-// 排序
 // 筛选
 // 分页
-// 选择
-// 虚拟列表
 // 权限
-// 操作列
-// 自定义render
-// 固定列
-// 拖拽
 // 多模板
+
+const TableContext = createContext({});
 
 interface ProTableProps {
   request: any;
   columns: any[];
 }
 
-export default function ProTable(props: ProTableProps) {
-  const { request, columns } = props;
+export default function ProTable(props: any) {
+  const { request } = props;
 
-  const { data, loading, setPagination, pagination, fetchData } =
-    useTable(request);
+  // const { data, loading, setPagination, pagination, fetchData } =
+  const table = useTable(request);
 
   return (
-    <div>
-      <Table
+    <TableContext.Provider value={table}>
+      {/* <Table
         rowKey={"id"}
         pagination={pagination}
         columns={columns}
@@ -40,11 +35,63 @@ export default function ProTable(props: ProTableProps) {
             pageSize: pag.pageSize!,
           }));
         }}
-      />
-      {/* <Pagination {...props} /> */}
-    </div>
+      /> */}
+      {props.children}
+    </TableContext.Provider>
   );
 }
+
+ProTable.Header = function (props: any) {
+  const table = useContext(TableContext);
+  const [form] = Form.useForm();
+  return (
+    <Form
+      form={form}
+      layout="inline"
+      className="mb-4"
+      onFinish={(values) => table.fetchData({ ...values, page: 1 })}
+    >
+      <Form.Item className="mb-0">
+        <Space>
+          {props.children}
+          <Button type="primary" htmlType="submit">
+            查询
+          </Button>
+          <Button
+            onClick={() => {
+              form.resetFields();
+              table.fetchData({ page: 1 });
+            }}
+          >
+            重置
+          </Button>
+        </Space>
+      </Form.Item>
+    </Form>
+  );
+};
+
+ProTable.Table = function (props: Pick<ProTableProps, "columns">) {
+  const table = useContext(TableContext);
+  const { data, loading, setPagination, pagination, fetchData } = table as any;
+
+  return (
+    <Table
+      rowKey={"id"}
+      pagination={pagination}
+      columns={props.columns}
+      dataSource={data}
+      loading={loading}
+      onChange={(pag) => {
+        setPagination((prev) => ({
+          ...prev,
+          current: pag.current!,
+          pageSize: pag.pageSize!,
+        }));
+      }}
+    />
+  );
+};
 
 // ProTable.Pagination = Pagination;
 // ProTable.ToolBar = ToolBar;
