@@ -86,10 +86,12 @@ export default function MyEditor({ content, onChange }) {
         <MenuBar editor={editor} />
         <ToolBar editor={editor} />
       </Space>
-      <div className="min-h-0 flex-1 overflow-auto [&_.tiptap]:min-h-full">
+      <div className="relative min-h-0 flex-1 overflow-auto [&_.tiptap]:min-h-full">
         <DragHandle
           editor={editor}
-          nested={true}
+          nested={{
+            edgeDetection: 'none',
+          }}
         >
           <div className="custom-drag-handle" />
         </DragHandle>
