@@ -3,14 +3,15 @@ import { Space } from "antd";
 // tiptap扩展
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Collapse, CollapseExtension } from "./Collapse";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
-import { SelectAllExtension } from "./extensions/SelectAllExtension";
 import { Mention } from "@tiptap/extension-mention";
-import { CustomFileHandler } from "./extensions/FileHandler";
+import DragHandle from "@tiptap/extension-drag-handle-react";
 
 // 自定义的工具栏 菜单栏 样式
+import { Collapse, CollapseExtension } from "./Collapse";
+import { SelectAllExtension } from "./extensions/SelectAllExtension";
+import { CustomFileHandler } from "./extensions/FileHandler";
 import MenuBar from "./components/MenuBar";
 import ToolBar from "./components/ToolBar";
 import "./index.scss";
@@ -70,7 +71,7 @@ export default function MyEditor({ content, onChange }) {
     },
     editorProps: {
       attributes: {
-        class: "p-4 border-1 border-gray-200",
+        class: "px-6 py-2 border-1 border-gray-200",
       },
     },
   });
@@ -86,6 +87,12 @@ export default function MyEditor({ content, onChange }) {
         <ToolBar editor={editor} />
       </Space>
       <div className="min-h-0 flex-1 overflow-auto [&_.tiptap]:min-h-full">
+        <DragHandle
+          editor={editor}
+          nested={true}
+        >
+          <div className="custom-drag-handle" />
+        </DragHandle>
         <EditorContent editor={editor} />
       </div>
     </div>

@@ -38,7 +38,7 @@ src/
 ├── components/       # 可复用组件
 │   ├── Form/         # 动态表单组件 (基于 Ant Design Form)
 │   ├── DynamicForm/  # 动态表单容器，封装 IForm
-│   ├── Tiptap/       # 富文本编辑器 (基于 TipTap)
+│   ├── MyEditor/       # 富文本编辑器 (基于 TipTap)
 │   ├── BusinessTable/# 业务表格组件
 │   ├── ProTable/     # 表格封装
 │   └── DndWrapper/   # 拖拽排序封装 (基于 @dnd-kit)
