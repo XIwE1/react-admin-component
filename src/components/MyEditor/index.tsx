@@ -6,7 +6,8 @@ import StarterKit from "@tiptap/starter-kit";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
 import { Mention } from "@tiptap/extension-mention";
-import DragHandle from "@tiptap/extension-drag-handle-react";
+// import DragHandle from "@tiptap/extension-drag-handle-react";
+import { DragExtension } from "./extensions/DragHandle";
 
 // 自定义的工具栏 菜单栏 样式
 import { Collapse, CollapseExtension } from "./Collapse";
@@ -37,6 +38,13 @@ export default function MyEditor({ content, onChange }) {
       // TaskList,
       // TaskItem,
       SelectAllExtension,
+      DragExtension.configure({
+        render() {
+          const el = document.createElement("div");
+          el.classList.add("custom-drag-handle");
+          return el;
+        },
+      }),
       Mention.configure({
         HTMLAttributes: {
           class: "mention",
@@ -87,14 +95,14 @@ export default function MyEditor({ content, onChange }) {
         <ToolBar editor={editor} />
       </Space>
       <div className="relative min-h-0 flex-1 overflow-auto [&_.tiptap]:min-h-full">
-        <DragHandle
+        {/* <DragHandle
           editor={editor}
           nested={{
             edgeDetection: 'none',
           }}
         >
           <div className="custom-drag-handle" />
-        </DragHandle>
+        </DragHandle> */}
         <EditorContent editor={editor} />
       </div>
     </div>
