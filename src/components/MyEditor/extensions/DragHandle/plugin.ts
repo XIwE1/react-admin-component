@@ -114,7 +114,7 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
       wrapper.style.position = "absolute";
       wrapper.style.top = "0";
       wrapper.style.left = "0";
-      editor.view.dom.appendChild(wrapper);
+      editor.view.dom.parentElement?.appendChild(wrapper);
 
       //   handleElement.style.pointerEvents = "auto";
       //   handleElement.dataset.dragging = "false";
@@ -180,7 +180,7 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
         },
         mouseleave: (_view, e) => {
           if (locked) return false;
-          if (e.target && wrapper.contains(e.relatedTarget as HTMLElement)) {
+          if (e.target && !wrapper.contains(e.relatedTarget as HTMLElement)) {
             hiddenDrag(handleElement);
             current = { node: null, pos: -1 };
             onNodeChange?.({ editor, node: null, pos: -1 });

@@ -1,4 +1,4 @@
-import { computePosition } from "@floating-ui/dom";
+import { computePosition, ComputePositionConfig } from "@floating-ui/dom";
 import type { Editor } from "@tiptap/core";
 import type { Node as PMNode } from "@tiptap/pm/model";
 import { EditorView } from "@tiptap/pm/view";
@@ -29,8 +29,12 @@ export function showDrag(target: HTMLElement) {
 }
 
 // 根据dom重新地位target元素的位置
+const defaultComputePositionConfig: ComputePositionConfig = {
+  placement: 'left-start',
+  strategy: 'absolute',
+}
 export function repositionDragHandle(dom: Element, target: HTMLElement) {
-  computePosition(dom, target).then((val) => {
+  computePosition(dom, target, defaultComputePositionConfig).then((val) => {
     Object.assign(target.style, {
       position: val.strategy,
       left: `${val.x}px`,
