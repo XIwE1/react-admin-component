@@ -6,9 +6,12 @@ export type EdgeDetectionConfig = {
 
 /** 与 tiptap `normalizeNestedOptions(true)` 默认一致 */
 export const NESTED_DEFAULT_EDGE_CONFIG: EdgeDetectionConfig = {
-  edges: ['left', 'top'],
-  threshold: 12,
-  strength: 500,
+  // edges: ['left', 'top'],
+  // threshold: 12,
+  // strength: 500,
+  edges: [],
+  threshold: 0,
+  strength: 0,
 }
 
 export function isNearEdge(
