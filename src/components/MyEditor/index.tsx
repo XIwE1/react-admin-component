@@ -85,7 +85,9 @@ export default function MyEditor({ content, onChange }) {
     <div className="my-editor flex h-full min-h-0 w-full overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100">
       <aside className="flex w-[172px] shrink-0 flex-col gap-2.5 overflow-y-auto border-r border-neutral-200 bg-[#fafafa] px-2.5 py-3">
         <BlockTitle title="Tiptap" />
-        <ToolBar editor={editor} />
+        <div className="w-full">
+          <ToolBar editor={editor} />
+        </div>
       </aside>
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">

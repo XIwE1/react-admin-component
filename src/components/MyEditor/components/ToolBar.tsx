@@ -8,14 +8,17 @@ interface ToolBarProps {
   editor: Editor;
 }
 
-function toolbarBtnClass(active = false, fullWidth = false) {
-  const base =
-    "!h-8 !min-w-8 !border !px-2 !text-[13px] !shadow-none transition-colors";
-  const width = fullWidth ? "!w-full !justify-start" : "";
+function sidebarBtnClass(active = false) {
+  const base = [
+    "!h-9 !w-full !rounded-md !border !px-3",
+    "!text-[13px] !font-medium !shadow-sm",
+    "!inline-flex !items-center !justify-center",
+    "transition-all",
+  ].join(" ");
   const state = active
     ? "!border-[#bfdbfe] !bg-[#eff6ff] !text-[#1d4ed8]"
-    : "!border-neutral-200 !bg-white !text-neutral-600 hover:!border-neutral-300 hover:!bg-neutral-50 hover:!text-neutral-800";
-  return [base, width, state].filter(Boolean).join(" ");
+    : "!border-neutral-200 !bg-white !text-neutral-700 hover:!border-neutral-300 hover:!bg-neutral-50 hover:!text-neutral-900";
+  return [base, state].join(" ");
 }
 
 const handleInsertCollapse = (editor: Editor) => {
@@ -48,11 +51,13 @@ const renderUploadImage = (editor: Editor) => {
       showUploadList={false}
       multiple
       accept="image/*"
+      className="block w-full [&_.ant-upload]:!block [&_.ant-upload]:!w-full"
       beforeUpload={(file) => handleImageUpload(editor, file, MyUploadApi)}
     >
       <Button
+        block
         type="default"
-        className={toolbarBtnClass(false, true)}
+        className={sidebarBtnClass()}
         icon={<UploadOutlined />}
       >
         上传图片
@@ -63,24 +68,27 @@ const renderUploadImage = (editor: Editor) => {
 
 export default function ToolBar({ editor }: ToolBarProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex w-full flex-col gap-1.5">
       <Button
+        block
         type="default"
-        className={toolbarBtnClass(false, true)}
+        className={sidebarBtnClass()}
         onClick={() => handleInsertCollapse(editor)}
       >
         插入折叠
       </Button>
       <Button
+        block
         type="default"
-        className={toolbarBtnClass(false, true)}
+        className={sidebarBtnClass()}
         onClick={() => handleInsertCodeBlock(editor)}
       >
         插入代码块
       </Button>
       <Button
+        block
         type="default"
-        className={toolbarBtnClass(false, true)}
+        className={sidebarBtnClass()}
         onClick={() => handleInserImage(editor)}
       >
         插入图片

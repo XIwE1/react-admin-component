@@ -37,10 +37,18 @@ const INIT_CONTENT = `
 <img src="https://placehold.co/400x800" alt="image" />
 `;
 
-const debugBtnClass =
-  "!h-8 !min-w-8 !w-full !justify-start !border !px-2 !text-[13px] !shadow-none transition-colors !border-neutral-200 !bg-white !text-neutral-600 hover:!border-neutral-300 hover:!bg-neutral-50 hover:!text-neutral-800";
-const wrapperClass =
-  "overflow-hidden rounded-lg border border-neutral-200 bg-[#fafafa] p-3 sm:w-64";
+const panelClass =
+  "flex w-56 shrink-0 flex-col gap-2.5 overflow-hidden rounded-lg border border-neutral-200 bg-[#fafafa] p-3 sm:w-64";
+
+const debugBtnClass = [
+  "!h-9 !w-full !rounded-md !border !px-3",
+  "!text-[13px] !font-medium !shadow-sm",
+  "!inline-flex !items-center !justify-center",
+  "transition-all",
+  "!border-neutral-200 !bg-white !text-neutral-700",
+  "hover:!border-neutral-300 hover:!bg-neutral-50 hover:!text-neutral-900",
+].join(" ");
+
 export default function Editor() {
   const [editor, setEditor] = useState(null);
   const [wordCount, setWordCount] = useState(0);
@@ -57,20 +65,21 @@ export default function Editor() {
           <MyEditor content={INIT_CONTENT} onChange={handleChange} />
         </div>
 
-        <Space direction="vertical">
-          <div className={wrapperClass}>
+        <Space direction="vertical" size={12} className="shrink-0">
+          <div className={panelClass}>
             <BlockTitle title="统计" />
-            <Space>
+            <div className="flex items-center justify-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-3 shadow-sm">
               <NumberScroll value={wordCount} options={{ decimals: 0 }} />
-              <span className="text-xs text-neutral-500">字符</span>
-            </Space>
+              <span className="text-xs font-medium text-neutral-500">字符</span>
+            </div>
           </div>
 
-          <div className={wrapperClass}>
+          <div className={panelClass}>
             <BlockTitle title="调试" />
             {editor ? (
-              <div className="flex flex-col gap-1">
+              <div className="flex w-full flex-col gap-1.5">
                 <Button
+                  block
                   type="default"
                   className={debugBtnClass}
                   onClick={() => editor.commands.clearContent()}
@@ -78,6 +87,7 @@ export default function Editor() {
                   清空内容
                 </Button>
                 <Button
+                  block
                   type="default"
                   className={debugBtnClass}
                   onClick={() => console.log(editor.getJSON())}
@@ -85,6 +95,7 @@ export default function Editor() {
                   打印 JSON
                 </Button>
                 <Button
+                  block
                   type="default"
                   className={debugBtnClass}
                   onClick={() => console.log(editor.getHTML())}
