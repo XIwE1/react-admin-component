@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button, Space } from "antd";
 import MyEditor from "@/components/MyEditor";
 import BlockTitle from "@/components/BlockTitle";
 import NumberScroll from "@/components/NumberScroll";
@@ -36,40 +37,65 @@ const INIT_CONTENT = `
 <img src="https://placehold.co/400x800" alt="image" />
 `;
 
+const debugBtnClass =
+  "!h-8 !min-w-8 !w-full !justify-start !border !px-2 !text-[13px] !shadow-none transition-colors !border-neutral-200 !bg-white !text-neutral-600 hover:!border-neutral-300 hover:!bg-neutral-50 hover:!text-neutral-800";
+const wrapperClass =
+  "overflow-hidden rounded-lg border border-neutral-200 bg-[#fafafa] p-3 sm:w-64";
 export default function Editor() {
-  const [textContent, setTextContent] = useState(null);
+  const [editor, setEditor] = useState(null);
   const [wordCount, setWordCount] = useState(0);
 
-  const handleChange = (editor) => {
-    setTextContent(editor.getText());
-    setWordCount(editor.getText().trim().length);
+  const handleChange = (ed) => {
+    setEditor(ed);
+    setWordCount(ed.getText().trim().length);
   };
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col gap-4">
-      <div className="shrink-0 flex flex-col gap-1">
-        <BlockTitle title={"TipTap"} />
-      </div>
-
-      <div className="min-h-0 flex-1">
-        <MyEditor content={INIT_CONTENT} onChange={handleChange} />
-      </div>
-      <BlockTitle title={"统计"} />
-
-      <aside className="shrink-0 grid gap-4 rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm sm:grid-cols-[auto_1fr] sm:items-start sm:gap-6 sm:p-5">
-        <div className="flex flex-col gap-1 border-slate-200 sm:border-r sm:pr-6">
-          <NumberScroll value={wordCount} options={{ decimals: 0 }}  />
-          <span className="text-sm text-slate-500">字符</span>
+    <div className="flex h-full min-h-0 w-full flex-col gap-3">
+      <div className="flex min-h-0 flex-1 gap-3">
+        <div className="min-h-0 min-w-0 flex-1">
+          <MyEditor content={INIT_CONTENT} onChange={handleChange} />
         </div>
-        <div className="min-w-0">
-          <span className="mb-2 block text-xs font-medium uppercase tracking-wide text-slate-400">
-            文本内容
-          </span>
-          <pre className="max-h-40 overflow-auto rounded-lg border border-slate-200/80 bg-slate-50 p-3 text-xs leading-relaxed text-slate-600 whitespace-pre-wrap break-words">
-            {textContent}
-          </pre>
-        </div>
-      </aside>
+
+        <Space direction="vertical">
+          <div className={wrapperClass}>
+            <BlockTitle title="统计" />
+            <Space>
+              <NumberScroll value={wordCount} options={{ decimals: 0 }} />
+              <span className="text-xs text-neutral-500">字符</span>
+            </Space>
+          </div>
+
+          <div className={wrapperClass}>
+            <BlockTitle title="调试" />
+            {editor ? (
+              <div className="flex flex-col gap-1">
+                <Button
+                  type="default"
+                  className={debugBtnClass}
+                  onClick={() => editor.commands.clearContent()}
+                >
+                  清空内容
+                </Button>
+                <Button
+                  type="default"
+                  className={debugBtnClass}
+                  onClick={() => console.log(editor.getJSON())}
+                >
+                  打印 JSON
+                </Button>
+                <Button
+                  type="default"
+                  className={debugBtnClass}
+                  onClick={() => console.log(editor.getHTML())}
+                >
+                  打印 HTML
+                </Button>
+              </div>
+            ) : null}
+          </div>
+        </Space>
+      </div>
     </div>
   );
 }

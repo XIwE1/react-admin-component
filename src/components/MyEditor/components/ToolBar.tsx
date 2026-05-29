@@ -1,12 +1,21 @@
 import { Editor } from "@tiptap/react";
-import { Button, Space, Upload } from "antd";
+import { Button, Upload } from "antd";
 import React from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { handleImageUpload, MyUploadApi } from "../utils/ImageUtils";
-import type { UploadProps } from "antd";
 
 interface ToolBarProps {
   editor: Editor;
+}
+
+function toolbarBtnClass(active = false, fullWidth = false) {
+  const base =
+    "!h-8 !min-w-8 !border !px-2 !text-[13px] !shadow-none transition-colors";
+  const width = fullWidth ? "!w-full !justify-start" : "";
+  const state = active
+    ? "!border-[#bfdbfe] !bg-[#eff6ff] !text-[#1d4ed8]"
+    : "!border-neutral-200 !bg-white !text-neutral-600 hover:!border-neutral-300 hover:!bg-neutral-50 hover:!text-neutral-800";
+  return [base, width, state].filter(Boolean).join(" ");
 }
 
 const handleInsertCollapse = (editor: Editor) => {
@@ -33,11 +42,6 @@ const handleInserImage = (editor: Editor) => {
   }
 };
 
-const handleClearContent = (editor: Editor) => {
-  if (!editor) return;
-  editor.commands.clearContent();
-};
-
 const renderUploadImage = (editor: Editor) => {
   return (
     <Upload
@@ -46,21 +50,42 @@ const renderUploadImage = (editor: Editor) => {
       accept="image/*"
       beforeUpload={(file) => handleImageUpload(editor, file, MyUploadApi)}
     >
-      <Button icon={<UploadOutlined />}>上传图片</Button>
+      <Button
+        type="default"
+        className={toolbarBtnClass(false, true)}
+        icon={<UploadOutlined />}
+      >
+        上传图片
+      </Button>
     </Upload>
   );
 };
 
 export default function ToolBar({ editor }: ToolBarProps) {
   return (
-    <Space>
-      <Button onClick={() => handleInsertCollapse(editor)}>插入折叠</Button>
-      <Button onClick={() => handleInsertCodeBlock(editor)}>插入代码块</Button>
-      <Button onClick={() => handleInserImage(editor)}>插入图片</Button>
+    <div className="flex flex-col gap-1">
+      <Button
+        type="default"
+        className={toolbarBtnClass(false, true)}
+        onClick={() => handleInsertCollapse(editor)}
+      >
+        插入折叠
+      </Button>
+      <Button
+        type="default"
+        className={toolbarBtnClass(false, true)}
+        onClick={() => handleInsertCodeBlock(editor)}
+      >
+        插入代码块
+      </Button>
+      <Button
+        type="default"
+        className={toolbarBtnClass(false, true)}
+        onClick={() => handleInserImage(editor)}
+      >
+        插入图片
+      </Button>
       {renderUploadImage(editor)}
-      <Button onClick={() => handleClearContent(editor)}>清空内容</Button>
-      <Button onClick={() => console.log(editor.getJSON())}>打印JSON</Button>
-      <Button onClick={() => console.log(editor.getHTML())}>打印HTML</Button>
-    </Space>
+    </div>
   );
 }

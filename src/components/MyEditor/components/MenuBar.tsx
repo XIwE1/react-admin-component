@@ -1,6 +1,6 @@
 import { Editor } from "@tiptap/react";
-import { Button, Divider, Space } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import { Button, Divider } from "antd";
+import React, { useEffect, useState } from "react";
 import {
   BoldOutlined,
   ItalicOutlined,
@@ -12,8 +12,17 @@ interface MenuBarProps {
   editor: Editor;
 }
 
+function formatToolbarBtnClass(active = false) {
+  const base =
+    "!h-8 !min-w-8 !border !px-2 !text-[13px] !shadow-none transition-colors";
+  const state = active
+    ? "!border-neutral-400 !bg-neutral-400 !text-neutral-800"
+    : "!border-transparent !bg-neutral-100 !text-neutral-600 hover:!bg-neutral-200/70 hover:!text-neutral-500";
+  return [base, state].join(" ");
+}
+
 export default function MenuBar({ editor }: MenuBarProps) {
-  const [count, setCount] = useState(0);
+  const [, setCount] = useState(0);
 
   useEffect(() => {
     if (!editor) return;
@@ -31,51 +40,32 @@ export default function MenuBar({ editor }: MenuBarProps) {
     };
   }, [editor]);
 
-  const renderTextMarkItems = () => {
-    const BoldComponent = BoldButton(editor);
-    const ItalicComponent = ItalicButton(editor);
-    const StrikeComponent = StrikeButton(editor);
-    const UnderlineComponent = UnderlineButton(editor);
-
-    return (
-      <Space>
-        {BoldComponent}
-        {ItalicComponent}
-        {StrikeComponent}
-        {UnderlineComponent}
-      </Space>
-    );
-  };
-
-  const renderTitleItems = () => {
-    const HeadLv1Component = HeadLv1Button(editor);
-    const HeadLv2Component = HeadLv2Button(editor);
-    const HeadLv3Component = HeadLv3Button(editor);
-
-    return (
-      <Space>
-        {HeadLv1Component}
-        {HeadLv2Component}
-        {HeadLv3Component}
-      </Space>
-    );
-  };
-
   return (
-    <Space split={<Divider type="vertical" />}>
-      {renderTextMarkItems()}
-      {renderTitleItems()}
-    </Space>
+    <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-neutral-200/80 bg-neutral-50 px-4 py-2">
+      <span className="text-[11px] text-neutral-600">样式</span>
+      <div className="flex gap-1">
+        <BoldButton editor={editor} />
+        <ItalicButton editor={editor} />
+        <StrikeButton editor={editor} />
+        <UnderlineButton editor={editor} />
+      </div>
+      <Divider type="vertical" className="mx-0 h-5 border-neutral-200" />
+      <span className="text-[11px] text-neutral-600">标题</span>
+      <div className="flex gap-1">
+        <HeadLv1Button editor={editor} />
+        <HeadLv2Button editor={editor} />
+        <HeadLv3Button editor={editor} />
+      </div>
+    </div>
   );
 }
 
-// 文本样式
-const BoldButton = (editor: Editor) => {
+const BoldButton = ({ editor }: { editor: Editor }) => {
   const isActive = editor.isActive("bold");
-
   return (
     <Button
-      type={isActive ? "primary" : "default"}
+      type="default"
+      className={formatToolbarBtnClass(isActive)}
       icon={<BoldOutlined />}
       onClick={() => editor.chain().focus().toggleBold().run()}
       disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -83,11 +73,12 @@ const BoldButton = (editor: Editor) => {
   );
 };
 
-const ItalicButton = (editor: Editor) => {
+const ItalicButton = ({ editor }: { editor: Editor }) => {
   const isActive = editor.isActive("italic");
   return (
     <Button
-      type={isActive ? "primary" : "default"}
+      type="default"
+      className={formatToolbarBtnClass(isActive)}
       icon={<ItalicOutlined />}
       onClick={() => editor.chain().focus().toggleItalic().run()}
       disabled={!editor.can().chain().focus().toggleItalic().run()}
@@ -95,11 +86,12 @@ const ItalicButton = (editor: Editor) => {
   );
 };
 
-const StrikeButton = (editor: Editor) => {
+const StrikeButton = ({ editor }: { editor: Editor }) => {
   const isActive = editor.isActive("strike");
   return (
     <Button
-      type={isActive ? "primary" : "default"}
+      type="default"
+      className={formatToolbarBtnClass(isActive)}
       icon={<StrikethroughOutlined />}
       onClick={() => editor.chain().focus().toggleStrike().run()}
       disabled={!editor.can().chain().focus().toggleStrike().run()}
@@ -107,35 +99,39 @@ const StrikeButton = (editor: Editor) => {
   );
 };
 
-const UnderlineButton = (editor: Editor) => {
+const UnderlineButton = ({ editor }: { editor: Editor }) => {
   const isActive = editor.isActive("underline");
   return (
     <Button
-      type={isActive ? "primary" : "default"}
+      type="default"
+      className={formatToolbarBtnClass(isActive)}
       icon={<UnderlineOutlined />}
       onClick={() => editor.chain().focus().toggleUnderline().run()}
       disabled={!editor.can().chain().focus().toggleUnderline().run()}
     />
   );
 };
-// 标题
-const HeadLv1Button = (editor: Editor) => {
+
+const HeadLv1Button = ({ editor }: { editor: Editor }) => {
   const isActive = editor.isActive("heading", { level: 1 });
   return (
     <Button
-      type={isActive ? "primary" : "default"}
+      type="default"
+      className={formatToolbarBtnClass(isActive)}
       onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-      disabled={!editor.can().chain().focus().toggleHeading({ level: 2 }).run()}
+      disabled={!editor.can().chain().focus().toggleHeading({ level: 1 }).run()}
     >
       H1
     </Button>
   );
 };
-const HeadLv2Button = (editor: Editor) => {
+
+const HeadLv2Button = ({ editor }: { editor: Editor }) => {
   const isActive = editor.isActive("heading", { level: 2 });
   return (
     <Button
-      type={isActive ? "primary" : "default"}
+      type="default"
+      className={formatToolbarBtnClass(isActive)}
       onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
       disabled={!editor.can().chain().focus().toggleHeading({ level: 2 }).run()}
     >
@@ -143,11 +139,13 @@ const HeadLv2Button = (editor: Editor) => {
     </Button>
   );
 };
-const HeadLv3Button = (editor: Editor) => {
+
+const HeadLv3Button = ({ editor }: { editor: Editor }) => {
   const isActive = editor.isActive("heading", { level: 3 });
   return (
     <Button
-      type={isActive ? "primary" : "default"}
+      type="default"
+      className={formatToolbarBtnClass(isActive)}
       onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
       disabled={!editor.can().chain().focus().toggleHeading({ level: 3 }).run()}
     >
