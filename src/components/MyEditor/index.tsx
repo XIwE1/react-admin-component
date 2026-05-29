@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { Space } from "antd";
+import React from "react";
+import { Divider } from "antd";
 // tiptap扩展
-import { useEditor, EditorContent, type Editor } from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
@@ -25,9 +25,6 @@ export default function MyEditor({ content, onChange }) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        // undoRedo: false,
-        // codeBlock: false,
-        // code: false,
         heading: { levels: [1, 2, 3] },
       }),
       Collapse,
@@ -62,40 +59,50 @@ export default function MyEditor({ content, onChange }) {
       }),
       CustomFileHandler,
     ],
-    // editable: true,
-    // autofocus: true,
     content,
     // 传递一个扩展或扩展名称的数组
     // 以仅允许特定输入、粘贴规则,默认不传 = 全部
     // enableInputRules: [Link, "horizontalRule"],
     // enablePasteRules: [Link, 'horizontalRule'],
-    onCreate(props) {
+    onCreate() {
       onChange?.(editor);
     },
-    onUpdate(props) {
+    onUpdate() {
       // editor.setEditable 会触发 onUpdate
       // 调用外部 onChange 回调
       onChange?.(editor);
     },
     editorProps: {
       attributes: {
-        class: "px-6 py-2 border-1 border-gray-200",
+        class:
+          "tiptap min-h-[360px] px-8 py-6 text-[15px] leading-7 text-slate-800 outline-none focus:outline-none",
       },
     },
   });
 
   return (
-    <div className="flex max-h-[inherit] min-h-0 w-full flex-col overflow-hidden">
-      <Space
-        className="w-full shrink-0 border-b border-gray-200 pb-2"
-        wrap
-        size="small"
-      >
-        <MenuBar editor={editor} />
-        <ToolBar editor={editor} />
-      </Space>
-      <div className="relative min-h-0 flex-1 overflow-auto [&_.tiptap]:min-h-full">
-        {/* <DragHandle
+    <div className="my-editor flex h-full min-h-0 w-full flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm">
+      <header className="shrink-0 border-b border-slate-200/80 bg-slate-50/90 px-4 py-3 backdrop-blur-sm">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-center gap-1">
+            <span className="mr-2 text-xs font-medium uppercase tracking-wide text-slate-400">
+              格式
+            </span>
+            <MenuBar editor={editor} />
+          </div>
+          <div className="flex flex-wrap items-center gap-1">
+            <span className="mr-2 text-xs font-medium uppercase tracking-wide text-slate-400">
+              操作
+            </span>
+            <ToolBar editor={editor} />
+          </div>
+        </div>
+      </header>
+
+      <div className="relative min-h-0 flex-1 overflow-y-auto bg-gradient-to-b from-slate-50/80 to-slate-100/40">
+        <div className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6">
+          <div className="overflow-hidden rounded-lg border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] ring-1 ring-slate-900/[0.03]">
+            {/* <DragHandle
           editor={editor}
           nested={{
             edgeDetection: 'none',
@@ -103,12 +110,13 @@ export default function MyEditor({ content, onChange }) {
         >
           <div className="custom-drag-handle" />
         </DragHandle> */}
-        <EditorContent editor={editor} />
+            <EditorContent editor={editor} />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
 // 示例
 // 或者 editor.on("xxx", ({ editor }) => {})
 // 亦或者写到Extension中，Extension.create，作为插件引入
