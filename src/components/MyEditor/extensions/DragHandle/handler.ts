@@ -99,4 +99,5 @@ export function dragHandler(props: dragHandlerProps) {
     document.removeEventListener("dragend", cleanupDragPreview);
   };
   document.addEventListener("dragend", cleanupDragPreview);
+  document.addEventListener("drop", cleanupDragPreview);
 }

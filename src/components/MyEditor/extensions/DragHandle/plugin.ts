@@ -68,6 +68,7 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
   }
   function onDragEnd(e: DragEvent) {
     onElementDragEnd?.(e);
+    hiddenDrag(handleElement);
     if (handleElement) {
       handleElement.style.pointerEvents = "auto";
       handleElement.dataset.dragging = "false";
