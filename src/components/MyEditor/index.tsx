@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
@@ -33,6 +33,7 @@ export default function MyEditor({ content, onChange }) {
       }),
       SelectAllExtension,
       DragExtension.configure({
+        pinLeft: true,
         render() {
           const el = document.createElement("div");
           el.classList.add("custom-drag-handle");
@@ -80,6 +81,10 @@ export default function MyEditor({ content, onChange }) {
       },
     },
   });
+
+  useEffect(() => {
+    (window as any).editor = editor;
+  }, [editor]);
 
   return (
     <div className="my-editor flex h-full min-h-0 w-full overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100">

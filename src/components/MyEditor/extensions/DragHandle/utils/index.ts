@@ -28,16 +28,30 @@ export function showDrag(target: HTMLElement) {
   target.style.pointerEvents = "auto";
 }
 
+
 // 根据dom重新地位target元素的位置
 const defaultComputePositionConfig: ComputePositionConfig = {
-  placement: 'left-start',
-  strategy: 'absolute',
-}
-export function repositionDragHandle(dom: Element, target: HTMLElement) {
+  placement: "left-start",
+  strategy: "absolute",
+};
+export function repositionDragHandle(
+  dom: Element,
+  target: HTMLElement,
+  anchor?: Element,
+) {
   computePosition(dom, target, defaultComputePositionConfig).then((val) => {
+    let left = val.x;
+
+    if (anchor) {
+      const op = target.offsetParent as HTMLElement;
+      const opRect = op.getBoundingClientRect();
+      left =
+        anchor.getBoundingClientRect().left - opRect.left + op.scrollLeft;
+    }
+
     Object.assign(target.style, {
       position: val.strategy,
-      left: `${val.x}px`,
+      left: `${left}px`,
       top: `${val.y}px`,
     });
   });

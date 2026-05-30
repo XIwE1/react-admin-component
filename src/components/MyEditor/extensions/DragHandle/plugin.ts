@@ -24,6 +24,7 @@ interface DragHandlePlugin {
   handleElement: HTMLElement;
   editor: Editor;
   nested?: boolean;
+  pinLeft?: boolean;
   onElementDragStart?: (e: DragEvent) => void;
   onElementDragEnd?: (e: DragEvent) => void;
   onNodeChange?: (data: {
@@ -42,6 +43,7 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
     onElementDragStart,
     onElementDragEnd,
     onNodeChange,
+    pinLeft = false,
   } = props;
 
   // 手柄容器，通过手动定位控制手柄位置
@@ -148,7 +150,11 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
 
           // step4. 更新手柄位置
           onNodeChange?.({ editor, node: current.node, pos: current.pos });
-          repositionDragHandle(domNode as Element, handleElement);
+          repositionDragHandle(
+            domNode as Element,
+            handleElement,
+            pinLeft ? view.dom : undefined,
+          );
         },
         // 清除监听 & 循环 & 容器
         destroy() {
@@ -224,7 +230,11 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
               current = { node: targetNode, pos: targetNodePos ?? -1};
               
               onNodeChange?.({ editor, node: current.node, pos: current.pos });
-              repositionDragHandle(domNode as Element, handleElement);
+              repositionDragHandle(
+                domNode as Element,
+                handleElement,
+                pinLeft ? view.dom : undefined,
+              );
 
               showDrag(handleElement)
             }

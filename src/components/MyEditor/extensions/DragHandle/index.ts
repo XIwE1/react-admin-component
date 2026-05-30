@@ -6,10 +6,10 @@ import type { Node } from '@tiptap/pm/model'
 interface DraghandleProps {
   // 控制手柄渲染
   render(): HTMLElement
-  // 锁定手柄位置与状态
   locked?: boolean
   // 是否支持嵌套
   nested?: boolean
+  pinLeft?: boolean
   // hover节点变化时回调
   onNodeChange?: (options: { editor: Editor, node: Node | null }) => void
   onElementDragEnd?: (e: DragEvent) => void
@@ -29,6 +29,7 @@ export const DragExtension = Extension.create<DraghandleProps>({
       },
       locked: false,
       nested: true,
+      pinLeft: false,
       onNodeChange: () => null,
       onElementDragStart: undefined,
       onElementDragEnd: undefined,
@@ -51,6 +52,7 @@ export const DragExtension = Extension.create<DraghandleProps>({
       handleElement: handleElement,
       editor: this.editor,
       nested: this.options.nested,
+      pinLeft: this.options.pinLeft,
       onNodeChange: this.options.onNodeChange,
       onElementDragStart: this.options.onElementDragStart,
       onElementDragEnd: this.options.onElementDragEnd
