@@ -76,7 +76,7 @@ export default function MyEditor({ content, onChange }) {
     editorProps: {
       attributes: {
         class:
-          "tiptap min-h-full px-2 py-1 text-[15px] leading-[1.75] text-neutral-800 outline-none focus:outline-none sm:px-4",
+          "tiptap min-h-full px-8 py-1 text-[15px] leading-[1.75] text-neutral-800 outline-none focus:outline-none",
       },
     },
   });
@@ -93,7 +93,7 @@ export default function MyEditor({ content, onChange }) {
       <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
         <MenuBar editor={editor} />
         <div className="relative min-h-0 flex-1 overflow-y-auto">
-          <div className="h-full w-full max-w-4xl px-8 py-4">
+          <div className="h-full w-full px-6 py-4">
             {/* <DragHandle
           editor={editor}
           nested={{
