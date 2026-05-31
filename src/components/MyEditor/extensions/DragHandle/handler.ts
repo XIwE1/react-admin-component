@@ -24,6 +24,7 @@ export function dragHandler(props: dragHandlerProps) {
   const { view } = editor;
   const { tr } = view.state;
 
+
   if (!event.dataTransfer) return;
 
   // step1. 确定拖拽范围ranges
@@ -40,7 +41,12 @@ export function dragHandler(props: dragHandlerProps) {
       return dragRange.$from === range.$from && dragRange.$to === range.$to;
     });
   });
-  const ranges = empty || !isDragWithinSelection ? selectionRanges : dragRanges;
+
+  // A || B ? C : D = (A || B) ? C : D
+  // const ranges = empty || isDragWithinSelection ? selectionRanges : dragRanges;
+  const ranges = (empty || !isDragWithinSelection) ? dragRanges : selectionRanges;
+
+  console.log("draghandler - ranges", ranges);
 
   if (!ranges.length) return;
 

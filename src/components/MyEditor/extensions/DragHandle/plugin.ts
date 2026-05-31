@@ -59,11 +59,12 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
   let rafId: number | null = null;
 
   function onDragStart(e: DragEvent) {
+    console.log("onDragStart - current", current);
+
     onElementDragStart?.(e);
     dragHandler({ event: e, dragContext: current, nested: !!nested, editor });
 
     if (handleElement) handleElement.dataset.dragging = "true";
-
     setTimeout(() => {
       handleElement.style.pointerEvents = "none";
     }, 0);
@@ -102,7 +103,7 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
         if (tr.docChanged && current.pos !== -1 && handleElement) {
           // 旧位置映射到新文档里的对应位置
           const newPos = tr.mapping.map(current.pos);
-          
+
           if (newPos !== current.pos) {
             current.pos = newPos;
           }
@@ -119,8 +120,9 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
       wrapper.style.left = "0";
       editor.view.dom.parentElement?.appendChild(wrapper);
 
-      //   handleElement.style.pointerEvents = "auto";
-      //   handleElement.dataset.dragging = "false";
+      handleElement.draggable = true;
+      handleElement.style.pointerEvents = "auto";
+      handleElement.dataset.dragging = "false";
       handleElement.addEventListener("dragstart", onDragStart);
       handleElement.addEventListener("dragend", onDragEnd);
 
@@ -147,7 +149,8 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
           const outerNodePos = getOuterNodePos(editor.state.doc, domNodePos);
 
           current = { node: outerNode, pos: outerNodePos };
-
+          console.log("update - current", current);
+          
           // step4. 更新手柄位置
           onNodeChange?.({ editor, node: current.node, pos: current.pos });
           repositionDragHandle(
@@ -194,7 +197,7 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
           }
           return false;
         },
-        // 更新手柄位置
+        // 更新current & 手柄位置
         mousemove: (view, event) => {
           if (!handleElement || locked || rafId) {
             return false;
@@ -227,8 +230,8 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
 
             // 3. 确定聚焦节点变化 targetNode  != currentNode
             if (targetNode !== current.node) {
-              current = { node: targetNode, pos: targetNodePos ?? -1};
-              
+              current = { node: targetNode, pos: targetNodePos ?? -1 };
+
               onNodeChange?.({ editor, node: current.node, pos: current.pos });
               repositionDragHandle(
                 domNode as Element,
@@ -236,7 +239,7 @@ export const DragHandlePlugin = (props: DragHandlePlugin) => {
                 pinLeft ? view.dom : undefined,
               );
 
-              showDrag(handleElement)
+              showDrag(handleElement);
             }
           });
 
