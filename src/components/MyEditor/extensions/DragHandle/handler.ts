@@ -37,10 +37,10 @@ export function dragHandler(props: dragHandlerProps) {
   // case: selectionRange >= dragRange,重新计算出完整的拖拽范围
   const isDragWithinSelection = selectionRanges.some((range) => {
     return dragRanges.find((dragRange) => {
-      dragRange.$from === range.$from && dragRange.$to === range.$to;
+      return dragRange.$from === range.$from && dragRange.$to === range.$to;
     });
   });
-  const ranges = empty || isDragWithinSelection ? selectionRanges : dragRanges;
+  const ranges = empty || !isDragWithinSelection ? selectionRanges : dragRanges;
 
   if (!ranges.length) return;
 
@@ -56,8 +56,9 @@ export function dragHandler(props: dragHandlerProps) {
 
   // step3. 拖拽内容预览
   const wrapper = document.createElement("div");
-  wrapper.style.position = "aboslute";
+  wrapper.style.position = "absolute";
   wrapper.style.top = "-1000px";
+  document.body.append(wrapper)
 
   ranges.forEach((range) => {
     const element = getDraggedBlockElement(
