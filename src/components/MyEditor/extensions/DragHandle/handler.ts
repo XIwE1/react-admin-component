@@ -24,7 +24,6 @@ export function dragHandler(props: dragHandlerProps) {
   const { view } = editor;
   const { tr } = view.state;
 
-
   if (!event.dataTransfer) return;
 
   // step1. 确定拖拽范围ranges
@@ -42,29 +41,44 @@ export function dragHandler(props: dragHandlerProps) {
     });
   });
 
+  // const isHandleInSelection = selectionRanges.some(
+  //   (range) => dragContext.pos >= range.$from.pos && dragContext.pos < range.$to.pos,
+  // );
+
   // A || B ? C : D = (A || B) ? C : D
-  // const ranges = empty || isDragWithinSelection ? selectionRanges : dragRanges;
-  const ranges = (empty || !isDragWithinSelection) ? dragRanges : selectionRanges;
+  // const ranges = empty || isDragWithinSelection ? selectionRanges : dragRanges; 理解错了会写成这样
+  const ranges = empty || !isDragWithinSelection ? dragRanges : selectionRanges;
+  // const ranges = empty || !isHandleInSelection ? dragRanges : selectionRanges;
 
   console.log("draghandler - ranges", ranges);
 
   if (!ranges.length) return;
 
-  // step2. 根据范围ranges切片出内容和计算选区
+  // step2. 根据范围ranges切片出内容slice和选区selection
   const [from, to] = [ranges[0].$from.pos, ranges[ranges.length - 1].$to.pos];
-  let selection: any = NodeRangeSelection.create(view.state.doc, from, to);
-  let slice = selection.content();
+  let selection;
+  let slice;
 
-  if (nested && dragContext.node) {
+  const isSingleBlock =
+    ranges.length === 1 &&
+    ranges[0].$from.pos === from &&
+    ranges[0].$to.pos === to;
+
+  const isNestedDrag = nested && dragContext.node && isSingleBlock;
+
+  if (isNestedDrag) {
     slice = view.state.doc.slice(from, to);
     selection = NodeSelection.create(view.state.doc, from);
+  } else {
+    selection = NodeRangeSelection.create(view.state.doc, from, to);
+    slice = selection.content();
   }
 
   // step3. 拖拽内容预览
   const wrapper = document.createElement("div");
   wrapper.style.position = "absolute";
   wrapper.style.top = "-1000px";
-  document.body.append(wrapper)
+  document.body.append(wrapper);
 
   ranges.forEach((range) => {
     const element = getDraggedBlockElement(
@@ -83,10 +97,15 @@ export function dragHandler(props: dragHandlerProps) {
   event.dataTransfer.setDragImage(wrapper, 0, 0);
 
   // step4. 派发pm事务 同步拖拽内容 选区
+  const nodeSelection =
+    selection instanceof NodeSelection ? selection : undefined;
+
+  // selection instanceof NodeSelection ? node.replace(tr) : tr.deleteSelection()
+  // 多选情况下 Selection = NodeRangeSelection 需要 .deleteSelection() 删除选区
   view.dragging = {
     slice,
     move: true,
-    node: selection,
+    node: nodeSelection,
   } as typeof view.dragging;
 
   tr.setSelection(selection);

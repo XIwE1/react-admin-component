@@ -4,6 +4,7 @@ import StarterKit from "@tiptap/starter-kit";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
 import { Mention } from "@tiptap/extension-mention";
+import NodeRange from '@tiptap/extension-node-range'
 // import DragHandle from "@tiptap/extension-drag-handle-react";
 import { DragExtension } from "./extensions/DragHandle";
 
@@ -28,6 +29,7 @@ export default function MyEditor({ content, onChange }) {
       }),
       Collapse,
       CollapseExtension,
+      NodeRange,
       CodeBlockLowlight.configure({
         lowlight,
       }),
