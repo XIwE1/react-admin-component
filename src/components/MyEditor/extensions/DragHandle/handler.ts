@@ -59,14 +59,17 @@ export function dragHandler(props: dragHandlerProps) {
   let selection;
   let slice;
 
-  const isSingleBlock =
-    ranges.length === 1 &&
-    ranges[0].$from.pos === from &&
-    ranges[0].$to.pos === to;
+  const isSingleBlock = 
+  ranges.length === 1 &&
+  ranges[0].$from.pos === from &&
+  ranges[0].$to.pos === to;
 
-  const isNestedDrag = nested && dragContext.node && isSingleBlock;
+  // nestedOptions.enabled && dragContext.node
+  // 只能说明：当前设置支持在嵌套结构里用手柄定位内层块，不能推出「这一次正在做嵌套单块拖拽」
+  const isNestedDrag = nested && dragContext.node;
 
-  if (isNestedDrag) {
+  // if (isNestedDrag) 可能导致多选情况下错误的进入嵌套单选逻辑
+  if (isNestedDrag && isSingleBlock) {
     slice = view.state.doc.slice(from, to);
     selection = NodeSelection.create(view.state.doc, from);
   } else {

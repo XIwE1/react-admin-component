@@ -4,8 +4,8 @@ import StarterKit from "@tiptap/starter-kit";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { all, createLowlight } from "lowlight";
 import { Mention } from "@tiptap/extension-mention";
-import NodeRange from '@tiptap/extension-node-range'
-// import DragHandle from "@tiptap/extension-drag-handle-react";
+import NodeRange from "@tiptap/extension-node-range";
+// import DragHandle from "@tiptap/extension-drag-handle";
 import { DragExtension } from "./extensions/DragHandle";
 
 // 自定义的工具栏 菜单栏 样式
@@ -34,6 +34,14 @@ export default function MyEditor({ content, onChange }) {
         lowlight,
       }),
       SelectAllExtension,
+      // DragHandle.configure({
+      //   nested: true,
+      //   render() {
+      //     const el = document.createElement("div");
+      //     el.classList.add("custom-drag-handle");
+      //     return el;
+      //   },
+      // }),
       DragExtension.configure({
         pinLeft: true,
         render() {
