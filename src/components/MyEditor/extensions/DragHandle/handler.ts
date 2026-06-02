@@ -30,9 +30,12 @@ export function dragHandler(props: dragHandlerProps) {
   const { $from, $to, empty } = view.state.selection;
 
   const dragRanges = getDragRanges(event, editor, nested, dragContext);
+  // depth = 0 只会选出最外层的节点 undefined不设置会推断出最小公共深度
   const selectionRanges = getSelectionRanges($from, $to, 0, {
     extendOnBoundaryOverlap: false,
   });
+  console.log("handler - dragRanges", dragRanges, dragRanges.length);
+  console.log("handler - selectionRanges", selectionRanges, selectionRanges.length);
 
   // case: selectionRange >= dragRange,重新计算出完整的拖拽范围
   const isDragWithinSelection = selectionRanges.some((range) => {
@@ -40,6 +43,7 @@ export function dragHandler(props: dragHandlerProps) {
       return dragRange.$from === range.$from && dragRange.$to === range.$to;
     });
   });
+  console.log("handler - isDragWithinSelection", isDragWithinSelection);
 
   // const isHandleInSelection = selectionRanges.some(
   //   (range) => dragContext.pos >= range.$from.pos && dragContext.pos < range.$to.pos,
@@ -59,10 +63,10 @@ export function dragHandler(props: dragHandlerProps) {
   let selection;
   let slice;
 
-  const isSingleBlock = 
-  ranges.length === 1 &&
-  ranges[0].$from.pos === from &&
-  ranges[0].$to.pos === to;
+  const isSingleBlock =
+    ranges.length === 1 &&
+    ranges[0].$from.pos === from &&
+    ranges[0].$to.pos === to;
 
   // nestedOptions.enabled && dragContext.node
   // 只能说明：当前设置支持在嵌套结构里用手柄定位内层块，不能推出「这一次正在做嵌套单块拖拽」

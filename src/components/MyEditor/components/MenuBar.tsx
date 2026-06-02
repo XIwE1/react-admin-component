@@ -42,7 +42,7 @@ export default function MenuBar({ editor }: MenuBarProps) {
 
   return (
     <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-neutral-200/80 bg-neutral-50 px-4 py-2">
-      <span className="text-[11px] text-neutral-600">样式</span>
+      <span className="text-[11px] font-bold text-neutral-600">样式</span>
       <div className="flex gap-1">
         <BoldButton editor={editor} />
         <ItalicButton editor={editor} />
@@ -50,7 +50,7 @@ export default function MenuBar({ editor }: MenuBarProps) {
         <UnderlineButton editor={editor} />
       </div>
       <Divider type="vertical" className="mx-0 h-5 border-neutral-200" />
-      <span className="text-[11px] text-neutral-600">标题</span>
+      <span className="text-[11px] font-bold text-neutral-600">标题</span>
       <div className="flex gap-1">
         <HeadLv1Button editor={editor} />
         <HeadLv2Button editor={editor} />
