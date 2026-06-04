@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Button, Form, Space, Table } from "antd";
+import { Button, Form, Result, Space, Table } from "antd";
 import useTable from "./useTable";
+import { WithPermission } from "../Permission";
+
 
 // 筛选
 // 分页
@@ -11,10 +13,14 @@ const TableContext = createContext({});
 
 interface ProTableProps {
   request: any;
-  columns: any[];
+  columns?: any[];
+  children?: React.ReactNode;
 }
 
-export default function ProTable(props: any) {
+interface ProTableWithPermissionProps extends ProTableProps {
+  permission?: string[];
+}
+function ProTable(props: any) {
   const { request } = props;
 
   // const { data, loading, setPagination, pagination, fetchData } =
@@ -22,26 +28,12 @@ export default function ProTable(props: any) {
 
   return (
     <TableContext.Provider value={table}>
-      {/* <Table
-        rowKey={"id"}
-        pagination={pagination}
-        columns={columns}
-        dataSource={data}
-        loading={loading}
-        onChange={(pag) => {
-          setPagination((prev) => ({
-            ...prev,
-            current: pag.current!,
-            pageSize: pag.pageSize!,
-          }));
-        }}
-      /> */}
       {props.children}
     </TableContext.Provider>
   );
 }
 
-ProTable.Header = function (props: any) {
+PermissionProTable.Header = function (props: any) {
   const table = useContext(TableContext);
   const [form] = Form.useForm();
   return (
@@ -71,7 +63,7 @@ ProTable.Header = function (props: any) {
   );
 };
 
-ProTable.Table = function (props: Pick<ProTableProps, "columns">) {
+PermissionProTable.Table = function (props: Pick<ProTableProps, "columns">) {
   const table = useContext(TableContext);
   const { data, loading, setPagination, pagination, fetchData } = table as any;
 
@@ -90,6 +82,16 @@ ProTable.Table = function (props: Pick<ProTableProps, "columns">) {
         }));
       }}
     />
+  );
+};
+
+export default function PermissionProTable(props: ProTableWithPermissionProps) {
+  const { permission, ...rest } = props;
+  return (
+    <WithPermission permission={permission} fallback={<Result status="403" />}>
+      <ProTable {...rest} />
+      {/* {props.children} */}
+    </WithPermission>
   );
 };
 

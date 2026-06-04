@@ -6,6 +6,7 @@ import {
   fetchMockComponentTable,
   type ComponentTableRow,
 } from "../../mock/componentTable";
+import CustomButton from "../../components/CustomButton";
 
 const columns: ColumnsType<ComponentTableRow> = [
   { title: "ID", dataIndex: "id", width: 80 },
@@ -26,13 +27,29 @@ const columns: ColumnsType<ComponentTableRow> = [
 
 export default function Component() {
   return (
-    <div className="m-3">
-      <ProTable request={{ request: fetchMockComponentTable }}>
+    <Space direction="vertical" size="middle" className="m-3 w-full" wrap>
+      <Space size="middle" className="w-full">
+        <CustomButton permission={["button:create"]} customVariant="primary">
+          Primary
+        </CustomButton>
+        <CustomButton customVariant="secondary">Secondary</CustomButton>
+        <CustomButton customVariant="danger">Danger</CustomButton>
+        <CustomButton customVariant="warning">Warning</CustomButton>
+        <CustomButton customVariant="success">Success</CustomButton>
+        <CustomButton customVariant="info">Info</CustomButton>
+        <CustomButton customVariant="link">Link</CustomButton>
+        <CustomButton customVariant="ghost">Ghost</CustomButton>
+      </Space>
+
+      <ProTable
+        permission={["table:view"]}
+        request={{ request: fetchMockComponentTable }}
+      >
         <Space direction="vertical" size="middle" className="w-full">
           <ProTable.Header>
             {columns.map((item) => {
               return (
-                <Form.Item label={item.title}>
+                <Form.Item label={item.title} key={item.dataIndex}>
                   <Input />
                 </Form.Item>
               );
@@ -41,6 +58,20 @@ export default function Component() {
           <ProTable.Table columns={columns} />
         </Space>
       </ProTable>
-    </div>
+      {/* <Table
+        rowKey={"id"}
+        pagination={pagination}
+        columns={columns}
+        dataSource={data}
+        loading={loading}
+        onChange={(pag) => {
+          setPagination((prev) => ({
+            ...prev,
+            current: pag.current!,
+            pageSize: pag.pageSize!,
+          }));
+        }}
+      /> */}
+    </Space>
   );
 }
