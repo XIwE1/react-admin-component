@@ -35,7 +35,7 @@ export async function MyUploadApi(file: File, id: string) {
   // 假设这里上传文件到服务端
   await new Promise((resolve) => setTimeout(resolve, getRandomTime()));
   const status = getRandomStatus();
-  return { status, uploadId: id, src: status === "success" ? SUCCESS_URL : ERROR_URL };
+  return { status, uploadId: id, src: status === "success" ? URL.createObjectURL(file) : ERROR_URL };
 }
 
 // 通过 uploadId 找到对应 image 节点在文档中的位置（pos）
