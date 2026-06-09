@@ -1,12 +1,15 @@
 import React from "react";
-import { Form, Input, Space, Tag } from "antd";
+import { Form, Input, message, Space, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
+
+import BlockTitle from "../../components/BlockTitle";
 import ProTable from "../../components/ProTable";
 import {
   fetchMockComponentTable,
   type ComponentTableRow,
 } from "../../mock/componentTable";
 import CustomButton from "../../components/CustomButton";
+import BaseSelect from "../../components/BaseSelect";
 
 const columns: ColumnsType<ComponentTableRow> = [
   { title: "ID", dataIndex: "id", width: 80 },
@@ -28,19 +31,45 @@ const columns: ColumnsType<ComponentTableRow> = [
 export default function Component() {
   return (
     <Space direction="vertical" size="middle" className="m-3 w-full" wrap>
+      <BlockTitle title="选择" />
       <Space size="middle" className="w-full">
-        <CustomButton permission={["button:create"]} variant="primary" size="small">
+        <BaseSelect
+          options={[
+            { label: "选项1", value: "1" },
+            { label: "选项2", value: "2" },
+          ]}
+        />
+      </Space>
+      <BlockTitle title="按钮" />
+      <Space size="middle" className="w-full">
+        <CustomButton
+          permission={["button:create"]}
+          variant="primary"
+          size="small"
+        >
           Primary
         </CustomButton>
-        <CustomButton variant="secondary" size="medium">Secondary</CustomButton>
-        <CustomButton variant="danger" size="large">Danger</CustomButton>
-        <CustomButton variant="warning">Warning</CustomButton>
-        <CustomButton variant="success">Success</CustomButton>
+        <CustomButton variant="secondary" size="medium">
+          Secondary
+        </CustomButton>
+        <CustomButton variant="danger" size="large">
+          Danger
+        </CustomButton>
+        <CustomButton variant="warning" className="!text-red-500">
+          Warning
+        </CustomButton>
+        <CustomButton
+          variant="success"
+          onClick={() => message.success("Success")}
+        >
+          Success
+        </CustomButton>
         <CustomButton variant="info">Info</CustomButton>
         <CustomButton variant="link">Link</CustomButton>
         <CustomButton variant="ghost">Ghost</CustomButton>
       </Space>
 
+      <BlockTitle title="表格" />
       <ProTable
         permission={["table:view"]}
         request={{ request: fetchMockComponentTable }}
