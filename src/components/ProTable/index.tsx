@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Button, Form, Result, Space, Table } from "antd";
 import useTable from "./useTable";
-import { WithPermission } from "../Permission";
+import { Permission } from "../Permission";
 
 
 // 筛选
@@ -88,10 +88,10 @@ PermissionProTable.Table = function (props: Pick<ProTableProps, "columns">) {
 export default function PermissionProTable(props: ProTableWithPermissionProps) {
   const { permission, ...rest } = props;
   return (
-    <WithPermission permission={permission} fallback={<Result status="403" />}>
+    <Permission permission={permission} fallback={<Result status="403" />}>
       <ProTable {...rest} />
       {/* {props.children} */}
-    </WithPermission>
+    </Permission>
   );
 };
 

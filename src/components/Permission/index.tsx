@@ -8,7 +8,7 @@ interface WithPermissionProps {
   children: React.ReactNode;
 }
 
-export function WithPermission(props: WithPermissionProps) {
+export function Permission(props: WithPermissionProps) {
   const { permission, fallback, children } = props;
 
   const hasPermission = usePermission({ permission });

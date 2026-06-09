@@ -29,16 +29,16 @@ export default function Component() {
   return (
     <Space direction="vertical" size="middle" className="m-3 w-full" wrap>
       <Space size="middle" className="w-full">
-        <CustomButton permission={["button:create"]} customVariant="primary">
+        <CustomButton permission={["button:create"]} variant="primary" size="small">
           Primary
         </CustomButton>
-        <CustomButton customVariant="secondary">Secondary</CustomButton>
-        <CustomButton customVariant="danger">Danger</CustomButton>
-        <CustomButton customVariant="warning">Warning</CustomButton>
-        <CustomButton customVariant="success">Success</CustomButton>
-        <CustomButton customVariant="info">Info</CustomButton>
-        <CustomButton customVariant="link">Link</CustomButton>
-        <CustomButton customVariant="ghost">Ghost</CustomButton>
+        <CustomButton variant="secondary" size="medium">Secondary</CustomButton>
+        <CustomButton variant="danger" size="large">Danger</CustomButton>
+        <CustomButton variant="warning">Warning</CustomButton>
+        <CustomButton variant="success">Success</CustomButton>
+        <CustomButton variant="info">Info</CustomButton>
+        <CustomButton variant="link">Link</CustomButton>
+        <CustomButton variant="ghost">Ghost</CustomButton>
       </Space>
 
       <ProTable
