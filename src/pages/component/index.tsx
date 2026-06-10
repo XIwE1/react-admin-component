@@ -10,6 +10,7 @@ import {
 } from "../../mock/componentTable";
 import CustomButton from "../../components/CustomButton";
 import BaseSelect from "../../components/BaseSelect";
+import MutipleSelect from "../../components/MutipleSelect";
 
 const columns: ColumnsType<ComponentTableRow> = [
   { title: "ID", dataIndex: "id", width: 80 },
@@ -37,6 +38,17 @@ export default function Component() {
           options={[
             { label: "选项1", value: "1" },
             { label: "选项2", value: "2" },
+          ]}
+        />
+        <MutipleSelect
+          selected={["吃饭", "睡觉"]}
+          options={[
+            { label: "吃饭", value: "吃饭" },
+            { label: "睡觉", value: "睡觉" },
+            { label: "打游戏", value: "打游戏" },
+            { label: "工作", value: "工作" },
+            { label: "学习", value: "学习" },
+            { label: "其他", value: "其他" },
           ]}
         />
       </Space>

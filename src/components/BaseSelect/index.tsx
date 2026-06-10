@@ -11,12 +11,9 @@ function BaseSelect(props: SelectProps) {
   const {
     options = [],
     showSearch = true,
-    optionFilterProp = "label",
     allowClear = true,
     placeholder = DEFAULT_PLACEHOLDER,
     loading = false,
-    filterOption = true,
-    notFoundContent = "暂无数据",
     className,
     popupClassName,
     ...restProps
@@ -28,12 +25,9 @@ function BaseSelect(props: SelectProps) {
       popupClassName={clsx("base-select-dropdown", popupClassName)}
       options={options}
       showSearch={showSearch}
-      optionFilterProp={optionFilterProp}
       allowClear={allowClear}
       placeholder={placeholder}
       loading={loading}
-      filterOption={filterOption}
-      notFoundContent={notFoundContent}
       {...restProps}
     />
   );
